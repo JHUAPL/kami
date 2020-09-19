@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.8.2)
 
 # List all files containing tests. (Change as needed)
 set(TESTFILES        # All .cpp files in tests/
-    main.cpp
     dummy.cpp
 )
 
