@@ -31,7 +31,7 @@ include(ConfigSafeGuards)
 include(Colors)
 include(CTest)
 include(Doctest)
-include(Documentation)
+#include(Documentation)
 include(LTO)
 include(Misc)
 include(Warnings)
@@ -87,3 +87,4 @@ set_target_properties(
 
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)
+add_subdirectory(docs)

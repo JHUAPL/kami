@@ -11,7 +11,6 @@
 #include <kami/kami.hpp>
 #include <kami/multigrid2d.hpp>
 #include <map>
-#include <mutex>
 #include <vector>
 
 namespace kami {
@@ -19,6 +18,7 @@ namespace kami {
 typedef enum NeighborhoodType { Moore,
                                 VonNeumann } NeighborhoodType;
 
+/// asdfasdf
 class MultiGrid2DCoord {
    public:
     MultiGrid2DCoord(int, int);

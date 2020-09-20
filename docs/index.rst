@@ -1,0 +1,7 @@
+…
+
+Docs
+====
+
+.. doxygennamespace:: kami
+   :members:

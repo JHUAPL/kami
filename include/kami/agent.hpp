@@ -11,12 +11,19 @@
 
 namespace kami {
 
-/// A unique identifier for each agent
+/**
+ * A unique identifier for each agent
+ */
 class AgentID {
    public:
-    /// Create a new unique identifier
+    /**
+     * Create a new unique identifier
+     */
     AgentID();
 
+    /**
+     * Convert the identifier to a human readable string
+     */
     std::string toString() const;
 
     friend bool operator==(const AgentID &, const AgentID &);
