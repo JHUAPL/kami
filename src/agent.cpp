@@ -30,7 +30,7 @@ bool operator<(const AgentID &lhs, const AgentID &rhs) {
 }
 
 std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs) {
-    return lhs << rhs.id;
+    return lhs << rhs.toString();
 }
 
 AgentID Agent::getAgentID() const {
