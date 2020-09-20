@@ -27,37 +27,8 @@ jobs:
         mkdir build
         cd build
         conan install ..
-        cmake -DCMAKE_BUILD_TYPE=debug ..
+        cmake -DCMAKE_BUILD_TYPE=debug -DBUILD_DOCS=OFF ..
     - name: build
-      run: cmake --build build
+      run: make
     - name: test
       run: cd build && ctest
-
-
-  build-windows:
-
-    runs-on: windows-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-      with:
-          submodules: true
-    - name: Download Conan package manager.
-      run: |
-        pwd
-        pip3 install wheel setuptools
-        pip3 install conan
-        conan --version
-    - name: configure
-      run: |
-        mkdir build
-        cd build
-        conan install ..
-        cmake ..
-    - name: build
-      run: cmake --build build
-    - name: test
-      run: |
-        cd build
-        set CTEST_OUTPUT_ON_FAILURE=1
-        ctest -C Debug 

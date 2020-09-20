@@ -83,4 +83,7 @@ set_target_properties(
 
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)
-add_subdirectory(docs)
+
+if(${BUILD_DOCS} EQUAL "OFF")
+    add_subdirectory(docs)
+endif(${BUILD_DOCS} EQUAL "OFF")
