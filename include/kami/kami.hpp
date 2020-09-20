@@ -8,6 +8,6 @@
 
 #include <kami/agent.hpp>
 #include <kami/model.hpp>
-#include <kami/random.hpp>
+#include <kami/scheduler.hpp>
 
 #endif  // KAMI_KAMI_HPP

@@ -3,9 +3,7 @@
 #define KAMI_RANDOM_HPP
 
 #include <algorithm>
-#include <kami/agent.hpp>
-#include <kami/model.hpp>
-#include <kami/scheduler.hpp>
+#include <kami/kami.hpp>
 #include <random>
 #include <vector>
 

@@ -5,7 +5,6 @@
 #include "boltzmann.hpp"
 
 #include <iostream>
-#include <kami/agent.hpp>
 #include <kami/kami.hpp>
 #include <kami/multigrid2d.hpp>
 #include <kami/random.hpp>
