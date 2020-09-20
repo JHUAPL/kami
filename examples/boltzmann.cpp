@@ -4,13 +4,17 @@
 
 #include "boltzmann.hpp"
 
-// #include <spdlog/spdlog.h>
-
 #include <iostream>
 #include <kami/agent.hpp>
 #include <kami/kami.hpp>
 #include <kami/multigrid2d.hpp>
+#include <kami/random.hpp>
 #include <map>
+
+std::random_device *MoneyAgent::rd = nullptr;
+std::mt19937 *MoneyAgent::rng = nullptr;
+kami::MultiGrid2D *MoneyAgent::world = nullptr;
+BoltzmannWealthModel *MoneyAgent::model = nullptr;
 
 MoneyAgent::MoneyAgent() {
     rd = new std::random_device();
@@ -135,17 +139,12 @@ MoneyAgent *BoltzmannWealthModel::getAgentByID(kami::AgentID agentID) const {
     return agentPair;
 }
 
-std::random_device *MoneyAgent::rd = nullptr;
-std::mt19937 *MoneyAgent::rng = nullptr;
-kami::MultiGrid2D *MoneyAgent::world = nullptr;
-BoltzmannWealthModel *MoneyAgent::model = nullptr;
-
 int main(void) {
-    BoltzmannWealthModel model(100, 10, 10);
+    BoltzmannWealthModel model(10000, 100, 100);
 
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 100; i++) {
         model.step();
     }
 
-    model.prinfo();
+    // model.prinfo();
 }

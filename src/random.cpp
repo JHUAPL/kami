@@ -4,8 +4,8 @@
 
 #include "kami/random.hpp"
 
-#include <string>
 #include <random>
+#include <string>
 
 #include "kami/agent.hpp"
 #include "kami/model.hpp"
