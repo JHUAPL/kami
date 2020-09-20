@@ -6,17 +6,12 @@
 # For many purposes, you may not need to change anything about this file.
 
 cmake_minimum_required(VERSION 3.8.2)
-project("KAMI" CXX)
+project(KAMI VERSION 0.1.0 LANGUAGES CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake.modules/")
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
-
-# Set project name, version and laguages here. (change as needed)
-# Version numbers are available by including "exampleConfig.h" in 
-# the source. See exampleConfig.h.in for some more details.
-project(CPP_BOILERPLATE VERSION 1.2.3.4 LANGUAGES CXX)
 
 # Options: Things you can set via commandline options to cmake (e.g. -DENABLE_LTO=[ON|OFF])
 option(ENABLE_WARNINGS_SETTINGS "Allow target_set_warnings to add flags and defines.
