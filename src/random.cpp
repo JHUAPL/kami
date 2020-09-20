@@ -1,15 +1,13 @@
-/*
- *
+/*-
+ * TODO FILE HEADER
  */
 
-#include "kami/random.hpp"
-
+#include <kami/agent.hpp>
+#include <kami/model.hpp>
+#include <kami/random.hpp>
+#include <kami/scheduler.hpp>
 #include <random>
 #include <string>
-
-#include "kami/agent.hpp"
-#include "kami/model.hpp"
-#include "kami/scheduler.hpp"
 
 namespace kami {
 

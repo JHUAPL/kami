@@ -2,7 +2,7 @@
  *
  */
 
-#include "kami/agent.hpp"
+#include <kami/agent.hpp>
 
 #include <string>
 

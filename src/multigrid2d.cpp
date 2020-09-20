@@ -2,15 +2,13 @@
  * TODO FILEHEADER
  */
 
-#include "kami/multigrid2d.hpp"
-
+#include <kami/agent.hpp>
+#include <kami/domain.hpp>
+#include <kami/kami.hpp>
+#include <kami/multigrid2d.hpp>
 #include <map>
 #include <mutex>
 #include <vector>
-
-#include "kami/agent.hpp"
-#include "kami/domain.hpp"
-#include "kami/kami.hpp"
 
 namespace kami {
 
@@ -70,8 +68,8 @@ MultiGrid2D::~MultiGrid2D(void) {
     delete agentIndex;
 
     for (unsigned int i = 0; i < maxRows; i++)
-        delete [] agentGrid[i];
-    delete [] agentGrid;
+        delete[] agentGrid[i];
+    delete[] agentGrid;
 }
 
 bool MultiGrid2D::addAgent(AgentID agentID, int xCoord, int yCoord) {
