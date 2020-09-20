@@ -12,7 +12,7 @@ jobs:
       with:
           submodules: true
     - name: configure
-      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=debug ..
+      run: mkdir build && cd build && conan install .. && cmake -DCMAKE_BUILD_TYPE=debug ..
     - name: build
       run: cmake --build build
     - name: test
@@ -31,6 +31,7 @@ jobs:
       run: |
         mkdir build
         cd build
+        conan install ..
         cmake ..
     - name: build
       run: cmake --build build
