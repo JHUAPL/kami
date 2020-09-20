@@ -1,9 +1,8 @@
-/*
- *
+/*-
+ * TODO FILE HEADER
  */
 
 #include <kami/agent.hpp>
-
 #include <string>
 
 namespace kami {
