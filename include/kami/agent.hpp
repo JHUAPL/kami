@@ -11,24 +11,32 @@
 
 namespace kami {
 
-/**
- * A unique identifier for each agent
- */
+///  \brief A unique identifier for each agent.
+///  \details A unqiue identifier is created for each Agent at
+///  runtime.  The unique identifier is an unsigned integer that
+///  increments monotonically with each new Agent instantiated.
+///  AgentIDs are not guaranteed to be unique from session-to-session.
 class AgentID {
    public:
-    /**
-     * Create a new unique identifier
-     */
+    ///  \brief Constructs a new unique identifier.
     AgentID();
 
-    /**
-     * Convert the identifier to a human readable string
-     */
+    ///  \brief Convert the identifier to a human readable string.
     std::string toString() const;
 
+    ///  \brief Test if two AgentID instances are equal.
     friend bool operator==(const AgentID &, const AgentID &);
+
+    ///  \brief Test if two AgentID instances are not equal.
     friend bool operator!=(const AgentID &, const AgentID &);
+
+    ///  \brief Test if one AgentID is less than another.
+    ///  \details Due to the way AgentID instance are used internally,
+    ///  the AgentID must be ordered.  The `<` operator provides 
+    ///  basic order sufficient for `std::map`.
     friend bool operator<(const AgentID &, const AgentID &);
+
+    ///  \brief Output an AgentID to the specified output stream.
     friend std::ostream &operator<<(std::ostream &, const AgentID &);
 
    private:
