@@ -42,6 +42,7 @@ set(SOURCES          # All .cpp files in src/
     src/kami.cpp
     src/multigrid2d.cpp
     src/random.cpp
+    src/sequential.cpp
 )
 set(TESTFILES        # All .cpp files in tests/
     tests/dummy.cpp
