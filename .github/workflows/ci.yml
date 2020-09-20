@@ -13,15 +13,21 @@ jobs:
           submodules: true
     - name: Download Conan package manager.
       run: |
-           pwd
-           pip3 install wheel setuptools
-           pip3 install conan
-           export PATH=$PATH:/home/runner/.local/bin
-           echo $PATH
-           conan --version
-           ls
+        pwd
+        pip3 install wheel setuptools
+        pip3 install conan
+        export PATH=$PATH:/home/runner/.local/bin
+        echo $PATH
+        conan --version
+        ls
     - name: configure
-      run: mkdir build && cd build && conan install .. && cmake -DCMAKE_BUILD_TYPE=debug ..
+      run: |
+        export PATH=$PATH:/home/runner/.local/bin
+        echo $PATH
+        mkdir build
+        cd build
+        conan install ..
+        cmake -DCMAKE_BUILD_TYPE=debug ..
     - name: build
       run: cmake --build build
     - name: test
@@ -38,13 +44,10 @@ jobs:
           submodules: true
     - name: Download Conan package manager.
       run: |
-           pwd
-           pip3 install wheel setuptools
-           pip3 install conan
-           export PATH=$PATH:/home/runner/.local/bin
-           echo $PATH
-           conan --version
-           ls
+        pwd
+        pip3 install wheel setuptools
+        pip3 install conan
+        conan --version
     - name: configure
       run: |
         mkdir build
