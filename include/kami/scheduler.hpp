@@ -10,10 +10,18 @@
 
 namespace kami {
 
-/// An abstract class for a Scheduler
+///  \brief     Create a Kami scheduler.
+///  \details   Schedulers are responsible for executing each time step
+///  in the model.  A scheduler will have a collection of agents assigned
+///  to it and will execute the step function for each agent based on the
+///  type of scheduling implemented.
 class Scheduler {
    public:
-
+    /// \brief  Return a new Kami scheduler
+    ///
+    /// \details    This function should return a new instance of a
+    /// scheduler class that implements this trait.
+    Scheduler() {}
     virtual ~Scheduler();
 
     /// Add an Agent to the Scheduler.
