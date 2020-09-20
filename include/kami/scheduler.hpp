@@ -21,7 +21,6 @@ class Scheduler {
     ///
     /// \details    This function should return a new instance of a
     /// scheduler class that implements this trait.
-    Scheduler() {}
     virtual ~Scheduler();
 
     /// Add an Agent to the Scheduler.
