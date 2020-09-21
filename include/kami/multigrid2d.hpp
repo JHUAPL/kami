@@ -9,14 +9,12 @@
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/kami.hpp>
+#include <kami/grid.hpp>
 #include <kami/multigrid2d.hpp>
 #include <map>
 #include <vector>
 
 namespace kami {
-
-typedef enum NeighborhoodType { Moore,
-                                VonNeumann } NeighborhoodType;
 
 /// asdfasdf
 class MultiGrid2DCoord {
@@ -62,8 +60,8 @@ class MultiGrid2D : public GridDomain {
     bool getColWrap(void) const;
     bool getRowWrap(void) const;
 
-    std::vector<MultiGrid2DCoord> getNeighborhood(MultiGrid2DCoord, NeighborhoodType, bool) const;
-    std::vector<MultiGrid2DCoord> getNeighborhood(AgentID, NeighborhoodType, bool) const;
+    std::vector<MultiGrid2DCoord> getNeighborhood(MultiGrid2DCoord, GridNeighborhoodType, bool) const;
+    std::vector<MultiGrid2DCoord> getNeighborhood(AgentID, GridNeighborhoodType, bool) const;
 
     std::vector<AgentID> *getCellContents(MultiGrid2DCoord);
 

@@ -46,7 +46,7 @@ void MoneyAgent::setModel(class BoltzmannWealthModel *m) {
 
 void MoneyAgent::moveAgent() {
     auto agentID = this->getAgentID();
-    auto moveList = world->getNeighborhood(agentID, kami::NeighborhoodType::Moore, false);
+    auto moveList = world->getNeighborhood(agentID, kami::GridNeighborhoodType::Moore, false);
 
     std::uniform_int_distribution<unsigned long> dist(0, moveList.size() - 1);
     auto newLocation = moveList[dist(*rng)];

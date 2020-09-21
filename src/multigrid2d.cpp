@@ -5,6 +5,7 @@
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/kami.hpp>
+#include <kami/grid.hpp>
 #include <kami/multigrid2d.hpp>
 #include <map>
 #include <mutex>
@@ -128,13 +129,13 @@ void MultiGrid2D::setRowWrap(bool newRowWrap) { rowWrap = newRowWrap; }
 bool MultiGrid2D::getColWrap(void) const { return colWrap; }
 bool MultiGrid2D::getRowWrap(void) const { return rowWrap; }
 
-std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(AgentID agentID, NeighborhoodType nType, bool includeCenter) const {
+std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(AgentID agentID, GridNeighborhoodType nType, bool includeCenter) const {
     MultiGrid2DCoord location = getLocationByAgent(agentID);
 
     return getNeighborhood(location, nType, includeCenter);
 }
 
-std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(MultiGrid2DCoord location, NeighborhoodType nType, bool includeCenter) const {
+std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(MultiGrid2DCoord location, GridNeighborhoodType nType, bool includeCenter) const {
     std::vector<MultiGrid2DCoord> neighborhood;
     auto xCoord = location.getXCoord();
     auto yCoord = location.getYCoord();
@@ -148,7 +149,7 @@ std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(MultiGrid2DCoord loca
     neighborhood.push_back(locationWrap(xCoord, yCoord + 1));
     neighborhood.push_back(locationWrap(xCoord - 1, yCoord));
 
-    if (nType == NeighborhoodType::Moore) {
+    if (nType == GridNeighborhoodType::Moore) {
         // NE, SE, SW, NW
         neighborhood.push_back(locationWrap(xCoord + 1, yCoord - 1));
         neighborhood.push_back(locationWrap(xCoord + 1, yCoord + 1));

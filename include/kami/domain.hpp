@@ -7,18 +7,16 @@
 #define KAMI_DOMAIN_HPP
 
 #include <kami/kami.hpp>
+#include <kami/grid.hpp>
 
 namespace kami {
 
-/**
-  A domain provides an environment for the agents to participate in
-*/
+/// \brief Provides an environment for the agents to participate in
 class Domain {
 };
 
-/**
-  A domain based on a grid with integer steps
-*/
+
+///  \brief A domain based on a grid with integer steps
 class GridDomain : public Domain {
 };
 
