@@ -44,6 +44,9 @@ set(SOURCES          # All .cpp files in src/
     src/random.cpp
     src/sequential.cpp
 )
+
+file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
+
 set(TESTFILES        # All .cpp files in tests/
     tests/dummy.cpp
 )
@@ -83,4 +86,4 @@ set_target_properties(
 
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)
-add_subdirectory(docs)
+#add_subdirectory(docs)
