@@ -42,6 +42,7 @@ set(SOURCES          # All .cpp files in src/
     src/kami.cpp
     src/multigrid1d.cpp
     src/multigrid2d.cpp
+    src/multigrid3d.cpp
     src/random.cpp
     src/sequential.cpp
     src/staged.cpp
@@ -98,6 +99,19 @@ set_target_properties(
         CXX_EXTENSIONS NO
 )
 
+add_executable(boltzmann3d examples/boltzmann3d.cpp)   # Name of exec. and location of file.
+target_link_libraries(boltzmann3d PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
+target_set_warnings(boltzmann3d ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
+target_enable_lto(boltzmann3d optimized)  # enable link-time-optimization if available for non-debug configurations
+
+# Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
+set_target_properties(
+    ${LIBRARY_NAME} boltzmann3d
+      PROPERTIES 
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED YES 
+        CXX_EXTENSIONS NO
+)
 
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)

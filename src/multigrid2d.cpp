@@ -4,8 +4,8 @@
 
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
-#include <kami/kami.hpp>
 #include <kami/grid.hpp>
+#include <kami/kami.hpp>
 #include <kami/multigrid2d.hpp>
 #include <map>
 #include <mutex>
@@ -13,21 +13,21 @@
 
 namespace kami {
 
-MultiGrid2DCoord::MultiGrid2DCoord(int newXCoord, int newYCoord) {
-    xCoord = newXCoord;
-    yCoord = newYCoord;
+MultiGrid2DCoord::MultiGrid2DCoord(int newX, int newY) {
+    x = newX;
+    y = newY;
 }
 
-int MultiGrid2DCoord::getXCoord(void) const {
-    return xCoord;
+int MultiGrid2DCoord::getX(void) const {
+    return x;
 }
 
-int MultiGrid2DCoord::getYCoord(void) const {
-    return yCoord;
+int MultiGrid2DCoord::getY(void) const {
+    return y;
 }
 
 bool operator==(const MultiGrid2DCoord &lhs, const MultiGrid2DCoord &rhs) {
-    return (lhs.xCoord == rhs.yCoord && lhs.yCoord == rhs.yCoord);
+    return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
 
 bool operator!=(const MultiGrid2DCoord &lhs, const MultiGrid2DCoord &rhs) {
@@ -35,19 +35,19 @@ bool operator!=(const MultiGrid2DCoord &lhs, const MultiGrid2DCoord &rhs) {
 }
 
 std::ostream &operator<<(std::ostream &lhs, const MultiGrid2DCoord &rhs) {
-    return lhs << "(" << rhs.xCoord << ", " << rhs.yCoord << ")";
+    return lhs << "(" << rhs.x << ", " << rhs.y << ")";
 }
 
-MultiGrid2D::MultiGrid2D(unsigned int newMaxCols, unsigned int newMaxRows, bool newColWrap = false, bool newRowWrap = false) {
-    setMaxCols(newMaxCols);
-    setMaxRows(newMaxRows);
+MultiGrid2D::MultiGrid2D(unsigned int newMaxX, unsigned int newMaxY, bool newWrapX = false, bool newWrapY = false) {
+    maxX = newMaxX;
+    maxY = newMaxY;
 
-    setColWrap(newColWrap);
-    setRowWrap(newRowWrap);
+    setWrapX(newWrapX);
+    setWrapY(newWrapY);
 
-    agentGrid = new std::vector<AgentID> *[newMaxCols];
-    for (unsigned int i = 0; i < newMaxRows; i++)
-        agentGrid[i] = new std::vector<AgentID>[newMaxRows];
+    agentGrid = new std::vector<AgentID> *[maxX];
+    for (unsigned int i = 0; i < maxX; i++)
+        agentGrid[i] = new std::vector<AgentID>[maxY];
 
     agentIndex = new std::map<AgentID, MultiGrid2DCoord>;
 }
@@ -55,18 +55,18 @@ MultiGrid2D::MultiGrid2D(unsigned int newMaxCols, unsigned int newMaxRows, bool 
 MultiGrid2D::~MultiGrid2D(void) {
     delete agentIndex;
 
-    for (unsigned int i = 0; i < maxRows; i++)
+    for (unsigned int i = 0; i < maxX; i++)
         delete[] agentGrid[i];
     delete[] agentGrid;
 }
 
-bool MultiGrid2D::addAgent(AgentID agentID, int xCoord, int yCoord) {
-    return addAgent(agentID, MultiGrid2DCoord(xCoord, yCoord));
+bool MultiGrid2D::addAgent(AgentID agentID, int x, int y) {
+    return addAgent(agentID, MultiGrid2DCoord(x, y));
 }
 bool MultiGrid2D::addAgent(AgentID agentID, MultiGrid2DCoord location) {
     if (isLocationValid(location)) {
         agentIndex->insert(std::pair<AgentID, MultiGrid2DCoord>(agentID, location));
-        agentGrid[location.getXCoord()][location.getYCoord()].push_back(agentID);
+        agentGrid[location.getX()][location.getY()].push_back(agentID);
         return (true);
     }
 
@@ -79,12 +79,12 @@ void MultiGrid2D::deleteAgent(AgentID agentID) {
     deleteAgent(agentID, location);
 }
 
-void MultiGrid2D::deleteAgent(AgentID agentID, int xCoord, int yCoord) {
-    deleteAgent(agentID, MultiGrid2DCoord(xCoord, yCoord));
+void MultiGrid2D::deleteAgent(AgentID agentID, int x, int y) {
+    deleteAgent(agentID, MultiGrid2DCoord(x, y));
 }
 
 void MultiGrid2D::deleteAgent(AgentID agentID, MultiGrid2DCoord location) {
-    auto agentList = agentGrid[static_cast<int>(location.getXCoord())][static_cast<int>(location.getYCoord())];
+    auto agentList = agentGrid[static_cast<int>(location.getX())][static_cast<int>(location.getY())];
     for (auto testAgentID = agentList.begin(); testAgentID < agentList.end(); testAgentID++) {
         if (*testAgentID == agentID) {
             agentList.erase(testAgentID);
@@ -94,10 +94,11 @@ void MultiGrid2D::deleteAgent(AgentID agentID, MultiGrid2DCoord location) {
 }
 
 bool MultiGrid2D::isLocationValid(MultiGrid2DCoord location) const {
-    auto xCoord = location.getXCoord();
-    auto yCoord = location.getYCoord();
+    auto x = location.getX();
+    auto y = location.getY();
 
-    return (xCoord >= 0 && xCoord < static_cast<int>(maxCols) && yCoord >= 0 && yCoord < static_cast<int>(maxRows));
+    return (x >= 0 && x < static_cast<int>(maxX) &&
+            y >= 0 && y < static_cast<int>(maxY));
 }
 
 MultiGrid2DCoord MultiGrid2D::getLocationByAgent(AgentID agentID) const {
@@ -111,10 +112,10 @@ void MultiGrid2D::moveAgent(AgentID agentID, MultiGrid2DCoord nextLocation) {
     addAgent(agentID, nextLocation);
 }
 
-void MultiGrid2D::setColWrap(bool newColWrap) { colWrap = newColWrap; }
-void MultiGrid2D::setRowWrap(bool newRowWrap) { rowWrap = newRowWrap; }
-bool MultiGrid2D::getColWrap(void) const { return colWrap; }
-bool MultiGrid2D::getRowWrap(void) const { return rowWrap; }
+void MultiGrid2D::setWrapX(bool newWrapX) { wrapX = newWrapX; }
+void MultiGrid2D::setWrapY(bool newWrapY) { wrapY = newWrapY; }
+bool MultiGrid2D::getWrapX(void) const { return wrapX; }
+bool MultiGrid2D::getWrapY(void) const { return wrapY; }
 
 std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(AgentID agentID, GridNeighborhoodType nType, bool includeCenter) const {
     MultiGrid2DCoord location = getLocationByAgent(agentID);
@@ -124,24 +125,24 @@ std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(AgentID agentID, Grid
 
 std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(MultiGrid2DCoord location, GridNeighborhoodType nType, bool includeCenter) const {
     std::vector<MultiGrid2DCoord> neighborhood;
-    auto xCoord = location.getXCoord();
-    auto yCoord = location.getYCoord();
+    auto x = location.getX();
+    auto y = location.getY();
 
     if (includeCenter == true)
         neighborhood.push_back(location);
 
     // N, E, S, W
-    neighborhood.push_back(locationWrap(xCoord, yCoord - 1));
-    neighborhood.push_back(locationWrap(xCoord + 1, yCoord));
-    neighborhood.push_back(locationWrap(xCoord, yCoord + 1));
-    neighborhood.push_back(locationWrap(xCoord - 1, yCoord));
+    neighborhood.push_back(locationWrap(x, y - 1));
+    neighborhood.push_back(locationWrap(x, y + 1));
+    neighborhood.push_back(locationWrap(x + 1, y));
+    neighborhood.push_back(locationWrap(x - 1, y));
 
     if (nType == GridNeighborhoodType::Moore) {
         // NE, SE, SW, NW
-        neighborhood.push_back(locationWrap(xCoord + 1, yCoord - 1));
-        neighborhood.push_back(locationWrap(xCoord + 1, yCoord + 1));
-        neighborhood.push_back(locationWrap(xCoord - 1, yCoord + 1));
-        neighborhood.push_back(locationWrap(xCoord - 1, yCoord - 1));
+        neighborhood.push_back(locationWrap(x + 1, y - 1));
+        neighborhood.push_back(locationWrap(x + 1, y + 1));
+        neighborhood.push_back(locationWrap(x - 1, y + 1));
+        neighborhood.push_back(locationWrap(x - 1, y - 1));
     }
 
     return neighborhood;
@@ -149,27 +150,25 @@ std::vector<MultiGrid2DCoord> MultiGrid2D::getNeighborhood(MultiGrid2DCoord loca
 
 std::vector<AgentID> *MultiGrid2D::getCellContents(MultiGrid2DCoord location) {
     if (isLocationValid(location)) {
-        return &agentGrid[location.getXCoord()][location.getYCoord()];
+        return &agentGrid[location.getX()][location.getY()];
     }
 
     return nullptr;
 }
 
-void MultiGrid2D::setMaxCols(unsigned int newMaxCols) { maxCols = newMaxCols; }
-void MultiGrid2D::setMaxRows(unsigned int newMaxRows) { maxRows = newMaxRows; }
-unsigned int MultiGrid2D::getMaxCols(void) const { return maxCols; }
-unsigned int MultiGrid2D::getMaxRows(void) const { return maxRows; }
+unsigned int MultiGrid2D::getMaxX(void) const { return maxX; }
+unsigned int MultiGrid2D::getMaxY(void) const { return maxY; }
 
 MultiGrid2DCoord MultiGrid2D::locationWrap(MultiGrid2DCoord location) const {
-    return locationWrap(location.getXCoord(), location.getYCoord());
+    return locationWrap(location.getX(), location.getY());
 }
 
-MultiGrid2DCoord MultiGrid2D::locationWrap(int xCoord, int yCoord) const {
-    if (colWrap == true)
-        xCoord = (xCoord + static_cast<int>(maxCols)) % static_cast<int>(maxCols);
-    if (rowWrap == true)
-        yCoord = (yCoord + static_cast<int>(maxRows)) % static_cast<int>(maxRows);
-    return MultiGrid2DCoord(xCoord, yCoord);
+MultiGrid2DCoord MultiGrid2D::locationWrap(int x, int y) const {
+    if (wrapX == true)
+        x = (x + static_cast<int>(maxX)) % static_cast<int>(maxX);
+    if (wrapY == true)
+        y = (y + static_cast<int>(maxY)) % static_cast<int>(maxY);
+    return MultiGrid2DCoord(x, y);
 }
 
 }  // namespace kami

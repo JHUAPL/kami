@@ -84,12 +84,12 @@ void MoneyAgent::prinfo(void) const {
     std::cout << "  agent: " << agentID << " step: " << stepCounter << " wealth: " << agentWealth << " location: " << location << std::endl;
 }
 
-BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int width, unsigned int height) {
+BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int lengthY) {
     auto seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::minstd_rand rng(static_cast<unsigned int>(seed));
-    std::uniform_int_distribution<unsigned long> distWidth(0, width - 1);
-    std::uniform_int_distribution<unsigned long> distHeight(0, height - 1);
-    world = new kami::MultiGrid2D(width, height, true, true);
+    std::uniform_int_distribution<unsigned long> distX(0, lengthX - 1);
+    std::uniform_int_distribution<unsigned long> distY(0, lengthY - 1);
+    world = new kami::MultiGrid2D(lengthX, lengthY, true, true);
     sched = new kami::RandomScheduler(this);
 
     stepCount = 0;
@@ -100,7 +100,7 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
         MoneyAgent *newAgent = new MoneyAgent();
         agentList.insert(std::pair<kami::AgentID, MoneyAgent *>(newAgent->getAgentID(), newAgent));
         sched->addAgent(newAgent->getAgentID());
-        world->addAgent(newAgent->getAgentID(), static_cast<int>(distWidth(rng)), static_cast<int>(distHeight(rng)));
+        world->addAgent(newAgent->getAgentID(), static_cast<int>(distX(rng)), static_cast<int>(distY(rng)));
     }
 }
 

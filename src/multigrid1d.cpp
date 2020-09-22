@@ -15,16 +15,16 @@
 
 namespace kami {
 
-MultiGrid1DCoord::MultiGrid1DCoord(int newCoord) {
-    coord = newCoord;
+MultiGrid1DCoord::MultiGrid1DCoord(int newX) {
+    x = newX;
 }
 
-int MultiGrid1DCoord::getCoord() const {
-    return coord;
+int MultiGrid1DCoord::getX() const {
+    return x;
 }
 
 bool operator==(const MultiGrid1DCoord &lhs, const MultiGrid1DCoord &rhs) {
-    return (lhs.coord == rhs.coord);
+    return (lhs.x == rhs.x);
 }
 
 bool operator!=(const MultiGrid1DCoord &lhs, const MultiGrid1DCoord &rhs) {
@@ -32,15 +32,16 @@ bool operator!=(const MultiGrid1DCoord &lhs, const MultiGrid1DCoord &rhs) {
 }
 
 std::ostream &operator<<(std::ostream &lhs, const MultiGrid1DCoord &rhs) {
-    return lhs << "(" << rhs.coord << ")";
+    return lhs << "(" << rhs.x << ")";
 }
 
-MultiGrid1D::MultiGrid1D(unsigned int newMaxCols, bool newColWrap = false) {
-    agentGrid = new std::vector<AgentID>[newMaxCols];
-    agentIndex = new std::map<AgentID, MultiGrid1DCoord>;
+MultiGrid1D::MultiGrid1D(unsigned int newMaxX, bool newWrapX = false) {
+    maxX = newMaxX;
 
-    maxCols = newMaxCols;
-    colWrap = newColWrap;
+    setWrapX(newWrapX);
+
+    agentGrid = new std::vector<AgentID>[maxX];
+    agentIndex = new std::map<AgentID, MultiGrid1DCoord>;
 }
 
 MultiGrid1D::~MultiGrid1D(void) {
@@ -55,7 +56,7 @@ bool MultiGrid1D::addAgent(AgentID agentID, int coord) {
 bool MultiGrid1D::addAgent(AgentID agentID, MultiGrid1DCoord location) {
     if (isLocationValid(location)) {
         agentIndex->insert(std::pair<AgentID, MultiGrid1DCoord>(agentID, location));
-        agentGrid[location.getCoord()].push_back(agentID);
+        agentGrid[location.getX()].push_back(agentID);
         return (true);
     }
 
@@ -73,7 +74,7 @@ void MultiGrid1D::deleteAgent(AgentID agentID, int coord) {
 }
 
 void MultiGrid1D::deleteAgent(AgentID agentID, MultiGrid1DCoord location) {
-    auto agentList = agentGrid[static_cast<int>(location.getCoord())];
+    auto agentList = agentGrid[static_cast<int>(location.getX())];
     for (auto testAgentID = agentList.begin(); testAgentID < agentList.end(); testAgentID++) {
         if (*testAgentID == agentID) {
             agentList.erase(testAgentID);
@@ -83,9 +84,9 @@ void MultiGrid1D::deleteAgent(AgentID agentID, MultiGrid1DCoord location) {
 }
 
 bool MultiGrid1D::isLocationValid(MultiGrid1DCoord location) const {
-    auto coord = location.getCoord();
+    auto x = location.getX();
 
-    return (coord >= 0 && coord < static_cast<int>(maxCols));
+    return (x >= 0 && x < static_cast<int>(maxX));
 }
 
 MultiGrid1DCoord MultiGrid1D::getLocationByAgent(AgentID agentID) const {
@@ -99,8 +100,8 @@ void MultiGrid1D::moveAgent(AgentID agentID, MultiGrid1DCoord nextLocation) {
     addAgent(agentID, nextLocation);
 }
 
-void MultiGrid1D::setWrap(bool newColWrap) { colWrap = newColWrap; }
-bool MultiGrid1D::getWrap(void) const { return colWrap; }
+void MultiGrid1D::setWrapX(bool newWrapX) { wrapX = newWrapX; }
+bool MultiGrid1D::getWrapX(void) const { return wrapX; }
 
 std::vector<MultiGrid1DCoord> MultiGrid1D::getNeighborhood(AgentID agentID, bool includeCenter) const {
     MultiGrid1DCoord location = getLocationByAgent(agentID);
@@ -110,37 +111,36 @@ std::vector<MultiGrid1DCoord> MultiGrid1D::getNeighborhood(AgentID agentID, bool
 
 std::vector<MultiGrid1DCoord> MultiGrid1D::getNeighborhood(MultiGrid1DCoord location, bool includeCenter) const {
     std::vector<MultiGrid1DCoord> neighborhood;
-    auto coord = location.getCoord();
+    auto x = location.getX();
 
     if (includeCenter == true)
         neighborhood.push_back(location);
 
     // E, W
-    neighborhood.push_back(locationWrap(coord + 1));
-    neighborhood.push_back(locationWrap(coord - 1));
+    neighborhood.push_back(locationWrap(x + 1));
+    neighborhood.push_back(locationWrap(x - 1));
 
     return neighborhood;
 }
 
 std::vector<AgentID> *MultiGrid1D::getCellContents(MultiGrid1DCoord location) {
     if (isLocationValid(location)) {
-        return &agentGrid[location.getCoord()];
+        return &agentGrid[location.getX()];
     }
 
     return nullptr;
 }
 
-void MultiGrid1D::setMaxCols(unsigned int newMaxCols) { maxCols = newMaxCols; }
-unsigned int MultiGrid1D::getMaxCols(void) const { return maxCols; }
+unsigned int MultiGrid1D::getMaxX(void) const { return maxX; }
 
 MultiGrid1DCoord MultiGrid1D::locationWrap(MultiGrid1DCoord location) const {
-    return locationWrap(location.getCoord());
+    return locationWrap(location.getX());
 }
 
-MultiGrid1DCoord MultiGrid1D::locationWrap(int coord) const {
-    if (colWrap == true)
-        coord = (coord + static_cast<int>(maxCols)) % static_cast<int>(maxCols);
-    return MultiGrid1DCoord(coord);
+MultiGrid1DCoord MultiGrid1D::locationWrap(int x) const {
+    if (wrapX == true)
+        x = (x + static_cast<int>(maxX)) % static_cast<int>(maxX);
+    return MultiGrid1DCoord(x);
 }
 
 }  // namespace kami

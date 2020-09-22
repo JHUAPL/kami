@@ -21,16 +21,15 @@ class MultiGrid2DCoord {
    public:
     MultiGrid2DCoord(int, int);
 
-    int getXCoord(void) const;
-    int getYCoord(void) const;
+    int getX(void) const;
+    int getY(void) const;
 
     friend bool operator==(const MultiGrid2DCoord &, const MultiGrid2DCoord &);
     friend bool operator!=(const MultiGrid2DCoord &, const MultiGrid2DCoord &);
     friend std::ostream &operator<<(std::ostream &, const MultiGrid2DCoord &);
 
    private:
-    int xCoord;
-    int yCoord;
+    int x, y;
 };
 
 class MultiGrid2D : public GridDomain {
@@ -51,27 +50,25 @@ class MultiGrid2D : public GridDomain {
 
     void moveAgent(AgentID, MultiGrid2DCoord);
 
-    void setColWrap(bool);
-    void setRowWrap(bool);
-    bool getColWrap(void) const;
-    bool getRowWrap(void) const;
+    void setWrapX(bool);
+    void setWrapY(bool);
+    bool getWrapX(void) const;
+    bool getWrapY(void) const;
 
     std::vector<MultiGrid2DCoord> getNeighborhood(MultiGrid2DCoord, GridNeighborhoodType, bool) const;
     std::vector<MultiGrid2DCoord> getNeighborhood(AgentID, GridNeighborhoodType, bool) const;
 
     std::vector<AgentID> *getCellContents(MultiGrid2DCoord);
 
-    void setMaxRows(unsigned int);
-    void setMaxCols(unsigned int);
-    unsigned int getMaxRows(void) const;
-    unsigned int getMaxCols(void) const;
+    unsigned int getMaxX(void) const;
+    unsigned int getMaxY(void) const;
 
    private:
     std::vector<AgentID> **agentGrid;
     std::map<AgentID, MultiGrid2DCoord> *agentIndex;
     static std::mutex lock;
-    unsigned int maxRows, maxCols;
-    bool colWrap, rowWrap;
+    unsigned int maxX, maxY;
+    bool wrapX, wrapY;
 
     MultiGrid2DCoord locationWrap(int, int) const;
     MultiGrid2DCoord locationWrap(MultiGrid2DCoord) const;

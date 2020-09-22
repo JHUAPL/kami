@@ -21,14 +21,14 @@ class MultiGrid1DCoord {
    public:
     MultiGrid1DCoord(int);
 
-    int getCoord(void) const;
+    int getX(void) const;
 
     friend bool operator==(const MultiGrid1DCoord &, const MultiGrid1DCoord &);
     friend bool operator!=(const MultiGrid1DCoord &, const MultiGrid1DCoord &);
     friend std::ostream &operator<<(std::ostream &, const MultiGrid1DCoord &);
 
    private:
-    int coord;
+    int x;
 };
 
 class MultiGrid1D : public GridDomain {
@@ -49,23 +49,22 @@ class MultiGrid1D : public GridDomain {
 
     void moveAgent(AgentID, MultiGrid1DCoord);
 
-    void setWrap(bool);
-    bool getWrap(void) const;
+    void setWrapX(bool);
+    bool getWrapX(void) const;
 
     std::vector<MultiGrid1DCoord> getNeighborhood(MultiGrid1DCoord, bool) const;
     std::vector<MultiGrid1DCoord> getNeighborhood(AgentID, bool) const;
 
     std::vector<AgentID> *getCellContents(MultiGrid1DCoord);
 
-    void setMaxCols(unsigned int);
-    unsigned int getMaxCols(void) const;
+    unsigned int getMaxX(void) const;
 
    private:
     std::vector<AgentID> *agentGrid;
     std::map<AgentID, MultiGrid1DCoord> *agentIndex;
     static std::mutex lock;
-    unsigned int maxCols;
-    bool colWrap;
+    unsigned int maxX;
+    bool wrapX;
 
     MultiGrid1DCoord locationWrap(int) const;
     MultiGrid1DCoord locationWrap(MultiGrid1DCoord) const;
