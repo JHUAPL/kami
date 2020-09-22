@@ -8,10 +8,10 @@
 
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
-#include <kami/kami.hpp>
 #include <kami/grid.hpp>
-#include <kami/multigrid2d.hpp>
+#include <kami/kami.hpp>
 #include <map>
+#include <mutex>
 #include <vector>
 
 namespace kami {
@@ -20,10 +20,6 @@ namespace kami {
 class MultiGrid2DCoord {
    public:
     MultiGrid2DCoord(int, int);
-
-    void setCoord(int, int);
-    void setXCoord(int);
-    void setYCoord(int);
 
     int getXCoord(void) const;
     int getYCoord(void) const;

@@ -2,7 +2,7 @@
  * TODO FILEHEADER
  */
 
-#include "boltzmann.hpp"
+#include "boltzmann2d.hpp"
 
 #include <iostream>
 #include <kami/kami.hpp>
@@ -139,11 +139,11 @@ MoneyAgent *BoltzmannWealthModel::getAgentByID(kami::AgentID agentID) const {
 }
 
 int main(void) {
-    BoltzmannWealthModel model(10000, 100, 100);
+    BoltzmannWealthModel model(100, 10, 10);
 
     for (int i = 0; i < 100; i++) {
         model.step();
     }
 
-    // model.prinfo();
+    model.prinfo();
 }

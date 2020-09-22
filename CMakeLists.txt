@@ -40,16 +40,17 @@ find_lto(CXX)
 set(SOURCES          # All .cpp files in src/
     src/agent.cpp
     src/kami.cpp
+    src/multigrid1d.cpp
     src/multigrid2d.cpp
     src/random.cpp
     src/sequential.cpp
+    src/staged.cpp
 )
-
-file(GLOB_RECURSE SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 set(TESTFILES        # All .cpp files in tests/
     tests/dummy.cpp
 )
+
 set(LIBRARY_NAME kami)  # Default name for the library built from src/*.cpp (change if you wish)
 
 # --------------------------------------------------------------------------------
@@ -68,21 +69,35 @@ target_link_libraries(${LIBRARY_NAME} PUBLIC spdlog)
 target_set_warnings(${LIBRARY_NAME} ENABLE ALL AS_ERROR ALL DISABLE Annoying)
 # target_compile_options(${LIBRARY_NAME} ... )  # For setting manually.
 
-# Add an executable for the file app/main.cpp.
 # If you add more executables, copy these lines accordingly.
-add_executable(boltzmann examples/boltzmann.cpp)   # Name of exec. and location of file.
-target_link_libraries(boltzmann PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
-target_set_warnings(boltzmann ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
-target_enable_lto(boltzmann optimized)  # enable link-time-optimization if available for non-debug configurations
+add_executable(boltzmann1d examples/boltzmann1d.cpp)   # Name of exec. and location of file.
+target_link_libraries(boltzmann1d PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
+target_set_warnings(boltzmann1d ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
+target_enable_lto(boltzmann1d optimized)  # enable link-time-optimization if available for non-debug configurations
 
 # Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
 set_target_properties(
-    ${LIBRARY_NAME} boltzmann
+    ${LIBRARY_NAME} boltzmann1d
       PROPERTIES 
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED YES 
         CXX_EXTENSIONS NO
 )
+
+add_executable(boltzmann2d examples/boltzmann2d.cpp)   # Name of exec. and location of file.
+target_link_libraries(boltzmann2d PRIVATE ${LIBRARY_NAME})  # Link the executable to library (if it uses it).
+target_set_warnings(boltzmann2d ENABLE ALL AS_ERROR ALL DISABLE Annoying) # Set warnings (if needed).
+target_enable_lto(boltzmann2d optimized)  # enable link-time-optimization if available for non-debug configurations
+
+# Set the properties you require, e.g. what C++ standard to use. Here applied to library and main (change as needed).
+set_target_properties(
+    ${LIBRARY_NAME} boltzmann2d
+      PROPERTIES 
+        CXX_STANDARD 17
+        CXX_STANDARD_REQUIRED YES 
+        CXX_EXTENSIONS NO
+)
+
 
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)

@@ -14,20 +14,7 @@
 namespace kami {
 
 MultiGrid2DCoord::MultiGrid2DCoord(int newXCoord, int newYCoord) {
-    setXCoord(newXCoord);
-    setYCoord(newYCoord);
-}
-
-void MultiGrid2DCoord::setCoord(int newXCoord, int newYCoord) {
-    setXCoord(newXCoord);
-    setYCoord(newYCoord);
-}
-
-void MultiGrid2DCoord::setXCoord(int newXCoord) {
     xCoord = newXCoord;
-}
-
-void MultiGrid2DCoord::setYCoord(int newYCoord) {
     yCoord = newYCoord;
 }
 

@@ -3,13 +3,13 @@
  */
 
 #pragma once
-#ifndef BOLTZMAN_HPP
-#define BOLTZMAN_HPP
+#ifndef BOLTZMAN1D_HPP
+#define BOLTZMAN1D_HPP
 
 #include <iostream>
 #include <kami/agent.hpp>
 #include <kami/kami.hpp>
-#include <kami/multigrid2d.hpp>
+#include <kami/multigrid1d.hpp>
 #include <kami/random.hpp>
 #include <map>
 #include <random>
@@ -21,7 +21,7 @@ class MoneyAgent : public kami::Agent {
 
     void step();
 
-    static void setWorld(kami::MultiGrid2D *w);
+    static void setWorld(kami::MultiGrid1D *w);
     static void setModel(class BoltzmannWealthModel *m);
 
     void moveAgent();
@@ -33,7 +33,7 @@ class MoneyAgent : public kami::Agent {
     void prinfo(void) const;
 
    private:
-    static kami::MultiGrid2D *world;
+    static kami::MultiGrid1D *world;
     static BoltzmannWealthModel *model;
     static std::random_device *rd;
     static std::mt19937 *rng;
@@ -43,7 +43,7 @@ class MoneyAgent : public kami::Agent {
 
 class BoltzmannWealthModel : public kami::Model {
    public:
-    BoltzmannWealthModel(unsigned int = 100, unsigned int = 10, unsigned int = 10);
+    BoltzmannWealthModel(unsigned int = 10, unsigned int = 10);
     ~BoltzmannWealthModel();
     void step();
     void run(unsigned int n);
@@ -54,8 +54,8 @@ class BoltzmannWealthModel : public kami::Model {
    private:
     std::map<kami::AgentID, MoneyAgent *> agentList;
     kami::RandomScheduler *sched;
-    kami::MultiGrid2D *world;
+    kami::MultiGrid1D *world;
     unsigned int stepCount;
 };
 
-#endif  // BOLTZMAN_HPP
+#endif  // BOLTZMAN1D_HPP

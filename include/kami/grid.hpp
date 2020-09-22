@@ -29,6 +29,10 @@ enum GridNeighborhoodType {
 enum GridDistanceType { Linear,
                         Taxicab };
 
+///  \brief A domain based on a grid with integer steps
+class GridDomain : public Domain {
+};
+
 }  // namespace kami
 
 #endif  // KAMI_DOMAIN_HPP
