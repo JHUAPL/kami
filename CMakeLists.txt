@@ -39,12 +39,18 @@ find_lto(CXX)
 # --------------------------------------------------------------------------------
 set(SOURCES          # All .cpp files in src/
     src/agent.cpp
+    src/grid1d.cpp
+    src/grid2d.cpp
+    src/grid3d.cpp
     src/kami.cpp
     src/multigrid1d.cpp
     src/multigrid2d.cpp
     src/multigrid3d.cpp
     src/random.cpp
     src/sequential.cpp
+    src/sologrid1d.cpp
+    src/sologrid2d.cpp
+    src/sologrid3d.cpp
     src/staged.cpp
 )
 

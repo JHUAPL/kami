@@ -33,6 +33,9 @@ enum GridDistanceType { Linear,
 class GridDomain : public Domain {
 };
 
+class GridCoord {
+};
+
 }  // namespace kami
 
 #endif  // KAMI_DOMAIN_HPP

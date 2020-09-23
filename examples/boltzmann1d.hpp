@@ -12,12 +12,10 @@
 #include <kami/multigrid1d.hpp>
 #include <kami/random.hpp>
 #include <map>
-#include <random>
 
 class MoneyAgent : public kami::Agent {
    public:
     MoneyAgent();
-    ~MoneyAgent();
 
     void step();
 
@@ -35,8 +33,6 @@ class MoneyAgent : public kami::Agent {
    private:
     static kami::MultiGrid1D *world;
     static BoltzmannWealthModel *model;
-    static std::random_device *rd;
-    static std::mt19937 *rng;
     int stepCounter;
     int agentWealth;
 };
@@ -45,6 +41,7 @@ class BoltzmannWealthModel : public kami::Model {
    public:
     BoltzmannWealthModel(unsigned int = 10, unsigned int = 10);
     ~BoltzmannWealthModel();
+
     void step();
     void run(unsigned int n);
     void prinfo(void) const;

@@ -4,29 +4,21 @@
 
 #include "boltzmann2d.hpp"
 
+#include <stdlib.h>
+
 #include <iostream>
 #include <kami/kami.hpp>
+#include <kami/grid2d.hpp>
 #include <kami/multigrid2d.hpp>
-#include <kami/random.hpp>
 #include <map>
 
-std::random_device *MoneyAgent::rd = nullptr;
-std::mt19937 *MoneyAgent::rng = nullptr;
 kami::MultiGrid2D *MoneyAgent::world = nullptr;
 BoltzmannWealthModel *MoneyAgent::model = nullptr;
 
 MoneyAgent::MoneyAgent() {
-    rd = new std::random_device();
-    rng = new std::mt19937{(*rd)()};
-
     stepCounter = 0;
     agentWealth = 1;
 }
-
-MoneyAgent::~MoneyAgent() {
-    delete rng;
-    delete rd;
-};
 
 void MoneyAgent::step() {
     stepCounter++;
@@ -47,9 +39,7 @@ void MoneyAgent::setModel(class BoltzmannWealthModel *m) {
 void MoneyAgent::moveAgent() {
     auto agentID = this->getAgentID();
     auto moveList = world->getNeighborhood(agentID, kami::GridNeighborhoodType::Moore, false);
-
-    std::uniform_int_distribution<unsigned long> dist(0, moveList.size() - 1);
-    auto newLocation = moveList[dist(*rng)];
+    auto newLocation = moveList[static_cast<unsigned int>(rand()) % moveList.size()];
 
     world->moveAgent(agentID, newLocation);
 }
@@ -64,12 +54,11 @@ void MoneyAgent::setWealth(int newWealth) {
 
 void MoneyAgent::giveMoney() {
     kami::AgentID agentID = getAgentID();
-    kami::MultiGrid2DCoord location = world->getLocationByAgent(agentID);
+    kami::GridCoord2D location = world->getLocationByAgent(agentID);
     std::vector<kami::AgentID> *cellMates = world->getCellContents(location);
 
     if (cellMates->size() > 1) {
-        std::uniform_int_distribution<unsigned long> dist(0, cellMates->size() - 1);
-        kami::AgentID otherAgentID = cellMates->at(dist(*rng));
+        kami::AgentID otherAgentID = cellMates->at(static_cast<unsigned int>(rand()) % cellMates->size());
         auto otherAgent = model->getAgentByID(otherAgentID);
 
         otherAgent->agentWealth += 1;
@@ -79,16 +68,12 @@ void MoneyAgent::giveMoney() {
 
 void MoneyAgent::prinfo(void) const {
     kami::AgentID agentID = getAgentID();
-    kami::MultiGrid2DCoord location = world->getLocationByAgent(agentID);
+    kami::GridCoord2D location = world->getLocationByAgent(agentID);
 
     std::cout << "  agent: " << agentID << " step: " << stepCounter << " wealth: " << agentWealth << " location: " << location << std::endl;
 }
 
 BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int lengthY) {
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::minstd_rand rng(static_cast<unsigned int>(seed));
-    std::uniform_int_distribution<unsigned long> distX(0, lengthX - 1);
-    std::uniform_int_distribution<unsigned long> distY(0, lengthY - 1);
     world = new kami::MultiGrid2D(lengthX, lengthY, true, true);
     sched = new kami::RandomScheduler(this);
 
@@ -98,18 +83,20 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
 
     for (unsigned int i = 0; i < numberAgents; i++) {
         MoneyAgent *newAgent = new MoneyAgent();
+
         agentList.insert(std::pair<kami::AgentID, MoneyAgent *>(newAgent->getAgentID(), newAgent));
         sched->addAgent(newAgent->getAgentID());
-        world->addAgent(newAgent->getAgentID(), static_cast<int>(distX(rng)), static_cast<int>(distY(rng)));
+        world->addAgent(newAgent->getAgentID(),
+                        kami::GridCoord2D(rand() % static_cast<int>(lengthX),
+                                          rand() % static_cast<int>(lengthY)));
     }
 }
 
 BoltzmannWealthModel::~BoltzmannWealthModel() {
-    for (auto agent = agentList.begin(); agent != agentList.end(); ++agent) {
-        world->deleteAgent(agent->first);
-        sched->deleteAgent(agent->first);
-        agentList.erase(agent);
+    for (auto agentPair = agentList.begin(); agentPair != agentList.end(); agentPair++) {
+        delete agentPair->second;
     }
+
     delete sched;
     delete world;
 }

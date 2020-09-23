@@ -17,7 +17,6 @@
 class MoneyAgent : public kami::Agent {
    public:
     MoneyAgent();
-    ~MoneyAgent();
 
     void step();
 
@@ -35,8 +34,6 @@ class MoneyAgent : public kami::Agent {
    private:
     static kami::MultiGrid3D *world;
     static BoltzmannWealthModel *model;
-    static std::random_device *rd;
-    static std::mt19937 *rng;
     int stepCounter;
     int agentWealth;
 };
