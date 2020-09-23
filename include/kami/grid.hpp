@@ -29,10 +29,11 @@ enum GridNeighborhoodType {
 enum GridDistanceType { Linear,
                         Taxicab };
 
-///  \brief A domain based on a grid with integer steps
+///  \brief An abstract domain based on a grid with integer steps
 class GridDomain : public Domain {
 };
 
+///  \brief An abstract for integer coordinates
 class GridCoord {
 };
 

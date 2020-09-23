@@ -121,4 +121,4 @@ set_target_properties(
 
 # Set up tests (see tests/CMakeLists.txt).
 add_subdirectory(tests)
-#add_subdirectory(docs)
+add_subdirectory(docs)

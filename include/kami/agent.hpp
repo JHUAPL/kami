@@ -44,11 +44,23 @@ class AgentID {
     uint64_t id;
 };
 
+///  \brief A superclass for Agents
+///
+///  \details All agents should subclass the Agent class.
+///  At a minimum, subclasses must implement the `step()`
+///  function, to execute a single time step for each agent.
 class Agent {
    public:
+    ///  \brief Deconstructor
     virtual ~Agent() = default;
 
+    /// \brief Get the agent's self identification number.
     AgentID getAgentID() const;
+
+    /// \brief Execute a time-step for the agent
+    ///
+    /// \details This function should step the agent instance.  Any activities that the
+    /// agent should perform as part of its time step should be in this function.
     virtual void step();
 
     friend bool operator==(const Agent &, const Agent &);
@@ -58,14 +70,29 @@ class Agent {
     AgentID agentID;
 };
 
-///  A class for agents with pre-`step()` and post-`step()` staging.
+///  \brief A class for agents with pre-`step()` and post-`step()` staging.
+///
+///  \details Staged agents use a two-phase or three-phase step to allow agents to take actions without
+///  updating the state of the model before all agents have been allowed to
+///  update.
 class StagedAgent : public Agent {
    public:
     ///
     StagedAgent();
     virtual ~StagedAgent() = default;
 
+    ///  \brief Initialize a staged time step for the agent
+    ///
+    ///  \details This method should initialize a time-step, but not actually execute
+    ///  any changes.  It should be implemented if a model's schedule expectes
+    ///  a staged stepping function wherein all agents step using the same
+    ///  state.
     virtual void preStep() = 0;
+
+    ///  \brief Post-step actions the agent
+    ///
+    ///  \details This method should be called after `step()`.  Any updates or cleanups
+    ///  to the agent should occur here that must happen after the step is complete.
     virtual void postStep() = 0;
 };
 
