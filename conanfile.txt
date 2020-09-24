@@ -1,6 +1,0 @@
-[requires]
-catch2/2.2.2@bincrafters/stable
-spdlog/1.7.0
-
-[generators]
-cmake

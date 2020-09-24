@@ -1,0 +1,5 @@
+[requires]
+foo/0.1@gavin/testing
+
+[generators]
+cmake_paths

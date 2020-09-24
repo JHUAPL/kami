@@ -1,0 +1,159 @@
+stages:
+- analysis
+- build
+- test
+
+cppcheck:
+  image: ubuntu:bionic
+  stage: analysis
+  before_script:
+    - apt update
+    - apt install -y --no-install-recommends cppcheck=1.82-1 python3-pygments python-pygments
+    - cppcheck --version
+  script:
+    - mkdir cppcheck
+    #- cppcheck . -I include/ --verbose --enable=all --inconclusive --language=c++ --error-exitcode=1
+    - cppcheck . -I include/ --enable=all --inconclusive --xml-version=2 --force --library=windows,posix,gnu . 2> cppcheck/result.xml
+    - cppcheck-htmlreport --source-encoding="iso8859-1" --title="my project name" --source-dir . --report-dir=cppcheck --file=cppcheck/result.xml
+  artifacts:
+    paths:
+      - cppcheck/
+    expire_in: 1 week
+
+
+.build_template: &job_definition
+    image: conanio/gcc7
+    stage: build
+    before_script:
+      - env
+      - sudo apt update
+      - sudo apt install -y python3-pip
+      - sudo pip3 install gcovr
+      - sudo chmod +x ./.ci-files/install_conan.sh
+      - sudo chmod +x ./.ci-files/install_cmake.sh
+      - sudo chmod +x ./.ci-files/run_conan_server.sh
+      - ./.ci-files/install_conan.sh
+      - ./.ci-files/install_cmake.sh
+      #
+      - ./.ci-files/run_conan_server.sh
+      - conan remote add local http://localhost:9300
+      - conan remote list
+
+    script:
+      - echo $USER    ---   $HOME
+      - echo Working directory $PWD
+      ### Test that we can build the library properly
+      - mkdir -p build && cd build
+      - cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/local
+      - cmake --build .
+      - ctest
+      - mkdir -p artifacts/coverage
+      - gcovr . -r .. --html-details --html -o artifacts/coverage/index.html -e ../test/third_party
+      - sudo cmake --build . --target install
+      ##  Test that we can build the test application
+      ##  and the find_package method works correctly.
+      - rm -rf *
+      - cmake ../test_cmake_install/cmake -D CMAKE_PREFIX_PATH=$HOME/local
+      - cmake --build .
+      - ctest
+      ## Build the Conan package and upload it to the local repo.
+      - cd ..
+      - conan user -p demo demo -r=local
+      - conan create . local/testing
+      - conan upload foo* -r=local -c --all
+      - conan search "*" -r=local
+    artifacts:
+      paths:
+        - artifacts/*
+      expire_in: 1 week
+
+build-gcc5:
+    <<: *job_definition           # Merge the contents of the 'job_definition' alias
+    image: conanio/gcc5
+
+build-gcc6:
+    <<: *job_definition           # Merge the contents of the 'job_definition' alias
+    image: conanio/gcc6
+
+build-gcc7:
+    <<: *job_definition           # Merge the contents of the 'job_definition' alias
+    image: conanio/gcc7
+
+build-gcc8:
+    <<: *job_definition           # Merge the contents of the 'job_definition' alias
+    image: conanio/gcc8
+
+build-clang60:
+    <<: *job_definition
+    image: conanio/clang60
+
+build-clang40:
+    <<: *job_definition
+    image: conanio/clang40
+
+build-clang50:
+    <<: *job_definition
+    image: conanio/clang50
+
+build-clang7:
+    <<: *job_definition
+    image: conanio/clang7
+
+build-clang39:
+    <<: *job_definition
+    image: conanio/clang39
+
+
+###############################################################################
+# The test package stage tests whether the different Conan generators work
+# correctly with the
+###############################################################################
+.test_package: &test_package_definition
+    image: conanio/gcc7
+    stage: test
+    dependencies:
+      - build-gcc5
+      - build-gcc6
+      - build-gcc7
+      - build-gcc8
+    before_script:
+      - env
+      - sudo apt update
+      - sudo chmod +x ./.ci-files/install_conan.sh
+      - sudo chmod +x ./.ci-files/install_cmake.sh
+      - sudo chmod +x ./.ci-files/run_conan_server.sh
+      - ./.ci-files/install_conan.sh
+      - ./.ci-files/install_cmake.sh
+      #
+      - ./.ci-files/run_conan_server.sh
+      - conan remote add local http://localhost:9300
+      - conan remote list
+    script:
+      # Create and uplaod the recipe to the repository
+      - conan user -p demo demo -r=local
+      - conan create . local/testing
+      - conan upload foo* -r=local -c --all
+      # Test the Conan cmake generator
+      - mkdir build && cd build
+      - conan install ../test_cmake_install/conan_cmake_generator --build missing
+      - cmake ../test_cmake_install/conan_cmake_generator
+      - cmake --build .
+      - rm -rf *
+      # Test the Conan cmake_paths generator
+      - conan install ../test_cmake_install/conan_cmake_paths_generator --build missing
+      - cmake ../test_cmake_install/conan_cmake_paths_generator
+      - cmake --build .
+      - rm -rf *
+      # Test the Conan find_package generator
+      - conan install ../test_cmake_install/conan_cmake_find_package_generator --build missing
+      - cmake ../test_cmake_install/conan_cmake_find_package_generator
+      - cmake --build .
+      - rm -rf *
+
+test-package-gcc8:
+    <<: *test_package_definition           # Merge the contents of the 'job_definition' alias
+    image: conanio/gcc8
+
+test-package-clang60:
+    <<: *test_package_definition           # Merge the contents of the 'job_definition' alias
+    image: conanio/clang60

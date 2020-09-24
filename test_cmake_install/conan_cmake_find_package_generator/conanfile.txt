@@ -1,0 +1,5 @@
+[requires]
+foo/0.1@local/testing
+
+[generators]
+cmake_find_package
