@@ -14,7 +14,7 @@
 
 namespace kami {
 
-class SoloGrid1D : public Grid1D {
+class KAMI_EXPORT SoloGrid1D : public Grid1D {
    public:
     SoloGrid1D(unsigned int, bool);
 

@@ -11,7 +11,7 @@
 namespace kami {
 
 /// \brief Provides an environment for the agents to participate in
-class Domain {
+class KAMI_EXPORT Domain {
 };
 
 }  // namespace kami

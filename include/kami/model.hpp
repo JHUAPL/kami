@@ -11,7 +11,7 @@
 namespace kami {
 
 /// An abstract for generic models
-class Model {
+class KAMI_EXPORT Model {
    public:
     /// Destructor.
     virtual ~Model();

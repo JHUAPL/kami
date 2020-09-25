@@ -6,6 +6,8 @@
 #ifndef KAMI_AGENT_HPP
 #define KAMI_AGENT_HPP
 
+#include <kami/KAMI_EXPORT.h>
+
 #include <iostream>
 #include <string>
 
@@ -16,7 +18,7 @@ namespace kami {
 ///  runtime.  The unique identifier is an unsigned integer that
 ///  increments monotonically with each new Agent instantiated.
 ///  AgentIDs are not guaranteed to be unique from session-to-session.
-class AgentID {
+class KAMI_EXPORT AgentID {
    public:
     ///  \brief Constructs a new unique identifier.
     AgentID();
@@ -49,7 +51,7 @@ class AgentID {
 ///  \details All agents should subclass the Agent class.
 ///  At a minimum, subclasses must implement the `step()`
 ///  function, to execute a single time step for each agent.
-class Agent {
+class KAMI_EXPORT Agent {
    public:
     ///  \brief Deconstructor
     virtual ~Agent() = default;

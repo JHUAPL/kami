@@ -17,7 +17,7 @@ namespace kami {
 ///  That order is preserved between calls to `step()` but may be modified by
 ///  `addAgent()` or `deleteAgent()`.
 ///  \pre       First create a Model for the scheduler to live in.
-class SequentialScheduler : public Scheduler {
+class KAMI_EXPORT SequentialScheduler : public Scheduler {
    public:
     ///  \brief Constructor.  
     ///  \details   The Model parameter is used by the scheduler to get 

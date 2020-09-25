@@ -16,7 +16,7 @@
 namespace kami {
 
 ///  \brief Onem-dimensional coordinates.
-class GridCoord1D : public GridCoord {
+class KAMI_EXPORT GridCoord1D : public GridCoord {
    public:
     ///  \brief  Constructor for one-dimensional coordinates.
     GridCoord1D(int);
@@ -42,7 +42,7 @@ class GridCoord1D : public GridCoord {
 ///
 ///  \details The grid is linear and may wrap around in either
 ///  dimension.
-class Grid1D : public GridDomain {
+class KAMI_EXPORT Grid1D : public GridDomain {
    public:
     ///  Constructor
     Grid1D(unsigned int, bool);

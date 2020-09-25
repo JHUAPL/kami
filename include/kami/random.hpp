@@ -15,7 +15,7 @@ namespace kami {
 ///  That order should be different for each subsequent call to `step()`, 
 ///  but is not gauranteed not to repeat.
 ///  \pre       First create a Model for the scheduler to live in.
-class RandomScheduler : public Scheduler {
+class KAMI_EXPORT RandomScheduler : public Scheduler {
    public:
     ///  \brief Constructor.  
     ///  \details   The Model parameter is used by the scheduler to get 
