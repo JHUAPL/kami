@@ -6,9 +6,8 @@
 #ifndef KAMI_AGENT_HPP
 #define KAMI_AGENT_HPP
 
-#include <kami/KAMI_EXPORT.h>
-
 #include <iostream>
+#include <kami/KAMI_EXPORT.hpp>
 #include <string>
 
 namespace kami {

@@ -6,6 +6,7 @@
 #ifndef KAMI_SOLOGRID2D_HPP
 #define KAMI_SOLOGRID2D_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>

@@ -28,7 +28,7 @@ create_library(NAME  kami
                PRIVATE_LINKED_TARGETS
                    ${COVERAGE_TARGET}
                EXPORT_FILE_PATH
-                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.h"
+                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.hpp"
  )
  
 set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}

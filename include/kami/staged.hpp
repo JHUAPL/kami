@@ -3,6 +3,7 @@
 #define KAMI_STAGED_HPP
 
 #include <algorithm>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/model.hpp>
 #include <kami/scheduler.hpp>

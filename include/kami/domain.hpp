@@ -6,6 +6,7 @@
 #ifndef KAMI_DOMAIN_HPP
 #define KAMI_DOMAIN_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/kami.hpp>
 
 namespace kami {

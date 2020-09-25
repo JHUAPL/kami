@@ -7,6 +7,7 @@
 #define KAMI_GRID2D_HPP
 
 #include <iostream>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>
 #include <kami/kami.hpp>

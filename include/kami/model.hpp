@@ -6,6 +6,7 @@
 #ifndef KAMI_MODEL_HPP
 #define KAMI_MODEL_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 
 namespace kami {

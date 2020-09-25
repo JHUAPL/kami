@@ -6,6 +6,7 @@
 #ifndef KAMI_MULTIGRID3D_HPP
 #define KAMI_MULTIGRID3D_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>

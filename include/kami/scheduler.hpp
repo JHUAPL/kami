@@ -6,6 +6,7 @@
 #ifndef KAMI_SCHEDULER_HPP
 #define KAMI_SCHEDULER_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 
 namespace kami {

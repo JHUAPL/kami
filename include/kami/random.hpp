@@ -3,6 +3,7 @@
 #define KAMI_RANDOM_HPP
 
 #include <algorithm>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/kami.hpp>
 #include <random>
 #include <vector>
