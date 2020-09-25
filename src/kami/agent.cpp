@@ -48,4 +48,9 @@ bool operator!=(const Agent &lhs, const Agent &rhs) {
     return !(lhs == rhs);
 }
 
+void TwoActionAgent::step() {
+    stepA();
+    stepB();
+}
+
 }  // namespace kami

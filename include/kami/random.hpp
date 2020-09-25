@@ -11,15 +11,15 @@
 namespace kami {
 
 ///  \brief     Will execute all agent steps in a random order.
-///  \details   A random scheduler will iterate over the agents assigned 
-///  to the scheduler and call their `step()` function in a random order. 
-///  That order should be different for each subsequent call to `step()`, 
+///  \details   A random scheduler will iterate over the agents assigned
+///  to the scheduler and call their `step()` function in a random order.
+///  That order should be different for each subsequent call to `step()`,
 ///  but is not gauranteed not to repeat.
 ///  \pre       First create a Model for the scheduler to live in.
 class KAMI_EXPORT RandomScheduler : public Scheduler {
    public:
-    ///  \brief Constructor.  
-    ///  \details   The Model parameter is used by the scheduler to get 
+    ///  \brief Constructor.
+    ///  \details   The Model parameter is used by the scheduler to get
     ///  access to an Agent.  The Model is presumed to maintain a master
     ///  list of all Agents in the Model and the Model can be queried for
     ///  a reference to any particular Agent at `step()` time.
@@ -39,18 +39,29 @@ class KAMI_EXPORT RandomScheduler : public Scheduler {
     void deleteAgent(AgentID);
 
     ///  \brief Execute a single time step.
-    ///  \details   This method will randomize the list of Agents in the 
-    ///  scheduler's internal queue and then execute the `Agent::step()` 
-    ///  method for every Agent assigned to this scheduler in the 
+    ///  \details   This method will randomize the list of Agents in the
+    ///  scheduler's internal queue and then execute the `Agent::step()`
+    ///  method for every Agent assigned to this scheduler in the
     ///  randomized order.
     void step();
 
-   private:
+   protected:
     std::vector<AgentID> agentList;
     std::random_device rd;
     std::mt19937 rng{rd()};
     Model *model;
     int stepCounter;
+};
+
+class KAMI_EXPORT TwoActionRandomScheduler : public RandomScheduler {
+   public:
+    ///  \brief Execute a single time step.
+    ///  \details   This method will randomize the list of TwoActionAgents in the
+    ///  scheduler's internal queue and then execute the `TwoActionAgent::stepA()`
+    ///  method for every TwoActionAgent assigned to this scheduler in the
+    ///  randomized order, then execute the `TwoActionAgent::stepB()` method for every 
+    //   TwoActionAgent assigned to this scheduler in the randomized order,
+    void step();
 };
 
 };  // namespace kami
