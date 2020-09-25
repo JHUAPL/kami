@@ -25,7 +25,7 @@ Creating a Conan package is relatively easy. Simple cd into the source directory
 and execute the conan create function.
 
 ```bash
-git clone https://github.com/GavinNL/cpp_library_template
+git clone https://github.com/k3jph/kami.git
 cd kami
 
 conan create . kami/develop
