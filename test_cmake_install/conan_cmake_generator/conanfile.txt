@@ -1,5 +1,0 @@
-[requires]
-foo/0.1@local/testing
-
-[generators]
-cmake
