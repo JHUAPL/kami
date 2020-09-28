@@ -30,6 +30,10 @@ create_library(NAME  kami
                EXPORT_FILE_PATH
                    "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.hpp"
  )
+
+configure_file(
+    "${CMAKE_SOURCE_DIR}/include/kami/config.hpp.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.hpp")
  
 set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
                                       SOVERSION ${KAMI_VERSION_MAJOR})
@@ -54,7 +58,8 @@ set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
  #            <prefix>/include/${NAMESPACE}/LIBRARY_NAME/LIBRARY_NAME_export.h
  install(
      FILES
-         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.h"
+         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.hpp"
+         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.hpp"
      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami"
  )
 
