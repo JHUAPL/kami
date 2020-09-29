@@ -63,6 +63,8 @@ set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami"
  )
 
+add_library(kami::kami ALIAS kami)
+
 ################################################################################
 
 # }

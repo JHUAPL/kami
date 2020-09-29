@@ -2,7 +2,8 @@
 # Set minimum version of CMake.
 cmake_minimum_required(VERSION 3.13)
 
-project(libkamidata  VERSION  ${KAMI_VERSION_STRING})
+project(libkamidata  VERSION    ${KAMI_VERSION_STRING}
+                     LANGUAGES  CXX)
 
 create_library(NAME  kamidata
                NAMESPACE kami
@@ -16,9 +17,9 @@ create_library(NAME  kamidata
                EXPORT_FILE_PATH
                    "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.hpp"
  )
-
+ 
 set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
-                                          SOVERSION ${KAMI_VERSION_MAJOR})
+                                        SOVERSION ${KAMI_VERSION_MAJOR})
 
  # Introduce variables:
  # * CMAKE_INSTALL_LIBDIR
@@ -31,7 +32,7 @@ set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
  #   * include/foo/bar/bar.h -> <prefix>/include/foo/bar/bar.h
  install(
      DIRECTORY   "${CMAKE_SOURCE_DIR}/include/kami/data"
-     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/data"
+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami/data"
      FILES_MATCHING PATTERN "*"
  )
 
@@ -40,9 +41,11 @@ set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
  #            <prefix>/include/${NAMESPACE}/LIBRARY_NAME/LIBRARY_NAME_export.h
  install(
      FILES
-         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/BAZ_EXPORT.h"
+         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.hpp"
      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami/data"
  )
+
+add_library(kami::data ALIAS kamidata)
 
 ################################################################################
 
