@@ -1,4 +1,4 @@
-#include <kami/data/baz.h>
+#include <iostream>
 
 namespace foo {
 
