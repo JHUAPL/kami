@@ -28,7 +28,7 @@
 cmake_minimum_required(VERSION 3.13) # GENERATOR_IS_MULTI_CONFIG
 
 set(KAMI_VERSION_MAJOR 0)
-set(KAMI_VERSION_MINOR 1)
+set(KAMI_VERSION_MINOR 2)
 set(KAMI_VERSION_PATCH 0)
 set(KAMI_VERSION_STRING ${KAMI_VERSION_MAJOR}.${KAMI_VERSION_MINOR}.${KAMI_VERSION_PATCH})
 
@@ -43,6 +43,9 @@ project(kami  VERSION       ${KAMI_VERSION_STRING}
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
 
 set(PROJECT_NAMESPACE        kami  )  # The project namespace. Library targets
                                       # will be referred by

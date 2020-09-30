@@ -1,14 +1,13 @@
 from conans import ConanFile, CMake
 
 
-class CppLibraryTemplateConan(ConanFile):
+class KamiConan(ConanFile):
     name = "kami"
-    version = "0.1.0"
-    license = "Unlicense"
+    version = "0.2.0"
     author = "James P. Howard, II <james.howard@jhu.edu>"
     url = "http://github.com/GavinNL/cpp_library_template"
-    description = "A simple C++ Library Template."
-    topics = ("<Put some tag here>", "<here>", "<and here>")
+    description = "Agent-Based Modeling in Modern C++"
+    topics = ("agent-based modeling", "simulation", "orms")
     settings = "os", "compiler", "build_type", "arch"
     generators = "cmake"
     exports_sources = "*"
@@ -46,3 +45,8 @@ class CppLibraryTemplateConan(ConanFile):
         # following generators:
         #  cmake, cmake_paths, cmake_
         self.cpp_info.libs = ["dog", "cat", "bar", "kami", "kamidata"]
+
+    def requirements(self):
+        # Or add a new requirement!
+        self.requires("spdlog/1.7.0")
+        self.requires("cli11/1.9.1")
