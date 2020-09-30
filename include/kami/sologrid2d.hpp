@@ -6,6 +6,7 @@
 #ifndef KAMI_SOLOGRID2D_HPP
 #define KAMI_SOLOGRID2D_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>
@@ -15,7 +16,7 @@
 
 namespace kami {
 
-class SoloGrid2D : public Grid2D {
+class KAMI_EXPORT SoloGrid2D : public Grid2D {
    public:
     SoloGrid2D(unsigned int, unsigned int, bool, bool);
 

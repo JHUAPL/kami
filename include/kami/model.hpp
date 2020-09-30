@@ -6,12 +6,13 @@
 #ifndef KAMI_MODEL_HPP
 #define KAMI_MODEL_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 
 namespace kami {
 
 /// An abstract for generic models
-class Model {
+class KAMI_EXPORT Model {
    public:
     /// Destructor.
     virtual ~Model();

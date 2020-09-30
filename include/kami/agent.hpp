@@ -7,6 +7,7 @@
 #define KAMI_AGENT_HPP
 
 #include <iostream>
+#include <kami/KAMI_EXPORT.hpp>
 #include <string>
 
 namespace kami {
@@ -16,7 +17,7 @@ namespace kami {
 ///  runtime.  The unique identifier is an unsigned integer that
 ///  increments monotonically with each new Agent instantiated.
 ///  AgentIDs are not guaranteed to be unique from session-to-session.
-class AgentID {
+class KAMI_EXPORT AgentID {
    public:
     ///  \brief Constructs a new unique identifier.
     AgentID();
@@ -49,7 +50,7 @@ class AgentID {
 ///  \details All agents should subclass the Agent class.
 ///  At a minimum, subclasses must implement the `step()`
 ///  function, to execute a single time step for each agent.
-class Agent {
+class KAMI_EXPORT Agent {
    public:
     ///  \brief Deconstructor
     virtual ~Agent() = default;
@@ -75,7 +76,7 @@ class Agent {
 ///  \details Staged agents use a two-phase or three-phase step to allow agents to take actions without
 ///  updating the state of the model before all agents have been allowed to
 ///  update.
-class StagedAgent : public Agent {
+class KAMI_EXPORT StagedAgent : public Agent {
    public:
     ///
     StagedAgent();
@@ -94,6 +95,37 @@ class StagedAgent : public Agent {
     ///  \details This method should be called after `step()`.  Any updates or cleanups
     ///  to the agent should occur here that must happen after the step is complete.
     virtual void postStep() = 0;
+};
+
+///  \brief A class for agents with two actions per scheduler step
+///
+///  \details This class is meant to be used for models that require two steps per
+///  scheduler cycle.  This is conceived as being a "day" and "night" action for 
+///  each agent where the scheduler interprets a step as a day-long period.  However,
+///  it may be appropriate for other model configurations, too.
+class KAMI_EXPORT TwoActionAgent : public Agent {
+   public:
+    ///
+    TwoActionAgent();
+    virtual ~TwoActionAgent() = default;
+
+    /// \brief Execute a time-step for the agent.
+    ///
+    /// \details This function should step the agent instance completely and executes
+    /// both the `stepA()` and `stepB()` methods.
+    virtual void step();
+
+    ///  \brief Execute the first element of the time step.
+    ///
+    ///  \details This method should execute the first action in a given time step.
+    ///  The action is not expected to be state preserving for other agents.
+    virtual void stepA() = 0;
+
+    ///  \brief Execute the second element of the time step.
+    ///
+    ///  \details This method should execute the second action in a given time step.
+    ///  The action is not expected to be state preserving for other agents.
+    virtual void stepB() = 0;
 };
 
 }  // namespace kami

@@ -6,6 +6,7 @@
 #ifndef KAMI_SCHEDULER_HPP
 #define KAMI_SCHEDULER_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 
 namespace kami {
@@ -15,7 +16,7 @@ namespace kami {
 ///  in the model.  A scheduler will have a collection of agents assigned
 ///  to it and will execute the step function for each agent based on the
 ///  type of scheduling implemented.
-class Scheduler {
+class KAMI_EXPORT Scheduler {
    public:
     /// \brief  Return a new Kami scheduler
     ///

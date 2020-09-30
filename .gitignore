@@ -30,7 +30,11 @@
 *.exe
 *.out
 *.app
-*.x
 
-# Build directory
-build/
+# Build directories
+*/build/*
+*/build-*/*
+build/*
+
+# Qtcreator files
+*.user

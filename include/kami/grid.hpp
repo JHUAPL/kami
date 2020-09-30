@@ -7,13 +7,14 @@
 #define KAMI_GRID_HPP
 
 #include <iostream>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/domain.hpp>
 #include <kami/kami.hpp>
 
 namespace kami {
 
 ///  \brief Neighborhood types for orthogonal grid domains
-enum GridNeighborhoodType {
+enum KAMI_EXPORT GridNeighborhoodType {
     ///  \brief Moore neighborhood.
     ///  \details Moore neighborhood types include diagonally
     ///  adjacent cells as neighbors.
@@ -26,15 +27,15 @@ enum GridNeighborhoodType {
 };
 
 ///  \brief Distance types for orthogonal grid domains
-enum GridDistanceType { Linear,
-                        Taxicab };
+enum KAMI_EXPORT GridDistanceType { Linear,
+                                   Taxicab };
 
 ///  \brief An abstract domain based on a grid with integer steps
-class GridDomain : public Domain {
+class KAMI_EXPORT GridDomain : public Domain {
 };
 
 ///  \brief An abstract for integer coordinates
-class GridCoord {
+class KAMI_EXPORT GridCoord {
 };
 
 }  // namespace kami

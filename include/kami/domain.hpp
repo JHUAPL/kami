@@ -6,12 +6,13 @@
 #ifndef KAMI_DOMAIN_HPP
 #define KAMI_DOMAIN_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/kami.hpp>
 
 namespace kami {
 
 /// \brief Provides an environment for the agents to participate in
-class Domain {
+class KAMI_EXPORT Domain {
 };
 
 }  // namespace kami

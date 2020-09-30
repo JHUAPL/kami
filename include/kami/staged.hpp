@@ -3,6 +3,7 @@
 #define KAMI_STAGED_HPP
 
 #include <algorithm>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/model.hpp>
 #include <kami/scheduler.hpp>
@@ -17,7 +18,7 @@ namespace kami {
 ///  That order is preserved between calls to `step()` but may be modified by
 ///  `addAgent()` or `deleteAgent()`.
 ///  \pre       First create a Model for the scheduler to live in.
-class StagedScheduler : public Scheduler {
+class KAMI_EXPORT StagedScheduler : public Scheduler {
    public:
     ///  \brief Constructor.  
     ///  \details   The Model parameter is used by the scheduler to get 

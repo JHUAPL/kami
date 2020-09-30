@@ -47,10 +47,9 @@ matrix:
         env: CONAN_APPLE_CLANG_VERSIONS=10.0
 
 install:
-  - chmod +x .ci-files/install_conan.sh .ci-files/install_cmake.sh
-  - ./.ci-files/install_conan.sh
-  - ./.ci-files/install_cmake.sh
+  - chmod +x .ci/install.sh
+  - ./.ci/install.sh
 
 script:
-  - chmod +x .ci-files/run.sh
-  - ./.ci-files/run.sh
+  - chmod +x .ci/run.sh
+  - ./.ci/run.sh

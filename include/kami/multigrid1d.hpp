@@ -6,6 +6,7 @@
 #ifndef KAMI_MULTIGRID1D_HPP
 #define KAMI_MULTIGRID1D_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>
@@ -14,7 +15,7 @@
 
 namespace kami {
 
-class MultiGrid1D : public Grid1D {
+class KAMI_EXPORT MultiGrid1D : public Grid1D {
    public:
     MultiGrid1D(unsigned int, bool);
 

@@ -7,6 +7,7 @@
 #define KAMI_GRID2D_HPP
 
 #include <iostream>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>
 #include <kami/kami.hpp>
@@ -16,7 +17,7 @@
 namespace kami {
 
 ///  \brief Two-dimensional coordinates.
-class GridCoord2D : public GridCoord {
+class KAMI_EXPORT GridCoord2D : public GridCoord {
    public:
     ///  \brief  Constructor for two-dimensional coordinates.
     GridCoord2D(int, int);
@@ -45,7 +46,7 @@ class GridCoord2D : public GridCoord {
 ///
 ///  \details The grid is rectangular and may wrap around in either
 ///  dimension.
-class Grid2D : public GridDomain {
+class KAMI_EXPORT Grid2D : public GridDomain {
    public:
     ///  Constructor
     Grid2D(unsigned int, unsigned int, bool, bool);

@@ -7,6 +7,7 @@
 #define KAMI_GRID3D_HPP
 
 #include <iostream>
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>
 #include <kami/kami.hpp>
@@ -16,7 +17,7 @@
 namespace kami {
 
 ///  \brief Three-dimensional coordinates.
-class GridCoord3D : public GridCoord {
+class KAMI_EXPORT GridCoord3D : public GridCoord {
    public:
     ///  \brief  Constructor for three-dimensional coordinates.
     GridCoord3D(int, int, int);
@@ -48,7 +49,7 @@ class GridCoord3D : public GridCoord {
 ///
 ///  \details The grid is rectangular and may wrap around in any
 ///  dimension.
-class Grid3D : public GridDomain {
+class KAMI_EXPORT Grid3D : public GridDomain {
    public:
     ///  Constructor
     Grid3D(unsigned int, unsigned int, unsigned int, bool, bool, bool);

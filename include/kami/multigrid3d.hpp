@@ -6,6 +6,7 @@
 #ifndef KAMI_MULTIGRID3D_HPP
 #define KAMI_MULTIGRID3D_HPP
 
+#include <kami/KAMI_EXPORT.hpp>
 #include <kami/agent.hpp>
 #include <kami/domain.hpp>
 #include <kami/grid.hpp>
@@ -14,7 +15,7 @@
 
 namespace kami {
 
-class MultiGrid3D : public Grid3D {
+class KAMI_EXPORT MultiGrid3D : public Grid3D {
    public:
     MultiGrid3D(unsigned int, unsigned int, unsigned int, bool, bool, bool);
 

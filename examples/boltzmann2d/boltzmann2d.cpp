@@ -7,8 +7,9 @@
 #include <stdlib.h>
 
 #include <iostream>
-#include <kami/kami.hpp>
+#include <kami/config.hpp>
 #include <kami/grid2d.hpp>
+#include <kami/kami.hpp>
 #include <kami/multigrid2d.hpp>
 #include <map>
 
