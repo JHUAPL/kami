@@ -5,9 +5,11 @@ linux: &linux
    python: "3.7"
    services:
      - docker
+
 osx: &osx
    os: osx
    language: generic
+
 matrix:
    include:
       - <<: *linux
@@ -45,6 +47,11 @@ matrix:
       - <<: *osx
         osx_image: xcode10.1
         env: CONAN_APPLE_CLANG_VERSIONS=10.0
+
+addons:
+  apt:
+    packages:
+      - doxygen
 
 install:
   - chmod +x .ci-files/install_conan.sh .ci-files/install_cmake.sh
