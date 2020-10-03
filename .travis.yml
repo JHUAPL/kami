@@ -50,15 +50,22 @@ matrix:
 
 addons:
   apt:
+    sources:
+      - george-edison55-precise-backports
     packages:
+      - cmake-data
+      - cmake
       - doxygen
 
 install:
   - pip3 install -r docs/requirements.txt
-  - chmod +x .ci-files/install_conan.sh .ci-files/install_cmake.sh
-  - ./.ci-files/install_conan.sh
-  - ./.ci-files/install_cmake.sh
+  - pip3 install conan
 
-script:
-  - chmod +x .ci-files/run.sh
-  - ./.ci-files/run.sh
+script: |
+    mkdir build
+    cd build
+    conan install ..
+    cmake ..
+    cmake --build .
+    ctest -C Debug
+    cmake --build . --target install
