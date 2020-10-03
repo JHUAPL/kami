@@ -25,6 +25,10 @@ int GridCoord2D::getY(void) const {
     return y;
 }
 
+std::string GridCoord2D::toString() const {
+    return std::string("(" + std::to_string(x) + ", " + std::to_string(y) + ")");
+}
+
 bool operator==(const GridCoord2D &lhs, const GridCoord2D &rhs) {
     return (lhs.x == rhs.x && lhs.y == rhs.y);
 }
@@ -179,4 +183,5 @@ bool Grid2D::isEmpty(GridCoord2D location) const {
 
     return agentGrid[x][y].size() == 0;
 }
-}
+
+}  // namespace kami

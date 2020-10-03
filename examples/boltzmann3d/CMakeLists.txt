@@ -7,6 +7,8 @@ set(EXAMPLE_NAME "boltzmann3d")
 project(${EXAMPLE_NAME}
             LANGUAGES CXX)
 
+find_package(spdlog)
+
 create_executable(  NAME ${EXAMPLE_NAME}
                     SOURCES
                         boltzmann3d.cpp
@@ -18,7 +20,8 @@ create_executable(  NAME ${EXAMPLE_NAME}
                         ${CMAKE_SOURCE_DIR}/include
                     PUBLIC_LINKED_TARGETS
                         kami
- )
+                        spdlog::spdlog
+)
 
 set_target_properties(${EXAMPLE_NAME} PROPERTIES VERSION ${KAMI_VERSION_STRING})
 

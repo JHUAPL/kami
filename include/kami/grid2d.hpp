@@ -28,6 +28,9 @@ class KAMI_EXPORT GridCoord2D : public GridCoord {
     ///  Get the `Y` coordinate.
     int getY(void) const;
 
+    ///  \brief Convert the identifier to a human readable string.
+    std::string toString() const;
+
     ///  Test if two coordinates are equal.
     friend bool operator==(const GridCoord2D &, const GridCoord2D &);
 

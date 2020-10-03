@@ -30,6 +30,10 @@ int GridCoord3D::getZ(void) const {
     return z;
 }
 
+std::string GridCoord3D::toString() const {
+    return std::string("(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")");
+}
+
 bool operator==(const GridCoord3D &lhs, const GridCoord3D &rhs) {
     return (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z);
 }

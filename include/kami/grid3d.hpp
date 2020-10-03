@@ -31,6 +31,9 @@ class KAMI_EXPORT GridCoord3D : public GridCoord {
     ///  Get the `Z` coordinate.
     int getZ(void) const;
 
+    ///  \brief Convert the identifier to a human readable string.
+    std::string toString() const;
+
     ///  Test if two coordinates are equal.
     friend bool operator==(const GridCoord3D &, const GridCoord3D &);
 

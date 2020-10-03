@@ -1,5 +1,5 @@
 [requires]
-spdlog/1.7.0
+spdlog/1.8.0
 cli11/1.9.1
 
 [generators]

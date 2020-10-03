@@ -20,6 +20,10 @@ int GridCoord1D::getX() const {
     return x;
 }
 
+std::string GridCoord1D::toString() const {
+    return std::string("(" + std::to_string(x) + ")");
+}
+
 bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs) {
     return (lhs.x == rhs.x);
 }

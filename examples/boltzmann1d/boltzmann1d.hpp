@@ -13,13 +13,16 @@
 #include <kami/random.hpp>
 #include <map>
 
-class MoneyAgent : public kami::Agent {
+using namespace kami;
+using namespace std;
+
+class MoneyAgent : public Agent {
    public:
     MoneyAgent();
 
     void step();
 
-    static void setWorld(kami::MultiGrid1D *w);
+    static void setWorld(MultiGrid1D *w);
     static void setModel(class BoltzmannWealthModel *m);
 
     void moveAgent();
@@ -31,13 +34,13 @@ class MoneyAgent : public kami::Agent {
     void prinfo(void) const;
 
    private:
-    static kami::MultiGrid1D *world;
+    static MultiGrid1D *world;
     static BoltzmannWealthModel *model;
     int stepCounter;
     int agentWealth;
 };
 
-class BoltzmannWealthModel : public kami::Model {
+class BoltzmannWealthModel : public Model {
    public:
     BoltzmannWealthModel(unsigned int = 10, unsigned int = 10);
     ~BoltzmannWealthModel();
@@ -46,12 +49,12 @@ class BoltzmannWealthModel : public kami::Model {
     void run(unsigned int n);
     void prinfo(void) const;
 
-    MoneyAgent *getAgentByID(kami::AgentID agentID) const;
+    MoneyAgent *getAgentByID(AgentID agentID) const;
 
    private:
-    std::map<kami::AgentID, MoneyAgent *> agentList;
-    kami::RandomScheduler *sched;
-    kami::MultiGrid1D *world;
+    map<AgentID, MoneyAgent *> agentList;
+    RandomScheduler *sched;
+    MultiGrid1D *world;
     unsigned int stepCount;
 };
 

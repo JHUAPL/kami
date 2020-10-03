@@ -4,17 +4,42 @@
 
 #include "boltzmann2d.hpp"
 
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/stopwatch.h>
 #include <stdlib.h>
 
+#include <CLI/App.hpp>
+#include <CLI/Config.hpp>
+#include <CLI/Formatter.hpp>
 #include <iostream>
+#include <kami/agent.hpp>
 #include <kami/config.hpp>
 #include <kami/grid2d.hpp>
 #include <kami/kami.hpp>
 #include <kami/multigrid2d.hpp>
 #include <map>
 
-kami::MultiGrid2D *MoneyAgent::world = nullptr;
+using namespace kami;
+using namespace std;
+
+MultiGrid2D *MoneyAgent::world = nullptr;
 BoltzmannWealthModel *MoneyAgent::model = nullptr;
+shared_ptr<spdlog::logger> console;
+
+template <>
+struct fmt::formatter<AgentID> : fmt::formatter<string> {
+    auto format(AgentID agentID, format_context &ctx) {
+        return format_to(ctx.out(), "{}", agentID.toString());
+    }
+};
+
+template <>
+struct fmt::formatter<GridCoord2D> : fmt::formatter<string> {
+    auto format(GridCoord2D coord, format_context &ctx) {
+        return format_to(ctx.out(), "{}", coord.toString());
+    }
+};
 
 MoneyAgent::MoneyAgent() {
     stepCounter = 0;
@@ -29,7 +54,7 @@ void MoneyAgent::step() {
         giveMoney();
 }
 
-void MoneyAgent::setWorld(kami::MultiGrid2D *w) {
+void MoneyAgent::setWorld(MultiGrid2D *w) {
     world = w;
 }
 
@@ -39,9 +64,10 @@ void MoneyAgent::setModel(class BoltzmannWealthModel *m) {
 
 void MoneyAgent::moveAgent() {
     auto agentID = this->getAgentID();
-    auto moveList = world->getNeighborhood(agentID, kami::GridNeighborhoodType::Moore, false);
+    auto moveList = world->getNeighborhood(agentID, GridNeighborhoodType::Moore, false);
     auto newLocation = moveList[static_cast<unsigned int>(rand()) % moveList.size()];
 
+    console->trace("Moving Agent {} to location {}", agentID, newLocation);
     world->moveAgent(agentID, newLocation);
 }
 
@@ -54,29 +80,30 @@ void MoneyAgent::setWealth(int newWealth) {
 }
 
 void MoneyAgent::giveMoney() {
-    kami::AgentID agentID = getAgentID();
-    kami::GridCoord2D location = world->getLocationByAgent(agentID);
-    std::vector<kami::AgentID> *cellMates = world->getCellContents(location);
+    AgentID agentID = getAgentID();
+    GridCoord2D location = world->getLocationByAgent(agentID);
+    vector<AgentID> *cellMates = world->getCellContents(location);
 
     if (cellMates->size() > 1) {
-        kami::AgentID otherAgentID = cellMates->at(static_cast<unsigned int>(rand()) % cellMates->size());
+        AgentID otherAgentID = cellMates->at(static_cast<unsigned int>(rand()) % cellMates->size());
         auto otherAgent = model->getAgentByID(otherAgentID);
 
+        console->trace("Agent {} giving unit of wealth to agent {}", agentID, otherAgentID);
         otherAgent->agentWealth += 1;
         agentWealth -= 1;
     }
 }
 
 void MoneyAgent::prinfo(void) const {
-    kami::AgentID agentID = getAgentID();
-    kami::GridCoord2D location = world->getLocationByAgent(agentID);
+    AgentID agentID = getAgentID();
+    GridCoord2D location = world->getLocationByAgent(agentID);
 
-    std::cout << "  agent: " << agentID << " step: " << stepCounter << " wealth: " << agentWealth << " location: " << location << std::endl;
+    console->trace("Agent state for agent {}, step {}, wealth {}, location {}", agentID, stepCounter, agentWealth, location);
 }
 
 BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int lengthY) {
-    world = new kami::MultiGrid2D(lengthX, lengthY, true, true);
-    sched = new kami::RandomScheduler(this);
+    world = new MultiGrid2D(lengthX, lengthY, true, true);
+    sched = new RandomScheduler(this);
 
     stepCount = 0;
     MoneyAgent::setWorld(world);
@@ -85,10 +112,10 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
     for (unsigned int i = 0; i < numberAgents; i++) {
         MoneyAgent *newAgent = new MoneyAgent();
 
-        agentList.insert(std::pair<kami::AgentID, MoneyAgent *>(newAgent->getAgentID(), newAgent));
+        agentList.insert(pair<AgentID, MoneyAgent *>(newAgent->getAgentID(), newAgent));
         sched->addAgent(newAgent->getAgentID());
         world->addAgent(newAgent->getAgentID(),
-                        kami::GridCoord2D(rand() % static_cast<int>(lengthX),
+                        GridCoord2D(rand() % static_cast<int>(lengthX),
                                           rand() % static_cast<int>(lengthY)));
     }
 }
@@ -113,25 +140,44 @@ void BoltzmannWealthModel::run(unsigned int n) {
 }
 
 void BoltzmannWealthModel::prinfo(void) const {
-    std::cout << " step: " << stepCount << std::endl
-              << " agentinfo: " << std::endl;
+    console->trace("Model state step {}", stepCount);
     for (auto agent = agentList.begin(); agent != agentList.end(); ++agent) {
         agent->second->prinfo();
     }
 }
 
-MoneyAgent *BoltzmannWealthModel::getAgentByID(kami::AgentID agentID) const {
+MoneyAgent *BoltzmannWealthModel::getAgentByID(AgentID agentID) const {
     MoneyAgent *agentPair = agentList.at(agentID);
 
     return agentPair;
 }
 
-int main(void) {
-    BoltzmannWealthModel model(100, 10, 10);
+int main(int argc, char **argv) {
+    string ident = "boltzmann2d";
+    CLI::App app{ident};
+    string logLevelOption = "info";
+    unsigned int xSize = 10, ySize = 10, agentCount = xSize * ySize, maxSteps = 100;
 
-    for (int i = 0; i < 100; i++) {
+    app.add_option("-c", agentCount, "Set the number of agents")->check(CLI::PositiveNumber);
+    app.add_option("-l", logLevelOption, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
+    app.add_option("-n", maxSteps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
+    app.add_option("-x", xSize, "Set the number of colums")->check(CLI::PositiveNumber);
+    app.add_option("-y", ySize, "Set the number of rows")->check(CLI::PositiveNumber);
+    CLI11_PARSE(app, argc, argv);
+
+    console = spdlog::stdout_color_st(ident);
+    console->set_level(spdlog::level::from_str(logLevelOption));
+    console->info("Compiled with Kami/{}.{}.{}, log level {}", KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH, logLevelOption);
+    console->info("Starting Boltzmann Wealth Model with {} agents on a {}x{}-unit grid for {} steps", agentCount, xSize, ySize, maxSteps);
+
+    BoltzmannWealthModel model(agentCount, xSize, ySize);
+
+    spdlog::stopwatch sw;
+    for (int i = 0; i < maxSteps; i++) {
+        console->trace("Initiating model step {}", i);
         model.step();
     }
+    console->info("Boltzman Wealth Model simulation complete, requiring {} ", sw);
 
     model.prinfo();
 }

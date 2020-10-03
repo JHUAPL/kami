@@ -48,5 +48,5 @@ class KamiConan(ConanFile):
 
     def requirements(self):
         # Or add a new requirement!
-        self.requires("spdlog/1.7.0")
+        self.requires("spdlog/1.8.0")
         self.requires("cli11/1.9.1")
