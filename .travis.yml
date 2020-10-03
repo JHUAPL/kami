@@ -50,22 +50,39 @@ matrix:
 
 addons:
   apt:
-    sources:
-      - george-edison55-precise-backports
-    packages:
-      - cmake-data
-      - cmake
-      - doxygen
+    - doxygen
 
 install:
+  # Get some stuff we need for Sphinx and Conan
   - pip3 install -r docs/requirements.txt
   - pip3 install conan
+  # first we create a directory for the CMake binaries
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir ${DEPS_DIR} && cd ${DEPS_DIR}
+  # we use wget to fetch the cmake binaries
+  - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.18.3/cmake-3.18.3-Linux-x86_64.tar.gz
+  - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.18.3/cmake-3.18.3-SHA-256.txt
+  - travis_retry wget --no-check-certificate https://github.com/Kitware/CMake/releases/download/v3.18.3/cmake-3.18.3-SHA-256.txt.asc
+  # this is optional, but useful:
+  # do a quick md5 check to ensure that the archive we downloaded did not get compromised, leave off GPG verification for now
+  - sha256sum --ignore-missing -c cmake-3.18.3-SHA-256.txt 
+  # extract the binaries; the output here is quite lengthy,
+  # so we swallow it to not clutter up the travis console
+  - tar -xvf cmake-3.18.3-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.18.3-Linux-x86_64 cmake-install
+  # add both the top-level directory and the bin directory from the archive
+  # to the system PATH. By adding it to the front of the path we hide the
+  # preinstalled CMake with our own.
+  - PATH=${DEPS_DIR}/cmake-install:${DEPS_DIR}/cmake-install/bin:$PATH
+  # don't forget to switch back to the main build directory once you are done
+  - cd ${TRAVIS_BUILD_DIR}
+
+before_script:
+  - mkdir build
+  - cd build
+  - cmake ..
 
 script: |
-    mkdir build
-    cd build
-    conan install ..
-    cmake ..
-    cmake --build .
-    ctest -C Debug
-    cmake --build . --target install
+  - cmake --build .
+  - ctest -C Debug
+  - cmake --build . --target install
