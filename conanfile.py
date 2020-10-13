@@ -18,11 +18,8 @@ class KamiConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
-
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
-
         cmake.configure()
-
         return cmake
 
 
@@ -30,12 +27,8 @@ class KamiConan(ConanFile):
         cmake = self._configure_cmake()
         cmake.build()
 
+
     def package(self):
-        '''
-            Create a package using "cmake --build . --target install"
-            All installation files are defined in the CMakeLists.txt file rather
-            than in the conan package.
-        '''
         cmake = self._configure_cmake()
         cmake.install()
 
@@ -44,7 +37,8 @@ class KamiConan(ConanFile):
         # These libraries are required when using the
         # following generators:
         #  cmake, cmake_paths, cmake_
-        self.cpp_info.libs = ["dog", "cat", "bar", "kami", "kamidata"]
+        self.cpp_info.libs = ["kami", "kamidata"]
+
 
     def requirements(self):
         # Or add a new requirement!
