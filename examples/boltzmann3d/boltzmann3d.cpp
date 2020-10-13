@@ -170,7 +170,7 @@ int main(int argc, char **argv) {
 
     console = spdlog::stdout_color_st(ident);
     console->set_level(spdlog::level::from_str(logLevelOption));
-    console->info("Compiled with Kami/{}.{}.{}, log level {}", KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH, logLevelOption);
+    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
     console->info("Starting Boltzmann Wealth Model with {} agents on a {}x{}x{}-unit grid for {} steps", agentCount, xSize, ySize, zSize, maxSteps);
 
     BoltzmannWealthModel model(agentCount, xSize, ySize, zSize);

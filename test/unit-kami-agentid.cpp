@@ -25,7 +25,7 @@ int main(int argc, char **argv) {
     CLI11_PARSE(app, argc, argv);
 
     console->set_level(spdlog::level::from_str(logLevelOption));
-    console->info("Compiled with Kami/{}.{}.{}", KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH);
+    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
 
     AgentID testAgentID;
     console->debug("Successfully created AgentID with ID {}", testAgentID.toString());
