@@ -6,7 +6,7 @@ project(libkamidata  VERSION    ${KAMI_VERSION_STRING}
                      LANGUAGES  CXX)
 
 create_library(NAME  kamidata
-               NAMESPACE kami
+               NAMESPACE kamidata
                SOURCES
                    baz.cpp
                PUBLIC_INCLUDE_PATHS

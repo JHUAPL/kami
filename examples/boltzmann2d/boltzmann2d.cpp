@@ -101,9 +101,12 @@ void MoneyAgent::prinfo(void) const {
     console->trace("Agent state for agent {}, step {}, wealth {}, location {}", agentID, stepCounter, agentWealth, location);
 }
 
-BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int lengthY) {
+BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int lengthY, unsigned int seed) {
     world = new MultiGrid2D(lengthX, lengthY, true, true);
-    sched = new RandomScheduler(this);
+    if(seed == 0) 
+        sched = new RandomScheduler(this);
+    else
+        sched = new RandomScheduler(this, seed);
 
     stepCount = 0;
     MoneyAgent::setWorld(world);
@@ -156,11 +159,12 @@ int main(int argc, char **argv) {
     string ident = "boltzmann2d";
     CLI::App app{ident};
     string logLevelOption = "info";
-    unsigned int xSize = 10, ySize = 10, agentCount = xSize * ySize, maxSteps = 100;
+    unsigned int xSize = 10, ySize = 10, agentCount = xSize * ySize, maxSteps = 100, seed = 0;
 
     app.add_option("-c", agentCount, "Set the number of agents")->check(CLI::PositiveNumber);
     app.add_option("-l", logLevelOption, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
     app.add_option("-n", maxSteps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
+    app.add_option("-s", seed, "Set the RNG seed")->check(CLI::NonNegativeNumber);
     app.add_option("-x", xSize, "Set the number of colums")->check(CLI::PositiveNumber);
     app.add_option("-y", ySize, "Set the number of rows")->check(CLI::PositiveNumber);
     CLI11_PARSE(app, argc, argv);
@@ -170,7 +174,7 @@ int main(int argc, char **argv) {
     console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
     console->info("Starting Boltzmann Wealth Model with {} agents on a {}x{}-unit grid for {} steps", agentCount, xSize, ySize, maxSteps);
 
-    BoltzmannWealthModel model(agentCount, xSize, ySize);
+    BoltzmannWealthModel model(agentCount, xSize, ySize, seed);
 
     spdlog::stopwatch sw;
     for (int i = 0; i < maxSteps; i++) {

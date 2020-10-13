@@ -7,7 +7,6 @@
 #include <kami/agent.hpp>
 #include <kami/model.hpp>
 #include <kami/scheduler.hpp>
-#include <random>
 #include <vector>
 
 namespace kami {

@@ -11,9 +11,15 @@
 
 namespace kami {
 
-RandomScheduler::RandomScheduler(Model *newModel) {
+RandomScheduler::RandomScheduler(Model *m) {
     stepCounter = 0;
-    model = newModel;
+    model = m;
+}
+
+RandomScheduler::RandomScheduler(Model *m, uint_fast32_t seed) {
+    stepCounter = 0;
+    model = m;
+    rng.seed(seed);
 }
 
 RandomScheduler::~RandomScheduler() {}

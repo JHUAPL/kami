@@ -23,7 +23,14 @@ class KAMI_EXPORT RandomScheduler : public Scheduler {
     ///  access to an Agent.  The Model is presumed to maintain a master
     ///  list of all Agents in the Model and the Model can be queried for
     ///  a reference to any particular Agent at `step()` time.
-    RandomScheduler(Model *);
+    RandomScheduler(Model *model);
+
+    ///  \brief Constructor.
+    ///  \details   The Model parameter is used by the scheduler to get
+    ///  access to an Agent.  The Model is presumed to maintain a master
+    ///  list of all Agents in the Model and the Model can be queried for
+    ///  a reference to any particular Agent at `step()` time.
+    RandomScheduler(Model *model, uint_fast32_t seed);
 
     ///  A deconstructor.
     virtual ~RandomScheduler();
@@ -31,12 +38,12 @@ class KAMI_EXPORT RandomScheduler : public Scheduler {
     ///  \brief Add an agent to the scheduler.
     ///  \details   The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function adds a new Agent to the list.
-    void addAgent(AgentID);
+    void addAgent(AgentID aid);
 
     ///  \brief Remove an agent from the scheduler.
     ///  \details The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function removes an Agent from the list.
-    void deleteAgent(AgentID);
+    void deleteAgent(AgentID aid);
 
     ///  \brief Execute a single time step.
     ///  \details   This method will randomize the list of Agents in the

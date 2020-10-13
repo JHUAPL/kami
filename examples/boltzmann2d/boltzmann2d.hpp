@@ -42,7 +42,7 @@ class MoneyAgent : public Agent {
 
 class BoltzmannWealthModel : public Model {
    public:
-    BoltzmannWealthModel(unsigned int = 100, unsigned int = 10, unsigned int = 10);
+    BoltzmannWealthModel(unsigned int = 100, unsigned int = 10, unsigned int = 10, unsigned int = 0);
     ~BoltzmannWealthModel();
 
     void step();
