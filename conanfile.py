@@ -3,7 +3,7 @@ from conans import ConanFile, CMake
 
 class KamiConan(ConanFile):
     name = "kami"
-    version = "0.2.0"
+    version = "0.3.0"
     author = "James P. Howard, II <james.howard@jhu.edu>"
     url = "http://github.com/GavinNL/cpp_library_template"
     description = "Agent-Based Modeling in Modern C++"

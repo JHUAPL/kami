@@ -8,32 +8,32 @@ project(libkami  VERSION    ${KAMI_VERSION_STRING}
 create_library(NAME  kami
                NAMESPACE kami
                SOURCES
-                   agent.cpp
-                   grid1d.cpp
-                   grid2d.cpp
-                   grid3d.cpp
-                   kami.cpp
-                   multigrid1d.cpp
-                   multigrid2d.cpp
-                   multigrid3d.cpp
-                   random.cpp
-                   sequential.cpp
-                   sologrid1d.cpp
-                   sologrid2d.cpp
-                   sologrid3d.cpp
-                   staged.cpp
+                   agent.cc
+                   grid1d.cc
+                   grid2d.cc
+                   grid3d.cc
+                   kami.cc
+                   multigrid1d.cc
+                   multigrid2d.cc
+                   multigrid3d.cc
+                   random.cc
+                   sequential.cc
+                   sologrid1d.cc
+                   sologrid2d.cc
+                   sologrid3d.cc
+                   staged.cc
                PUBLIC_INCLUDE_PATHS
                    "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
                    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated_headers>"
                PRIVATE_LINKED_TARGETS
                    ${COVERAGE_TARGET}
                EXPORT_FILE_PATH
-                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.hpp"
+                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.h"
  )
 
 configure_file(
-    "${CMAKE_SOURCE_DIR}/include/kami/config.hpp.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.hpp")
+    "${CMAKE_SOURCE_DIR}/include/kami/config.h.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.h")
  
 set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
                                       SOVERSION ${KAMI_VERSION_MAJOR})
@@ -58,8 +58,8 @@ set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
  #            <prefix>/include/${NAMESPACE}/LIBRARY_NAME/LIBRARY_NAME_export.h
  install(
      FILES
-         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.hpp"
-         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.hpp"
+         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.h"
+         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.h"
      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami"
  )
 

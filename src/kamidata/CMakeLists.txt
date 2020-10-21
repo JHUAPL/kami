@@ -8,14 +8,14 @@ project(libkamidata  VERSION    ${KAMI_VERSION_STRING}
 create_library(NAME  kamidata
                NAMESPACE kamidata
                SOURCES
-                   baz.cpp
+                   baz.cc
                PUBLIC_INCLUDE_PATHS
                    "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
                    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated_headers>"
                PRIVATE_LINKED_TARGETS
                    ${COVERAGE_TARGET}
                EXPORT_FILE_PATH
-                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.hpp"
+                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.h"
  )
  
 set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
@@ -41,7 +41,7 @@ set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
  #            <prefix>/include/${NAMESPACE}/LIBRARY_NAME/LIBRARY_NAME_export.h
  install(
      FILES
-         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.hpp"
+         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.h"
      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami/data"
  )
 

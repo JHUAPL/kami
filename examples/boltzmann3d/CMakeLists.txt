@@ -11,7 +11,7 @@ find_package(spdlog)
 
 create_executable(  NAME ${EXAMPLE_NAME}
                     SOURCES
-                        boltzmann3d.cpp
+                        boltzmann3d.cc
                     PUBLIC_DEFINITIONS
                         USE_DOUBLE_PRECISION=1
                     PRIVATE_DEFINITIONS

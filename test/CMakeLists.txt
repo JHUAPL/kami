@@ -9,7 +9,7 @@ find_package(spdlog)
 create_test( NAME  
                 unit-kami-agentid
              SOURCES
-                unit-kami-agentid.cpp
+                unit-kami-agentid.cc
              PUBLIC_LINKED_TARGETS
                 kami::kami
                 spdlog::spdlog
@@ -22,7 +22,7 @@ create_test( NAME
 create_test( NAME  
                 unit-kami-agent
              SOURCES
-                unit-kami-agent.cpp
+                unit-kami-agent.cc
              PUBLIC_LINKED_TARGETS
                 kami::kami
                 spdlog::spdlog
