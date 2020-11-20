@@ -35,7 +35,7 @@ class KAMI_EXPORT GridDomain : public Domain {
 };
 
 ///  \brief An abstract for integer coordinates
-class KAMI_EXPORT GridCoord {
+class KAMI_EXPORT GridCoord : public Coord {
 };
 
 }  // namespace kami

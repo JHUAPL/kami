@@ -15,6 +15,9 @@ namespace kami {
 class KAMI_EXPORT Domain {
 };
 
+class KAMI_EXPORT Coord {
+};
+
 }  // namespace kami
 
 #endif  // KAMI_DOMAIN_HXX
