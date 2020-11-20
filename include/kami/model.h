@@ -12,7 +12,7 @@
 namespace kami {
 
 /// An abstract for generic models
-class KAMI_EXPORT Model {
+class LIBKAMI_EXPORT Model {
    public:
     /// Destructor.
     virtual ~Model();

@@ -16,7 +16,7 @@ namespace kami {
 ///  in the model.  A scheduler will have a collection of agents assigned
 ///  to it and will execute the step function for each agent based on the
 ///  type of scheduling implemented.
-class KAMI_EXPORT Scheduler {
+class LIBKAMI_EXPORT Scheduler {
    public:
     /// \brief  Return a new Kami scheduler
     ///

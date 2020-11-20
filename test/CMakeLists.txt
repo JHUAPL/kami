@@ -11,7 +11,7 @@ create_test( NAME
              SOURCES
                 unit-kami-agentid.cc
              PUBLIC_LINKED_TARGETS
-                kami::kami
+                kami::libkami
                 fmt
                 spdlog::spdlog
                 ${COVERAGE_LIBS}
@@ -25,7 +25,7 @@ create_test( NAME
              SOURCES
                 unit-kami-agent.cc
              PUBLIC_LINKED_TARGETS
-                kami::kami
+                kami::libkami
                 fmt
                 spdlog::spdlog
                 ${COVERAGE_LIBS}

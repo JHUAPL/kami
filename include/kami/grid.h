@@ -14,7 +14,7 @@
 namespace kami {
 
 ///  \brief Neighborhood types for orthogonal grid domains
-enum KAMI_EXPORT GridNeighborhoodType {
+enum LIBKAMI_EXPORT GridNeighborhoodType {
     ///  \brief Moore neighborhood.
     ///  \details Moore neighborhood types include diagonally
     ///  adjacent cells as neighbors.
@@ -27,15 +27,15 @@ enum KAMI_EXPORT GridNeighborhoodType {
 };
 
 ///  \brief Distance types for orthogonal grid domains
-enum KAMI_EXPORT GridDistanceType { Linear,
+enum LIBKAMI_EXPORT GridDistanceType { Linear,
                                     Taxicab };
 
 ///  \brief An abstract domain based on a grid with integer steps
-class KAMI_EXPORT GridDomain : public Domain {
+class LIBKAMI_EXPORT GridDomain : public Domain {
 };
 
 ///  \brief An abstract for integer coordinates
-class KAMI_EXPORT GridCoord : public Coord {
+class LIBKAMI_EXPORT GridCoord : public Coord {
 };
 
 }  // namespace kami

@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.13)
 project(libkamidata  VERSION    ${KAMI_VERSION_STRING}
                      LANGUAGES  CXX)
 
-create_library(NAME  kamidata
-               NAMESPACE kamidata
+create_library(NAME         libkamidata
+               NAMESPACE    libkamidata
                SOURCES
                    baz.cc
                PUBLIC_INCLUDE_PATHS
@@ -14,12 +14,11 @@ create_library(NAME  kamidata
                    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated_headers>"
                PRIVATE_LINKED_TARGETS
                    ${COVERAGE_TARGET}
-               EXPORT_FILE_PATH
-                   "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.h"
  )
- 
-set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
-                                        SOVERSION ${KAMI_VERSION_MAJOR})
+
+set_target_properties(libkamidata PROPERTIES VERSION        ${KAMI_VERSION_STRING}
+                                             SOVERSION      ${KAMI_VERSION_MAJOR}
+                                             OUTPUT_NAME    kamidata)
 
  # Introduce variables:
  # * CMAKE_INSTALL_LIBDIR
@@ -32,21 +31,8 @@ set_target_properties(kamidata PROPERTIES VERSION ${KAMI_VERSION_STRING}
  #   * include/foo/bar/bar.h -> <prefix>/include/foo/bar/bar.h
  install(
      DIRECTORY   "${CMAKE_SOURCE_DIR}/include/kami/data"
-     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami/data"
+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami"
      FILES_MATCHING PATTERN "*"
  )
 
- # Export headers:
- #   The export header will be stored in:
- #            <prefix>/include/${NAMESPACE}/LIBRARY_NAME/LIBRARY_NAME_export.h
- install(
-     FILES
-         "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/data/KAMIDATA_EXPORT.h"
-     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami/data"
- )
-
-add_library(kami::data ALIAS kamidata)
-
-################################################################################
-
-# }
+add_library(kami::libkamidata ALIAS libkamidata)

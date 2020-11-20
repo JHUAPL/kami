@@ -7,14 +7,14 @@
 // to build dll libraries that work on windows.
 // add the BAR_EXPORT definition to each
 // function/class you want to export to the dll.
-#include <kami/data/KAMIDATA_EXPORT.h>
+#include <kami/KAMI_EXPORT.h>
 
-namespace foo {
+namespace kami {
+namespace data {
 
+LIBKAMI_EXPORT void baz();
 
-KAMIDATA_EXPORT void baz();
-
-
-} // namespace foo
+}
+}  // namespace kami
 
 #endif  // KAMI_DATA_BAZ_HPP

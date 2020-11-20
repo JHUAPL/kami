@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.13)
 project(libkami  VERSION    ${KAMI_VERSION_STRING}
                  LANGUAGES  CXX)
 
-create_library(NAME  kami
-               NAMESPACE kami
+create_library(NAME         libkami
+               NAMESPACE    libkami
                SOURCES
                    agent.cc
                    grid1d.cc
@@ -35,8 +35,9 @@ configure_file(
     "${CMAKE_SOURCE_DIR}/include/kami/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.h")
  
-set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
-                                      SOVERSION ${KAMI_VERSION_MAJOR})
+set_target_properties(libkami PROPERTIES VERSION        ${KAMI_VERSION_STRING}
+                                         SOVERSION      ${KAMI_VERSION_MAJOR}
+                                         OUTPUT_NAME    kami)
 
  # Introduce variables:
  # * CMAKE_INSTALL_LIBDIR
@@ -63,8 +64,4 @@ set_target_properties(kami PROPERTIES VERSION ${KAMI_VERSION_STRING}
      DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/kami"
  )
 
-add_library(kami::kami ALIAS kami)
-
-################################################################################
-
-# }
+add_library(kami::libkami ALIAS libkami)

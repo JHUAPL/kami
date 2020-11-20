@@ -19,7 +19,7 @@ create_executable(  NAME ${EXAMPLE_NAME}
                     PRIVATE_INCLUDE_PATHS
                         ${CMAKE_SOURCE_DIR}/include
                     PUBLIC_LINKED_TARGETS
-                        kami
+                        kami::libkami
                         fmt
                         spdlog::spdlog
 )

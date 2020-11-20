@@ -16,7 +16,7 @@
 
 namespace kami {
 
-class KAMI_EXPORT SoloGrid2D : public Grid2D {
+class LIBKAMI_EXPORT SoloGrid2D : public Grid2D {
    public:
     SoloGrid2D(unsigned int, unsigned int, bool, bool);
 

@@ -16,7 +16,7 @@ namespace kami {
 ///  That order should be different for each subsequent call to `step()`,
 ///  but is not gauranteed not to repeat.
 ///  \pre       First create a Model for the scheduler to live in.
-class KAMI_EXPORT RandomScheduler : public Scheduler {
+class LIBKAMI_EXPORT RandomScheduler : public Scheduler {
    public:
     ///  \brief Constructor.
     ///  \details   The Model parameter is used by the scheduler to get
@@ -60,7 +60,7 @@ class KAMI_EXPORT RandomScheduler : public Scheduler {
     int stepCounter;
 };
 
-class KAMI_EXPORT TwoActionRandomScheduler : public RandomScheduler {
+class LIBKAMI_EXPORT TwoActionRandomScheduler : public RandomScheduler {
    public:
     ///  \brief Execute a single time step.
     ///  \details   This method will randomize the list of TwoActionAgents in the

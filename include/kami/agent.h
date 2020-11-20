@@ -17,7 +17,7 @@ namespace kami {
 ///  runtime.  The unique identifier is an unsigned integer that
 ///  increments monotonically with each new Agent instantiated.
 ///  AgentIDs are not guaranteed to be unique from session-to-session.
-class KAMI_EXPORT AgentID {
+class LIBKAMI_EXPORT AgentID {
    public:
     ///  \brief Constructs a new unique identifier.
     AgentID();
@@ -58,7 +58,7 @@ class KAMI_EXPORT AgentID {
 ///  \details All agents should subclass the Agent class.
 ///  At a minimum, subclasses must implement the `step()`
 ///  function, to execute a single time step for each agent.
-class KAMI_EXPORT Agent {
+class LIBKAMI_EXPORT Agent {
    public:
     ///  \brief Deconstructor
     virtual ~Agent() = default;
@@ -89,7 +89,7 @@ class KAMI_EXPORT Agent {
 ///  \details Staged agents use a two-phase or three-phase step to allow agents to take actions without
 ///  updating the state of the model before all agents have been allowed to
 ///  update.
-class KAMI_EXPORT StagedAgent : public Agent {
+class LIBKAMI_EXPORT StagedAgent : public Agent {
    public:
     ///
     StagedAgent();
@@ -116,7 +116,7 @@ class KAMI_EXPORT StagedAgent : public Agent {
 ///  scheduler cycle.  This is conceived as being a "day" and "night" action for 
 ///  each agent where the scheduler interprets a step as a day-long period.  However,
 ///  it may be appropriate for other model configurations, too.
-class KAMI_EXPORT TwoActionAgent : public Agent {
+class LIBKAMI_EXPORT TwoActionAgent : public Agent {
    public:
     ///
     TwoActionAgent();

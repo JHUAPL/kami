@@ -15,7 +15,7 @@
 
 namespace kami {
 
-class KAMI_EXPORT MultiGrid3D : public Grid3D {
+class LIBKAMI_EXPORT MultiGrid3D : public Grid3D {
    public:
     MultiGrid3D(unsigned int, unsigned int, unsigned int, bool, bool, bool);
 

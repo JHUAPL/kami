@@ -2,7 +2,7 @@ find_package(Doxygen REQUIRED)
 find_package(Sphinx REQUIRED)
 
 # Find all the public headers
-get_target_property(KAMI_PUBLIC_HEADER_DIR kami INTERFACE_INCLUDE_DIRECTORIES)
+get_target_property(KAMI_PUBLIC_HEADER_DIR libkami INTERFACE_INCLUDE_DIRECTORIES)
 file(GLOB_RECURSE KAMI_PUBLIC_HEADERS ${KAMI_PUBLIC_HEADER_DIR}/kami/*.h)
 
 set(DOXYGEN_INPUT_DIR ${PROJECT_SOURCE_DIR}/include/kami)

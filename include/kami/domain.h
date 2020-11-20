@@ -12,10 +12,10 @@
 namespace kami {
 
 /// \brief Provides an environment for the agents to participate in
-class KAMI_EXPORT Domain {
+class LIBKAMI_EXPORT Domain {
 };
 
-class KAMI_EXPORT Coord {
+class LIBKAMI_EXPORT Coord {
 };
 
 }  // namespace kami

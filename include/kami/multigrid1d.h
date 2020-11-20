@@ -15,7 +15,7 @@
 
 namespace kami {
 
-class KAMI_EXPORT MultiGrid1D : public Grid1D {
+class LIBKAMI_EXPORT MultiGrid1D : public Grid1D {
    public:
     MultiGrid1D(unsigned int, bool);
 
