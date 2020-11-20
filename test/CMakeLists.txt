@@ -12,6 +12,7 @@ create_test( NAME
                 unit-kami-agentid.cc
              PUBLIC_LINKED_TARGETS
                 kami::kami
+                fmt
                 spdlog::spdlog
                 ${COVERAGE_LIBS}
              COMMAND
@@ -25,6 +26,7 @@ create_test( NAME
                 unit-kami-agent.cc
              PUBLIC_LINKED_TARGETS
                 kami::kami
+                fmt
                 spdlog::spdlog
                 ${COVERAGE_LIBS}
              COMMAND
