@@ -27,8 +27,8 @@ enum LIBKAMI_EXPORT GridNeighborhoodType {
 };
 
 ///  \brief Distance types for orthogonal grid domains
-enum LIBKAMI_EXPORT GridDistanceType { Linear,
-                                    Taxicab };
+enum LIBKAMI_EXPORT GridDistanceType { Euclidean,
+                                       Manhattan };
 
 ///  \brief An abstract domain based on a grid with integer steps
 class LIBKAMI_EXPORT GridDomain : public Domain {
