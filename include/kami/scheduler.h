@@ -18,12 +18,6 @@ namespace kami {
 ///  type of scheduling implemented.
 class LIBKAMI_EXPORT Scheduler {
    public:
-    /// \brief  Return a new Kami scheduler
-    ///
-    /// \details    This function should return a new instance of a
-    /// scheduler class that implements this trait.
-    virtual ~Scheduler();
-
     /// Add an Agent to the Scheduler.
     ///
     /// @param agentID The AgentID of the agent to add.
