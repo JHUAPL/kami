@@ -12,7 +12,6 @@ create_library(NAME         libkami
                    grid1d.cc
                    grid2d.cc
                    grid3d.cc
-                   kami.cc
                    multigrid1d.cc
                    multigrid2d.cc
                    multigrid3d.cc

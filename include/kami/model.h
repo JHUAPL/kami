@@ -14,9 +14,6 @@ namespace kami {
 /// An abstract for generic models
 class LIBKAMI_EXPORT Model {
    public:
-    /// Destructor.
-    virtual ~Model();
-
     /// Get a reference to an Agent by AgentID
     virtual Agent *getAgentByID(AgentID) const = 0;
 

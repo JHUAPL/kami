@@ -24,7 +24,7 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     ///  access to an Agent.  The Model is presumed to maintain a master
     ///  list of all Agents in the Model and the Model can be queried for
     ///  a reference to any particular Agent at `step()` time.
-    SequentialScheduler(Model *);
+    SequentialScheduler(Model *newModel);
 
     ///  A deconstructor.
     virtual ~SequentialScheduler();
@@ -32,12 +32,12 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     ///  \brief Add an agent to the scheduler.
     ///  \details   The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function adds a new Agent to the list.
-    void addAgent(AgentID);
+    void addAgent(AgentID newAgentID);
 
     ///  \brief Remove an agent from the scheduler.
     ///  \details The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function removes an Agent from the list.
-    void deleteAgent(AgentID);
+    void deleteAgent(AgentID oldAgentID);
 
     ///  \brief Execute a single time step.
     ///  \details   This method will step through the list of Agents in the 
