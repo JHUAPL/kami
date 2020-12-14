@@ -120,9 +120,11 @@ void MoneyAgent::prinfo(void) const {
     console->trace("Agent state for agent {}, step {}, wealth {}, location {}", agentID, stepCounter, agentWealth, location);
 }
 
-BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX) {
+BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int newSeed) {
     world = new MultiGrid1D(lengthX, true);
-    sched = new RandomScheduler(this);
+    sched = new RandomScheduler(this, newSeed);
+
+    console->debug("Scheduler initiated with seed {}", sched->getSeed());
 
     stepCount = 0;
     MoneyAgent::setWorld(world);
@@ -133,8 +135,7 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
 
         agentList.insert(pair<AgentID, MoneyAgent *>(newAgent->getAgentID(), newAgent));
         sched->addAgent(newAgent->getAgentID());
-        world->addAgent(newAgent->getAgentID(),
-                        GridCoord1D(rand() % static_cast<int>(lengthX)));
+        world->addAgent(newAgent->getAgentID(), GridCoord1D(rand() % static_cast<int>(lengthX)));
     }
 }
 
@@ -164,6 +165,10 @@ void BoltzmannWealthModel::prinfo(void) const {
     }
 }
 
+int BoltzmannWealthModel::getSeed() const {
+    return (sched->getSeed());
+}
+
 MoneyAgent *BoltzmannWealthModel::getAgentByID(AgentID agentID) const {
     MoneyAgent *agentPair = agentList.at(agentID);
 
@@ -174,11 +179,12 @@ int main(int argc, char **argv) {
     string ident = "boltzmann1d";
     CLI::App app{ident};
     string logLevelOption = "info";
-    unsigned int xSize = 16, agentCount = xSize, maxSteps = 100;
+    unsigned int xSize = 16, agentCount = xSize, maxSteps = 100, initialSeed = 42;
 
     app.add_option("-c", agentCount, "Set the number of agents")->check(CLI::PositiveNumber);
     app.add_option("-l", logLevelOption, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
     app.add_option("-n", maxSteps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
+    app.add_option("-s", initialSeed, "Set the initial seed")->check(CLI::Number);
     app.add_option("-x", xSize, "Set the number of colums")->check(CLI::PositiveNumber);
     CLI11_PARSE(app, argc, argv);
 
@@ -187,14 +193,14 @@ int main(int argc, char **argv) {
     console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
     console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agentCount, xSize, maxSteps);
 
-    BoltzmannWealthModel model(agentCount, xSize);
+    BoltzmannWealthModel model(agentCount, xSize, initialSeed);
 
     spdlog::stopwatch sw;
     for (int i = 0; i < maxSteps; i++) {
         console->trace("Initiating model step {}", i);
         model.step();
     }
-    console->info("Boltzman Wealth Model simulation complete, requiring {} ", sw);
+    console->info("Boltzman Wealth Model simulation complete, requiring {} seconds", sw);
 
     model.prinfo();
 }

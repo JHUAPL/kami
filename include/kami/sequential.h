@@ -51,9 +51,6 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     ///  a reference to any particular Agent at `step()` time.
     SequentialScheduler(Model *newModel);
 
-    ///  A deconstructor.
-    virtual ~SequentialScheduler();
-
     ///  \brief Add an agent to the scheduler.
     ///  \details   The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function adds a new Agent to the list.
@@ -71,7 +68,7 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     ///  assigned.
     void step();
 
-   private:
+   protected:
     std::vector<AgentID> agentList;
     Model *model;
     int stepCounter;

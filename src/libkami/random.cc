@@ -27,48 +27,38 @@
 #include <kami/model.h>
 #include <kami/random.h>
 #include <kami/scheduler.h>
+
+#include <chrono>
 #include <random>
 #include <string>
+#include <iostream>
 
 namespace kami {
 
-RandomScheduler::RandomScheduler(Model *m) {
-    stepCounter = 0;
-    model = m;
+RandomScheduler::RandomScheduler(Model *newModel) : SequentialScheduler(newModel) {
+    auto timeNow = std::chrono::system_clock::now();
+    auto timeSeconds = std::chrono::time_point_cast<std::chrono::seconds>(timeNow);
+    auto newSeed = timeSeconds.time_since_epoch().count();
+
+    setSeed(newSeed);
 }
 
-RandomScheduler::RandomScheduler(Model *m, uint_fast32_t seed) {
-    stepCounter = 0;
-    model = m;
-    rng.seed(seed);
-}
-
-RandomScheduler::~RandomScheduler() {}
-
-void RandomScheduler::addAgent(AgentID newAgentID) {
-    agentList.push_back(newAgentID);
-}
-
-void RandomScheduler::deleteAgent(AgentID oldAgentID) {
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        if (*agentID == oldAgentID) {
-            agentList.erase(agentID);
-            return;
-        }
-    }
-    // ERROR HERE
+RandomScheduler::RandomScheduler(Model *newModel, int newSeed) : SequentialScheduler(newModel) {
+    setSeed(newSeed);
 }
 
 void RandomScheduler::step() {
-    stepCounter++;
-
     shuffle(agentList.begin(), agentList.end(), rng);
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        Agent *agent = model->getAgentByID(*agentID);
-        if (agent != nullptr)
-            agent->step();
-        // ERROR HERE
-    }
+    SequentialScheduler::step();
+}
+
+void RandomScheduler::setSeed(int newSeed) {
+    originalSeed = newSeed;
+    rng.seed(originalSeed);
+}
+
+int RandomScheduler::getSeed(void) const {
+    return(originalSeed);
 }
 
 }  // namespace kami

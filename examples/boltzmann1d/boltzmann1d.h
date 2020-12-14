@@ -63,12 +63,13 @@ class MoneyAgent : public Agent {
 
 class BoltzmannWealthModel : public Model {
    public:
-    BoltzmannWealthModel(unsigned int = 10, unsigned int = 10);
+    BoltzmannWealthModel(unsigned int numberAgents = 10, unsigned int lengthX = 10, unsigned int newSeed = 42);
     ~BoltzmannWealthModel();
 
     void step();
     void run(unsigned int n);
     void prinfo(void) const;
+    int getSeed() const;
 
     MoneyAgent *getAgentByID(AgentID agentID) const;
 

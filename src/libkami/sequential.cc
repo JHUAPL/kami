@@ -37,8 +37,6 @@ SequentialScheduler::SequentialScheduler(Model *newModel) {
     model = newModel;
 }
 
-SequentialScheduler::~SequentialScheduler() {}
-
 void SequentialScheduler::addAgent(AgentID newAgentID) {
     agentList.push_back(newAgentID);
 }
