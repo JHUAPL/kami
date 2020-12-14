@@ -71,21 +71,4 @@ void RandomScheduler::step() {
     }
 }
 
-void TwoActionRandomScheduler::step() {
-    stepCounter++;
-
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        TwoActionAgent *agent = dynamic_cast<TwoActionAgent *>(model->getAgentByID(*agentID));
-        if (agent != nullptr)
-            agent->stepA();
-        // ERROR HERE
-    }
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        TwoActionAgent *agent = dynamic_cast<TwoActionAgent *>(model->getAgentByID(*agentID));
-        if (agent != nullptr)
-            agent->stepA();
-        // ERROR HERE
-    }
-}
-
 }  // namespace kami

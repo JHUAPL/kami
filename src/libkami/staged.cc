@@ -60,19 +60,13 @@ void StagedScheduler::step() {
     for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
         StagedAgent *agent = dynamic_cast<StagedAgent *>(model->getAgentByID(*agentID));
         if (agent != nullptr)
-            agent->preStep();
-        // ERROR HERE
-    }
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        StagedAgent *agent = dynamic_cast<StagedAgent *>(model->getAgentByID(*agentID));
-        if (agent != nullptr)
             agent->step();
         // ERROR HERE
     }
     for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
         StagedAgent *agent = dynamic_cast<StagedAgent *>(model->getAgentByID(*agentID));
         if (agent != nullptr)
-            agent->postStep();
+            agent->advance();
         // ERROR HERE
     }
 }

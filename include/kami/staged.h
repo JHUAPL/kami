@@ -66,11 +66,9 @@ class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
 
     ///  \brief Execute a single time step.
     ///  \details   This method will step through the list of Agents in the
-    ///  scheduler's internal queue and then execute the `Agent::preStep()`
-    ///  method for every Agent assigned to this scheduler in the order
-    ///  assigned.  Next, it will execute the `Agent::step()` method for
+    ///  scheduler's internal queue and execute the `Agent::step()` method for
     ///  each Agent in the same order.  Finally, it will execute the
-    ///  `Agent::postStep()` method for each Agent in the same order.
+    ///  `Agent::advance()` method for each Agent in the same order.
     void step();
 
    private:
