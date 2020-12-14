@@ -37,8 +37,6 @@ AgentID Agent::getAgentID() const {
     return agentID;
 }
 
-void Agent::step() {
-}
 
 bool operator==(const Agent &lhs, const Agent &rhs) {
     return lhs.agentID == rhs.agentID;
