@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_MULTIGRID3D_HXX
-#define KAMI_MULTIGRID3D_HXX
+#ifndef KAMI_MULTIGRID3D_H
+#define KAMI_MULTIGRID3D_H
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
@@ -24,4 +24,4 @@ class LIBKAMI_EXPORT MultiGrid3D : public Grid3D {
 
 }  // namespace kami
 
-#endif  // KAMI_MULTIGRID3D_HXX
+#endif  // KAMI_MULTIGRID3D_H

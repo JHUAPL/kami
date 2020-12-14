@@ -1,6 +1,6 @@
 #pragma once
-#ifndef KAMI_RANDOM_HXX
-#define KAMI_RANDOM_HXX
+#ifndef KAMI_RANDOM_H
+#define KAMI_RANDOM_H
 
 #include <algorithm>
 #include <kami/KAMI_EXPORT.h>
@@ -73,4 +73,4 @@ class LIBKAMI_EXPORT TwoActionRandomScheduler : public RandomScheduler {
 
 };  // namespace kami
 
-#endif  // KAMI_RANDOM_HXX
+#endif  // KAMI_RANDOM_H

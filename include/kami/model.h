@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_MODEL_HXX
-#define KAMI_MODEL_HXX
+#ifndef KAMI_MODEL_H
+#define KAMI_MODEL_H
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
@@ -32,4 +32,4 @@ class LIBKAMI_EXPORT Model {
 
 }  // namespace kami
 
-#endif  // KAMI_MODEL_HXX
+#endif  // KAMI_MODEL_H

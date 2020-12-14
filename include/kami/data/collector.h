@@ -1,7 +1,7 @@
-#ifndef KAMI_DATA_BAZ_HPP
-#define KAMI_DATA_BAZ_HPP
+#ifndef KAMI_DATA_BAZ_H
+#define KAMI_DATA_BAZ_H
 
-#include <iostream> // std::cout
+#include <iostream>  // std::cout
 
 // this is a generated header. It is needed
 // to build dll libraries that work on windows.
@@ -17,4 +17,4 @@ LIBKAMI_EXPORT void baz();
 }
 }  // namespace kami
 
-#endif  // KAMI_DATA_BAZ_HPP
+#endif  // KAMI_DATA_BAZ_H

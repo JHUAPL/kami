@@ -1,6 +1,6 @@
 #pragma once
-#ifndef KAMI_SEQUENTIAL_HXX
-#define KAMI_SEQUENTIAL_HXX
+#ifndef KAMI_SEQUENTIAL_H
+#define KAMI_SEQUENTIAL_H
 
 #include <algorithm>
 #include <kami/KAMI_EXPORT.h>
@@ -54,4 +54,4 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
 
 };  // namespace kami
 
-#endif  // KAMI_SEQUENTIAL_HXX
+#endif  // KAMI_SEQUENTIAL_H

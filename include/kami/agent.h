@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_AGENT_HXX
-#define KAMI_AGENT_HXX
+#ifndef KAMI_AGENT_H
+#define KAMI_AGENT_H
 
 #include <iostream>
 #include <kami/KAMI_EXPORT.h>
@@ -143,4 +143,4 @@ class LIBKAMI_EXPORT TwoActionAgent : public Agent {
 
 }  // namespace kami
 
-#endif  // KAMI_AGENT_HXX
+#endif  // KAMI_AGENT_H

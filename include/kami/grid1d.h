@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_GRID1D_HXX
-#define KAMI_GRID1D_HXX
+#ifndef KAMI_GRID1D_H
+#define KAMI_GRID1D_H
 
 #include <iostream>
 #include <kami/KAMI_EXPORT.h>
@@ -114,4 +114,4 @@ class LIBKAMI_EXPORT Grid1D : public GridDomain {
 
 }  // namespace kami
 
-#endif  // KAMI_GRID1D_HXX
+#endif  // KAMI_GRID1D_H

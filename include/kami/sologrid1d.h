@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_SOLOGRID1D_HXX
-#define KAMI_SOLOGRID1D_HXX
+#ifndef KAMI_SOLOGRID1D_H
+#define KAMI_SOLOGRID1D_H
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
@@ -23,4 +23,4 @@ class LIBKAMI_EXPORT SoloGrid1D : public Grid1D {
 };
 }  // namespace kami
 
-#endif  // KAMI_SOLOGRID1D_HXX
+#endif  // KAMI_SOLOGRID1D_H

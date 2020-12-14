@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_SCHEDULER_HXX
-#define KAMI_SCHEDULER_HXX
+#ifndef KAMI_SCHEDULER_H
+#define KAMI_SCHEDULER_H
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
@@ -42,4 +42,4 @@ class LIBKAMI_EXPORT Scheduler {
 
 }  // namespace kami
 
-#endif  // KAMI_SCHEDULER_HXX
+#endif  // KAMI_SCHEDULER_H

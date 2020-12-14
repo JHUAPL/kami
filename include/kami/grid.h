@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_GRID_HXX
-#define KAMI_GRID_HXX
+#ifndef KAMI_GRID_H
+#define KAMI_GRID_H
 
 #include <iostream>
 #include <kami/KAMI_EXPORT.h>
@@ -40,4 +40,4 @@ class LIBKAMI_EXPORT GridCoord : public Coord {
 
 }  // namespace kami
 
-#endif  // KAMI_DOMAIN_HXX
+#endif  // KAMI_DOMAIN_H

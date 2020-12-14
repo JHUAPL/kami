@@ -3,8 +3,8 @@
  */
 
 #pragma once
-#ifndef KAMI_DOMAIN_HXX
-#define KAMI_DOMAIN_HXX
+#ifndef KAMI_DOMAIN_H
+#define KAMI_DOMAIN_H
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/kami.h>
@@ -20,4 +20,4 @@ class LIBKAMI_EXPORT Coord {
 
 }  // namespace kami
 
-#endif  // KAMI_DOMAIN_HXX
+#endif  // KAMI_DOMAIN_H

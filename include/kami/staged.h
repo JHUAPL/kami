@@ -1,6 +1,6 @@
 #pragma once
-#ifndef KAMI_STAGED_HXX
-#define KAMI_STAGED_HXX
+#ifndef KAMI_STAGED_H
+#define KAMI_STAGED_H
 
 #include <algorithm>
 #include <kami/KAMI_EXPORT.h>
@@ -56,4 +56,4 @@ class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
 
 };  // namespace kami
 
-#endif  // KAMI_STAGED_HXX
+#endif  // KAMI_STAGED_H
