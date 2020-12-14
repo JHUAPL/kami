@@ -37,15 +37,15 @@
 namespace kami {
 
 ///  \brief     Will execute all agent steps in a sequential order.
-///  \details   A sequential scheduler will iterate over the agents assigned 
-///  to the scheduler and call their `step()` function in a sequential order. 
+///  \details   A sequential scheduler will iterate over the agents assigned
+///  to the scheduler and call their `step()` function in a sequential order.
 ///  That order is preserved between calls to `step()` but may be modified by
 ///  `addAgent()` or `deleteAgent()`.
 ///  \pre       First create a Model for the scheduler to live in.
 class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
    public:
-    ///  \brief Constructor.  
-    ///  \details   The Model parameter is used by the scheduler to get 
+    ///  \brief Constructor.
+    ///  \details   The Model parameter is used by the scheduler to get
     ///  access to an Agent.  The Model is presumed to maintain a master
     ///  list of all Agents in the Model and the Model can be queried for
     ///  a reference to any particular Agent at `step()` time.

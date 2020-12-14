@@ -33,7 +33,7 @@ create_library(NAME         libkami
 configure_file(
     "${CMAKE_SOURCE_DIR}/include/kami/config.h.in"
     "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/config.h")
- 
+
 set_target_properties(libkami PROPERTIES VERSION        ${KAMI_VERSION_STRING}
                                          SOVERSION      ${KAMI_VERSION_MAJOR}
                                          OUTPUT_NAME    kami)

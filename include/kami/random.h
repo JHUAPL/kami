@@ -91,7 +91,7 @@ class LIBKAMI_EXPORT TwoActionRandomScheduler : public RandomScheduler {
     ///  \details   This method will randomize the list of TwoActionAgents in the
     ///  scheduler's internal queue and then execute the `TwoActionAgent::stepA()`
     ///  method for every TwoActionAgent assigned to this scheduler in the
-    ///  randomized order, then execute the `TwoActionAgent::stepB()` method for every 
+    ///  randomized order, then execute the `TwoActionAgent::stepB()` method for every
     //   TwoActionAgent assigned to this scheduler in the randomized order,
     void step();
 };

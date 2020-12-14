@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
 find_package(spdlog)
 
-create_test( NAME  
+create_test( NAME
                 unit-kami-agentid
              SOURCES
                 unit-kami-agentid.cc
@@ -20,7 +20,7 @@ create_test( NAME
              PUBLIC_COMPILE_FEATURES
                 ${COVERAGE_FLAGS})
 
-create_test( NAME  
+create_test( NAME
                 unit-kami-agent
              SOURCES
                 unit-kami-agent.cc

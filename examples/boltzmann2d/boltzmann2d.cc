@@ -124,7 +124,7 @@ void MoneyAgent::prinfo(void) const {
 
 BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int lengthY, unsigned int seed) {
     world = new MultiGrid2D(lengthX, lengthY, true, true);
-    if(seed == 0) 
+    if(seed == 0)
         sched = new RandomScheduler(this);
     else
         sched = new RandomScheduler(this, seed);

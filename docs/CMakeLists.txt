@@ -37,7 +37,7 @@ set(SPHINX_INDEX_FILE ${SPHINX_BUILD}/index.html)
 # - Our doc files have been updated
 # - The Sphinx config has been updated
 add_custom_command(OUTPUT ${SPHINX_INDEX_FILE}
-                   COMMAND 
+                   COMMAND
                      ${SPHINX_EXECUTABLE} -b html
                      # Tell Breathe where to find the Doxygen output
                      -Dbreathe_projects.kami=${DOXYGEN_OUTPUT_DIR}/xml
