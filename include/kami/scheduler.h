@@ -41,13 +41,13 @@ class LIBKAMI_EXPORT Scheduler {
    public:
     /// Add an Agent to the Scheduler.
     ///
-    /// @param agentID The AgentID of the agent to add.
-    virtual void addAgent(AgentID agentID) = 0;
+    /// @param agent_id The AgentID of the agent to add.
+    virtual void add_agent(AgentID agent_id) = 0;
 
     /// Remove an Agent from the Scheduler.
     ///
-    /// @param agentID The AgentID of the agent to remove.
-    virtual void deleteAgent(AgentID agentID) = 0;
+    /// @param agent_id The AgentID of the agent to remove.
+    virtual void delete_agent(AgentID agent_id) = 0;
 
     /// Step the Scheduler.
     ///

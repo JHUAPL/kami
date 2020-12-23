@@ -29,36 +29,36 @@
 #include <kami/scheduler.h>
 
 #include <chrono>
+#include <iostream>
 #include <random>
 #include <string>
-#include <iostream>
 
 namespace kami {
 
-RandomScheduler::RandomScheduler(Model *newModel) : SequentialScheduler(newModel) {
-    auto timeNow = std::chrono::system_clock::now();
-    auto timeSeconds = std::chrono::time_point_cast<std::chrono::seconds>(timeNow);
-    auto newSeed = timeSeconds.time_since_epoch().count();
+RandomScheduler::RandomScheduler(Model *model) : SequentialScheduler(model) {
+    using namespace std::chrono;
 
-    setSeed(newSeed);
+    auto time_now = system_clock::now();
+    auto time_seconds = time_point_cast<seconds>(time_now);
+    auto seed = time_seconds.time_since_epoch().count();
+
+    this->set_seed(seed);
 }
 
-RandomScheduler::RandomScheduler(Model *newModel, int newSeed) : SequentialScheduler(newModel) {
-    setSeed(newSeed);
+RandomScheduler::RandomScheduler(Model *model, int seed)
+    : SequentialScheduler(model) {
+    this->set_seed(seed);
 }
 
 void RandomScheduler::step() {
-    shuffle(agentList.begin(), agentList.end(), rng);
-    SequentialScheduler::step();
+    shuffle(_agent_list.begin(), _agent_list.end(), _rng);
+    this->SequentialScheduler::step();
 }
 
-void RandomScheduler::setSeed(int newSeed) {
-    originalSeed = newSeed;
-    rng.seed(originalSeed);
+void RandomScheduler::set_seed(int seed) {
+    this->_rng.seed(this->_original_seed = seed);
 }
 
-int RandomScheduler::getSeed(void) const {
-    return(originalSeed);
-}
+int RandomScheduler::get_seed(void) const { return (this->_original_seed); }
 
 }  // namespace kami

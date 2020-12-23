@@ -27,11 +27,12 @@
 #ifndef KAMI_SEQUENTIAL_H
 #define KAMI_SEQUENTIAL_H
 
-#include <algorithm>
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
 #include <kami/model.h>
 #include <kami/scheduler.h>
+
+#include <algorithm>
 #include <vector>
 
 namespace kami {
@@ -49,17 +50,17 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     ///  access to an Agent.  The Model is presumed to maintain a master
     ///  list of all Agents in the Model and the Model can be queried for
     ///  a reference to any particular Agent at `step()` time.
-    SequentialScheduler(Model *newModel);
+    SequentialScheduler(Model *model);
 
     ///  \brief Add an agent to the scheduler.
     ///  \details   The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function adds a new Agent to the list.
-    void addAgent(AgentID newAgentID);
+    void add_agent(AgentID agent_id);
 
     ///  \brief Remove an agent from the scheduler.
     ///  \details The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function removes an Agent from the list.
-    void deleteAgent(AgentID oldAgentID);
+    void delete_agent(AgentID agent_id);
 
     ///  \brief Execute a single time step.
     ///  \details   This method will step through the list of Agents in the
@@ -69,9 +70,13 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     void step();
 
    protected:
-    std::vector<AgentID> agentList;
-    Model *model;
-    int stepCounter;
+    ///  \brief A vector containing the `AgentID`s of all agents assgined to
+    ///  this scheduler
+    std::vector<AgentID> _agent_list;
+    ///  \brief A pointer to the `Model` this scehduler belongs to.
+    Model *_model;
+    ///  \brief Counter to increment on each step.
+    int _step_counter;
 };
 
 };  // namespace kami

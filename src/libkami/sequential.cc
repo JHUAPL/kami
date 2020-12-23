@@ -25,26 +25,28 @@
 
 #include <kami/agent.h>
 #include <kami/model.h>
-#include <kami/sequential.h>
 #include <kami/scheduler.h>
+#include <kami/sequential.h>
+
 #include <random>
 #include <string>
 
 namespace kami {
 
-SequentialScheduler::SequentialScheduler(Model *newModel) {
-    stepCounter = 0;
-    model = newModel;
+SequentialScheduler::SequentialScheduler(Model *model) {
+    _step_counter = 0;
+    _model = model;
 }
 
-void SequentialScheduler::addAgent(AgentID newAgentID) {
-    agentList.push_back(newAgentID);
+void SequentialScheduler::add_agent(AgentID agent_id) {
+    _agent_list.push_back(agent_id);
 }
 
-void SequentialScheduler::deleteAgent(AgentID oldAgentID) {
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        if (*agentID == oldAgentID) {
-            agentList.erase(agentID);
+void SequentialScheduler::delete_agent(AgentID agent_id) {
+    for (auto agent_list_iter = _agent_list.begin();
+         agent_list_iter < _agent_list.end(); agent_list_iter++) {
+        if (*agent_list_iter == agent_id) {
+            _agent_list.erase(agent_list_iter);
             return;
         }
     }
@@ -52,12 +54,12 @@ void SequentialScheduler::deleteAgent(AgentID oldAgentID) {
 }
 
 void SequentialScheduler::step() {
-    stepCounter++;
+    _step_counter++;
 
-    for (auto agentID = agentList.begin(); agentID < agentList.end(); agentID++) {
-        Agent *agent = model->getAgentByID(*agentID);
-        if (agent != nullptr)
-            agent->step();
+    for (auto agent_list_iter = _agent_list.begin();
+         agent_list_iter < _agent_list.end(); agent_list_iter++) {
+        Agent *agent = _model->getAgentByID(*agent_list_iter);
+        if (agent != nullptr) agent->step();
         // ERROR HERE
     }
 }

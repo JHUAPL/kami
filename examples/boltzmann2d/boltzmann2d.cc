@@ -126,7 +126,7 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
     world = new MultiGrid2D(lengthX, lengthY, true, true);
     sched = new RandomScheduler(this, newSeed);
 
-    console->debug("Scheduler initiated with seed {}", sched->getSeed());
+    console->debug("Scheduler initiated with seed {}", sched->get_seed());
 
     stepCount = 0;
     MoneyAgent::setWorld(world);
@@ -136,7 +136,7 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
         MoneyAgent *newAgent = new MoneyAgent();
 
         agentList.insert(pair<AgentID, MoneyAgent *>(newAgent->get_agent_id(), newAgent));
-        sched->addAgent(newAgent->get_agent_id());
+        sched->add_agent(newAgent->get_agent_id());
         world->addAgent(newAgent->get_agent_id(),
                         GridCoord2D(rand() % static_cast<int>(lengthX),
                                     rand() % static_cast<int>(lengthY)));

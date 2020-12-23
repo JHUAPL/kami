@@ -27,11 +27,12 @@
 #ifndef KAMI_STAGED_H
 #define KAMI_STAGED_H
 
-#include <algorithm>
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
 #include <kami/model.h>
 #include <kami/scheduler.h>
+
+#include <algorithm>
 #include <vector>
 
 namespace kami {
@@ -57,12 +58,12 @@ class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
     ///  \brief Add an agent to the scheduler.
     ///  \details   The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function adds a new Agent to the list.
-    void addAgent(AgentID);
+    void add_agent(AgentID agent_id);
 
     ///  \brief Remove an agent from the scheduler.
     ///  \details The scheduler maintains a list of all AgentIDs currently
     ///  assigned.  This function removes an Agent from the list.
-    void deleteAgent(AgentID);
+    void delete_agent(AgentID agent_id);
 
     ///  \brief Execute a single time step.
     ///  \details   This method will step through the list of Agents in the
@@ -72,9 +73,9 @@ class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
     void step();
 
    private:
-    std::vector<AgentID> agentList;
-    Model *model;
-    int stepCounter;
+    std::vector<AgentID> _agent_list;
+    Model *_model;
+    int _step_counter;
 };
 
 };  // namespace kami

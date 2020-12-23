@@ -126,7 +126,7 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
     world = new kami::MultiGrid3D(lengthX, lengthY, lengthZ, true, true, true);
     sched = new kami::RandomScheduler(this, newSeed);
 
-    console->debug("Scheduler initiated with seed {}", sched->getSeed());
+    console->debug("Scheduler initiated with seed {}", sched->get_seed());
 
     stepCount = 0;
     MoneyAgent::setWorld(world);
@@ -136,7 +136,7 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
         MoneyAgent *newAgent = new MoneyAgent();
 
         agentList.insert(std::pair<kami::AgentID, MoneyAgent *>(newAgent->get_agent_id(), newAgent));
-        sched->addAgent(newAgent->get_agent_id());
+        sched->add_agent(newAgent->get_agent_id());
         world->addAgent(newAgent->get_agent_id(),
                         kami::GridCoord3D(rand() % static_cast<int>(lengthX),
                                           rand() % static_cast<int>(lengthY),
@@ -168,10 +168,6 @@ void BoltzmannWealthModel::prinfo(void) const {
     for (auto agent = agentList.begin(); agent != agentList.end(); ++agent) {
         agent->second->prinfo();
     }
-}
-
-int BoltzmannWealthModel::getSeed() const {
-    return (sched->getSeed());
 }
 
 MoneyAgent *BoltzmannWealthModel::getAgentByID(kami::AgentID agentID) const {

@@ -50,7 +50,7 @@ class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
     ///  access to an Agent.  The Model is presumed to maintain a master
     ///  list of all Agents in the Model and the Model can be queried for
     ///  a reference to any particular Agent at `step()` time.
-    RandomScheduler(Model *newModel);
+    RandomScheduler(Model *model);
 
     ///  \brief Constructor.
     ///  \details   The Model parameter is used by the scheduler to get
@@ -69,16 +69,16 @@ class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
     ///  \brief Get the seed used.
     ///  \details Returns the seed used to initialize the random number
     ///  generator.
-    int getSeed(void) const;
+    int get_seed(void) const;
 
     ///  \brief Set the seed used.
     ///  \details Sets the seed used to initialize the random number generator.
-    void setSeed(int newSeed);
+    void set_seed(int seed);
 
    private:
-    std::random_device rd;
-    std::mt19937 rng{rd()};
-    int originalSeed;
+    std::random_device _rd;
+    std::mt19937 _rng{_rd()};
+    int _original_seed;
 };
 
 };  // namespace kami
