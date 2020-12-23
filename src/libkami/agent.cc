@@ -24,22 +24,13 @@
  */
 
 #include <kami/agent.h>
+
 #include <string>
 
 namespace kami {
 
-uint64_t AgentID::idGen = 1;
-
-AgentID::AgentID() {
-    id = idGen++;
-}
-
-std::string AgentID::toString() const {
-    return std::to_string(id);
-}
-
 bool operator==(const AgentID &lhs, const AgentID &rhs) {
-    return lhs.id == rhs.id;
+    return lhs._id == rhs._id;
 }
 
 bool operator!=(const AgentID &lhs, const AgentID &rhs) {
@@ -47,24 +38,19 @@ bool operator!=(const AgentID &lhs, const AgentID &rhs) {
 }
 
 bool operator<(const AgentID &lhs, const AgentID &rhs) {
-    return lhs.id < rhs.id;
+    return lhs._id < rhs._id;
 }
 
 std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs) {
-    return lhs << rhs.toString();
+    return lhs << rhs.to_string();
 }
 
-AgentID Agent::getAgentID() const {
-    return agentID;
-}
-
+AgentID Agent::get_agent_id() const { return this->_agent_id; }
 
 bool operator==(const Agent &lhs, const Agent &rhs) {
-    return lhs.agentID == rhs.agentID;
+    return lhs._agent_id == rhs._agent_id;
 }
 
-bool operator!=(const Agent &lhs, const Agent &rhs) {
-    return !(lhs == rhs);
-}
+bool operator!=(const Agent &lhs, const Agent &rhs) { return !(lhs == rhs); }
 
 }  // namespace kami

@@ -42,10 +42,10 @@ namespace kami {
 class LIBKAMI_EXPORT AgentID {
    public:
     ///  \brief Constructs a new unique identifier.
-    AgentID();
+    AgentID() : _id(_id_next++){};
 
     ///  \brief Convert the identifier to a human readable string.
-    std::string toString() const;
+    std::string to_string() const { return std::to_string(this->_id); }
 
     ///  \brief Test if two AgentID instances are equal.
     friend bool operator==(const AgentID &lhs, const AgentID &rhs);
@@ -63,8 +63,8 @@ class LIBKAMI_EXPORT AgentID {
     friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
 
    private:
-    static uint64_t idGen;
-    uint64_t id;
+    inline static long long _id_next = 1;
+    long long _id;
 };
 
 ///  \brief A superclass for Agents
@@ -75,12 +75,13 @@ class LIBKAMI_EXPORT AgentID {
 class LIBKAMI_EXPORT Agent {
    public:
     /// \brief Get the agent's self identification number.
-    AgentID getAgentID() const;
+    AgentID get_agent_id() const;
 
     /// \brief Execute a time-step for the agent
     ///
-    /// \details This function should step the agent instance.  Any activities that the
-    /// agent should perform as part of its time step should be in this function.
+    /// \details This function should step the agent instance.  Any activities
+    /// that the agent should perform as part of its time step should be in this
+    /// function.
     virtual void step() = 0;
 
     friend bool operator==(const Agent &lhs, const Agent &rhs);
@@ -88,20 +89,21 @@ class LIBKAMI_EXPORT Agent {
     friend bool operator!=(const Agent &lhs, const Agent &rhs);
 
    private:
-    AgentID agentID;
+    const AgentID _agent_id;
 };
 
 ///  \brief A class for agents with and post-`step()` advancement.
 ///
-///  \details Staged agents use a two-phase step to allow agents to take actions without
-///  updating the state of the model before all agents have been allowed to
-///  update.
+///  \details Staged agents use a two-phase step to allow agents to take actions
+///  without updating the state of the model before all agents have been allowed
+///  to update.
 class LIBKAMI_EXPORT StagedAgent : public Agent {
    public:
     ///  \brief Post-step advance the agent
     ///
-    ///  \details This method should be called after `step()`.  Any updates or cleanups
-    ///  to the agent should occur here that must happen after the step is complete.
+    ///  \details This method should be called after `step()`.  Any updates or
+    ///  cleanups to the agent should occur here that must happen after the step
+    ///  is complete.
     virtual void advance() = 0;
 };
 

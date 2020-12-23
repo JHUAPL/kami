@@ -51,7 +51,7 @@ shared_ptr<spdlog::logger> console;
 template <>
 struct fmt::formatter<AgentID> : fmt::formatter<string> {
     auto format(AgentID agentID, format_context &ctx) {
-        return format_to(ctx.out(), "{}", agentID.toString());
+        return format_to(ctx.out(), "{}", agentID.to_string());
     }
 };
 
@@ -84,7 +84,7 @@ void MoneyAgent::setModel(class BoltzmannWealthModel *m) {
 }
 
 void MoneyAgent::moveAgent() {
-    auto agentID = this->getAgentID();
+    auto agentID = this->get_agent_id();
     auto moveList = world->getNeighborhood(agentID, kami::GridNeighborhoodType::Moore, false);
     auto newLocation = moveList[static_cast<unsigned int>(rand()) % moveList.size()];
 
@@ -101,7 +101,7 @@ void MoneyAgent::setWealth(int newWealth) {
 }
 
 void MoneyAgent::giveMoney() {
-    kami::AgentID agentID = getAgentID();
+    kami::AgentID agentID = get_agent_id();
     kami::GridCoord3D location = world->getLocationByAgent(agentID);
     std::vector<kami::AgentID> *cellMates = world->getCellContents(location);
 
@@ -116,7 +116,7 @@ void MoneyAgent::giveMoney() {
 }
 
 void MoneyAgent::prinfo(void) const {
-    kami::AgentID agentID = getAgentID();
+    kami::AgentID agentID = get_agent_id();
     kami::GridCoord3D location = world->getLocationByAgent(agentID);
 
     console->trace("Agent state for agent {}, step {}, wealth {}, location {}", agentID, stepCounter, agentWealth, location);
@@ -135,9 +135,9 @@ BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned i
     for (unsigned int i = 0; i < numberAgents; i++) {
         MoneyAgent *newAgent = new MoneyAgent();
 
-        agentList.insert(std::pair<kami::AgentID, MoneyAgent *>(newAgent->getAgentID(), newAgent));
-        sched->addAgent(newAgent->getAgentID());
-        world->addAgent(newAgent->getAgentID(),
+        agentList.insert(std::pair<kami::AgentID, MoneyAgent *>(newAgent->get_agent_id(), newAgent));
+        sched->addAgent(newAgent->get_agent_id());
+        world->addAgent(newAgent->get_agent_id(),
                         kami::GridCoord3D(rand() % static_cast<int>(lengthX),
                                           rand() % static_cast<int>(lengthY),
                                           rand() % static_cast<int>(lengthZ)));
