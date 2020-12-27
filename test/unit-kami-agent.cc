@@ -15,6 +15,10 @@
 using namespace kami;
 using namespace std;
 
+class TestAgent : public Agent {
+    void step(){};
+};
+
 int main(int argc, char **argv) {
     string ident = "unit-kami-agent";
     CLI::App app{ident};
@@ -29,7 +33,7 @@ int main(int argc, char **argv) {
     console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING,
                   logLevelOption);
 
-    Agent testAgent;
+    TestAgent test_agent;
     console->debug("Successfully created Agent with ID {}",
-                   testAgent.getAgentID().toString());
+                   test_agent.get_agent_id().to_string());
 }

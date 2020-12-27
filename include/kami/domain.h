@@ -30,13 +30,16 @@
 #include <kami/KAMI_EXPORT.h>
 #include <kami/kami.h>
 
+#include <string>
+
 namespace kami {
 
 /// \brief Provides an environment for the agents to participate in
-class LIBKAMI_EXPORT Domain {
-};
+class LIBKAMI_EXPORT Domain {};
 
 class LIBKAMI_EXPORT Coord {
+   public:
+    virtual std::string to_string() const = 0;
 };
 
 }  // namespace kami

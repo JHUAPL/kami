@@ -27,10 +27,11 @@
 #ifndef KAMI_GRID_H
 #define KAMI_GRID_H
 
-#include <iostream>
 #include <kami/KAMI_EXPORT.h>
 #include <kami/domain.h>
 #include <kami/kami.h>
+
+#include <string>
 
 namespace kami {
 
@@ -48,15 +49,25 @@ enum LIBKAMI_EXPORT GridNeighborhoodType {
 };
 
 ///  \brief Distance types for orthogonal grid domains
-enum LIBKAMI_EXPORT GridDistanceType { Euclidean,
-                                       Manhattan };
+enum LIBKAMI_EXPORT GridDistanceType {
+    ///  \brief Euclidean distance
+    ///  \details The Euclidean distance is the length of the line segment
+    ///  connecting two points.
+    Euclidean,
+
+    ///  \brief Manhattan distance
+    ///  \details The Manhattan distance is the sum of the absolute values
+    ///  differences of the elements.
+    Manhattan
+};
 
 ///  \brief An abstract domain based on a grid with integer steps
-class LIBKAMI_EXPORT GridDomain : public Domain {
-};
+class LIBKAMI_EXPORT GridDomain : public Domain {};
 
 ///  \brief An abstract for integer coordinates
 class LIBKAMI_EXPORT GridCoord : public Coord {
+   public:
+    std::string to_string() const { return std::string(); };
 };
 
 }  // namespace kami
