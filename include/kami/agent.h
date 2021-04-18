@@ -34,32 +34,45 @@
 
 namespace kami {
 
-///  \brief A unique identifier for each agent.
-///  \details A unqiue identifier is created for each Agent at
-///  runtime.  The unique identifier is an unsigned integer that
-///  increments monotonically with each new Agent instantiated.
-///  AgentIDs are not guaranteed to be unique from session-to-session.
+/**
+ * A unqiue identifier is created for each Agent at
+ * runtime.  The unique identifier is an unsigned integer that
+ * increments monotonically with each new AgentID instantiated.
+ * AgentIDs are not guaranteed to be unique from session-to-session.
+ */
 class LIBKAMI_EXPORT AgentID {
    public:
-    ///  \brief Constructs a new unique identifier.
+    /**
+     *  Constructs a new unique identifier.
+     */
     AgentID() : _id(_id_next++){};
 
-    ///  \brief Convert the identifier to a human readable string.
+    /**
+     * Convert the identifier to a human readable string.
+     */
     std::string to_string() const { return std::to_string(this->_id); }
 
-    ///  \brief Test if two AgentID instances are equal.
+    /**
+     * Test if two AgentID instances are equal.
+     */
     friend bool operator==(const AgentID &lhs, const AgentID &rhs);
 
-    ///  \brief Test if two AgentID instances are not equal.
+    /**
+     * Test if two AgentID instances are not equal.
+     */
     friend bool operator!=(const AgentID &lhs, const AgentID &rhs);
 
-    ///  \brief Test if one AgentID is less than another.
-    ///  \details Due to the way AgentID instance are used internally,
-    ///  the AgentID must be ordered.  The `<` operator provides
-    ///  basic order sufficient for `std::map`.
+    /**
+     * @brief Test if one AgentID is less than another.
+     * @details Due to the way AgentID instances are used internally,
+     * the AgentID must be orderable.  The `<` operator provides a
+     * basic ordering sufficient for `std::map`.
+     */
     friend bool operator<(const AgentID &lhs, const AgentID &rhs);
 
-    ///  \brief Output an AgentID to the specified output stream.
+    /**
+     * Output an AgentID to the specified output stream.
+     */
     friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
 
    private:
@@ -67,43 +80,76 @@ class LIBKAMI_EXPORT AgentID {
     long long _id;
 };
 
-///  \brief A superclass for Agents
-///
-///  \details All agents should subclass the Agent class.
-///  At a minimum, subclasses must implement the `step()`
-///  function, to execute a single time step for each agent.
+/**
+ * @brief A superclass for all Agents
+ *
+ * @details All agents should subclass the Agent class.
+ * At a minimum, subclasses must implement the `step()`
+ * function, to execute a single time step for each agent.
+ */
 class LIBKAMI_EXPORT Agent {
    public:
-    /// \brief Get the agent's self identification number.
+    /**
+     * @brief Get the agent's self identification number.
+     */
     AgentID get_agent_id() const;
 
-    /// \brief Execute a time-step for the agent
-    ///
-    /// \details This function should step the agent instance.  Any activities
-    /// that the agent should perform as part of its time step should be in this
-    /// function.
+    /**
+     * \brief Execute a time-step for the agent
+     *
+     * \details This function should step the agent instance.  Any activities
+     * that the agent should perform as part of its time step should be in this
+     * function.
+     */
     virtual void step() = 0;
 
+    /**
+     * Compare it two Agents are the same agent by comparing their
+     * AgentIDs.  This does not compare that two Agent instances are
+     * identical.  Accordingly, this can be used to compare two instances
+     * of the same Agent at different points in their time stream.
+     *
+     * Subclasses of Agent may chose to extend this operator to tighten
+     * the restrictioons on the comparison.
+     */
     friend bool operator==(const Agent &lhs, const Agent &rhs);
 
+    /**
+     * Compare it two Agents are not the same agent by comparing their
+     * AgentIDs.  This does not compare that two Agent instances are
+     * identical.  Accordingly, this can be used to compare two instances
+     * of the same Agent at different points in their time stream.
+     *
+     * Subclasses of Agent may chose to extend this operator to tighten
+     * the restrictioons on the comparison.
+     */
     friend bool operator!=(const Agent &lhs, const Agent &rhs);
 
    private:
     const AgentID _agent_id;
 };
 
-///  \brief A class for agents with and post-`step()` advancement.
-///
-///  \details Staged agents use a two-phase step to allow agents to take actions
-///  without updating the state of the model before all agents have been allowed
-///  to update.
+/**
+ * @brief A class for agents with and post-`step()` advancement.
+ *
+ * @details Staged agents use a two-phase step to allow agents to take actions
+ * without updating the state of the model before all agents have been allowed
+ * to update.  All work necessary to advance the StagedAgent state should take
+ * place in the `step()` function.  However, the StagedAgent should not actually
+ * update the state, and instead save the results for later use.  Finally,
+ * during the `advance()` stage, the StagedAgent state should update.
+ *
+ * StagedAgents must implement both the `step()` and `advance()` functions.
+ */
 class LIBKAMI_EXPORT StagedAgent : public Agent {
    public:
-    ///  \brief Post-step advance the agent
-    ///
-    ///  \details This method should be called after `step()`.  Any updates or
-    ///  cleanups to the agent should occur here that must happen after the step
-    ///  is complete.
+    /**
+     * @brief Post-step advance the agent
+     *
+     * @details This method should be called after `step()`.  Any updates or
+     * cleanups to the agent should occur here that must happen after the step
+     * is complete.
+     */
     virtual void advance() = 0;
 };
 
