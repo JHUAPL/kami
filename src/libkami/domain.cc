@@ -23,43 +23,15 @@
  * SOFTWARE.
  */
 
-#pragma once
-#ifndef KAMI_DOMAIN_H
-#define KAMI_DOMAIN_H
+#include <kami/domain.h>
 
-#include <kami/KAMI_EXPORT.h>
-#include <kami/kami.h>
-
+#include <iostream>
 #include <string>
 
 namespace kami {
 
-/**
- * Provides an environment for the agents to participate in.  Implementations
- * of virtual environments are expected to subclass Domain.
- */
-class LIBKAMI_EXPORT Domain {};
-
-/**
- * Provides a coordinate system for each Domain.  The coordinate system must
- * be able to produce a human-readable version of the coordinates given.  For
- * instance, an integer grid in two dimensions would provide standard Descartes
- * coordinates like (0, 0) for the origin, or (2, 3) for the position that is 
- * two units "up" and three units to the "right" of the origin.
- */
-class LIBKAMI_EXPORT Coord {
-   public:
-    /**
-     * Convert the coordinate to a human readable string.
-     */
-    virtual std::string to_string() const = 0;
-
-    /**
-     * Output an Coord to the specified output stream.
-     */
-    friend std::ostream &operator<<(std::ostream &lhs, const Coord &rhs);
-};
+std::ostream &operator<<(std::ostream &lhs, const Coord &rhs) {
+    return lhs << rhs.to_string();
+}
 
 }  // namespace kami
-
-#endif  // KAMI_DOMAIN_H

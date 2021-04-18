@@ -9,6 +9,7 @@ create_library(NAME         libkami
                NAMESPACE    libkami
                SOURCES
                    agent.cc
+                   domain.cc
                    grid1d.cc
                    grid2d.cc
                    grid3d.cc
