@@ -7,12 +7,11 @@
 # Build, test and install the library
 git clone https://github.com/k3jph/kami.git
 cd kami
-mkdir build && cd build
-conan install ..
-cmake .. -DCMAKE_INSTALL_PREFIX=/tmp/kami -DBUILD_SHARED_LIBS:BOOL=FALSE
-cmake --build .
+conan install -if build .
+cmake -B build -DCMAKE_INSTALL_PREFIX=/tmp/kami -DBUILD_SHARED_LIBS:BOOL=FALSE
+cmake --build build
 ctest -C Debug
-cmake --build . --target install
+cmake --build build --target install
 ```
 
 ## Conan Package Manager

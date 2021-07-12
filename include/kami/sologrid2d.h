@@ -37,6 +37,14 @@
 
 namespace kami {
 
+/**
+ * @brief  A two-dimensional grid where each cell may contain only one Agent
+ *
+ * @details The grid is linear and may wrap around in its only dimension.
+ *
+ * @see `MultiGrid2D`
+ * @see `Grid2D`
+ */
 class LIBKAMI_EXPORT SoloGrid2D : public Grid2D {
    public:
     /**

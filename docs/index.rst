@@ -6,7 +6,3 @@ Docs
 
 .. toctree::
    :titlesonly:
-
-   about.rst
-   api/library_root
-   

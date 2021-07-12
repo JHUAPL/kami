@@ -180,16 +180,27 @@ class LIBKAMI_EXPORT Grid2D : public GridDomain {
 
     /**
      * Get the contents of the specified location.
+     *
+     * @param[in] coord the coordinates of the query.
+     *
+     * @return a pointer to a `vector` of `AgentID`s.  The pointer is to the
+     * internal copy of the agent list at the location, therefore, any changes
+     * to that object will update the state of the gird.  Further, the pointer
+     * should not be deleted when no longer used.
      */
     std::vector<AgentID> *get_location_contents(GridCoord2D coord) const;
 
     /**
      * Inquire to whether the grid wraps in the `x` dimension.
+     *
+     * @return true if the grid wraps, and false otherwise
      */
     bool get_wrap_x(void) const;
 
     /**
      * Inquire to whether the grid wraps in the `y` dimension.
+     *
+     * @return true if the grid wraps, and false otherwise
      */
     bool get_wrap_y(void) const;
 
@@ -228,19 +239,38 @@ class LIBKAMI_EXPORT Grid2D : public GridDomain {
         bool include_center) const;
 
     /**
-     * Get the length of the grid in the `y` dimension.
+     * Get the size of the grid in the `x` dimension.
+     *
+     * @return the length of the grid in the `x` dimension
      */
     unsigned int get_maximum_x(void) const;
 
     /**
-     * Get the length of the grid in the `y` dimension.
+     * Get the size of the grid in the `y` dimension.
+     *
+     * @return the length of the grid in the `xy dimension
      */
     unsigned int get_maximum_y(void) const;
 
    protected:
+    /**
+     * A vector containing the `AgentID`s of all agents assgined to this
+     * grid.
+     */
     std::vector<AgentID> **_agent_grid;
+
+    /**
+     * A map containing the grid location of each agent.
+     */
     std::map<AgentID, GridCoord2D> *_agent_index;
 
+    /**
+     * Automatically adjust a coordinate location for wrapping.
+     * 
+     * @param[in] coord the coordinates of the specified location.
+     * 
+     * @return the adjusted coordinate wrapped if appropriate.
+     */
     GridCoord2D coord_wrap(GridCoord2D coord) const;
 
    private:

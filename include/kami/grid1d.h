@@ -220,9 +220,24 @@ class LIBKAMI_EXPORT Grid1D : public GridDomain {
     unsigned int get_maximum_x(void) const;
 
    protected:
+    /**
+     * A vector containing the `AgentID`s of all agents assgined to this
+     * grid.
+     */
     std::vector<AgentID> *_agent_grid;
+
+    /**
+     * A map containing the grid location of each agent.
+     */
     std::map<AgentID, GridCoord1D> *_agent_index;
 
+    /**
+     * Automatically adjust a coordinate location for wrapping.
+     *
+     * @param[in] coord the coordinates of the specified location.
+     *
+     * @return the adjusted coordinate wrapped if appropriate.
+     */
     GridCoord1D coord_wrap(GridCoord1D coord) const;
 
    private:
