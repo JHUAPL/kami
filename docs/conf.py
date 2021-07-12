@@ -1,5 +1,6 @@
 import subprocess, os
-import sphinx_bootstrap_theme
+
+from documenteer.sphinxconfig.utils import form_ltd_edition_name
 
 def configureDoxyfile(input_dir, output_dir):
 
@@ -26,9 +27,8 @@ if read_the_docs_build:
 # -- Project information -----------------------------------------------------
 
 project = 'Kami'
-copyright = '2020'
-author = 'James P. Howard, II'
-
+copyright = '2020-2021 The Johns Hopkins University Applied Physics Laboratory LLC'
+author = 'James P. Howard, II <james.howard@jhu.edu>'
 
 # -- General configuration ---------------------------------------------------
 
@@ -42,7 +42,8 @@ author = 'James P. Howard, II'
 extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
-	'breathe'
+	'breathe',
+    'exhale'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -62,16 +63,45 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # Setup the breathe extension
 breathe_default_project = "kami"
 
+# Setup the exhale extension
+exhale_args = {
+    # These arguments are required
+    "containmentFolder":     "./api",
+    "rootFileName":          "library_root.rst",
+    "rootFileTitle":         "Library API",
+    "doxygenStripFromPath":  "..",
+    # Suggested optional arguments
+    "createTreeView":        True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    # "treeViewIsBootstrap": True,
+    "exhaleExecutesDoxygen": True,
+    "exhaleDoxygenStdin":    "INPUT = ../include"
+}
+
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
 
 # Tell sphinx what the pygments highlight language should be.
 highlight_language = 'cpp'
 
-# The short X.Y version
-version = ''
-# The full version, including alpha/beta/rc tags
-release = '0.1.0'
+# The version info for the project you're documenting, acts as replacement for
+# |version| and |release|, also used in various other places throughout the
+# built documents.
+#
+# The short X.Y version.
+github_ref = os.getenv("GITHUB_REF", "")
+if github_ref == "":
+    git_ref = "master"
+else:
+    match = re.match(r"refs/(heads|tags|pull)/(?P<ref>.+)", github_ref)
+    if not match:
+        git_ref = "master"
+    else:
+        git_ref = match.group("ref")
+
+version = form_ltd_edition_name(git_ref)
+# The full version, including alpha/beta/rc tags.
+release = version
 
 # -- General configuration ---------------------------------------------------
 
@@ -119,43 +149,11 @@ pygments_style = 'sphinx'
 #
 # html_sidebars = {}
 #---sphinx-themes-----
-html_theme = 'bootstrap'
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+html_theme = 'sphinx_rtd_theme'
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.
 html_theme_options = {
-    # Navigation bar title. (Default: ``project`` value)
-    'navbar_title': "Kami",
-
-    # Tab name for entire site. (Default: "Site")
-    'navbar_site_name': "Site",
-
-    # A list of tuples containing pages or urls to link to.
-    # Valid tuples should be in the following forms:
-    #    (name, page)                 # a link to a page
-    #    (name, "/aa/bb", 1)          # a link to an arbitrary relative url
-    #    (name, "http://example.com", True) # arbitrary absolute url
-    # Note the "1" or "True" value above as the third argument to indicate
-    # an arbitrary url.
-    'navbar_links': [
-        ("Examples", "examples"),
-        ("Link", "http://example.com", True),
-    ],
-
-    # Render the next and previous page links in navbar. (Default: true)
-    'navbar_sidebarrel': True,
-
-    # Render the current pages TOC in the navbar. (Default: true)
-    'navbar_pagenav': True,
-
-    # Tab name for the current pages TOC. (Default: "Page")
-    'navbar_pagenav_name': "Page",
-
-    # Global TOC depth for "site" navbar tab. (Default: 1)
-    # Switching to -1 shows all levels.
-    'globaltoc_depth': 2,
-
     # Include hidden TOCs in Site navbar?
     #
     # Note: If this is "false", you cannot have mixed ``:hidden:`` and
@@ -165,32 +163,17 @@ html_theme_options = {
     # Values: "true" (default) or "false"
     'globaltoc_includehidden': "true",
 
-    # HTML navbar class (Default: "navbar") to attach to <div> element.
-    # For black navbar, do "navbar navbar-inverse"
-    'navbar_class': "navbar navbar-inverse",
-
-    # Fix navigation bar to top of page?
-    # Values: "true" (default) or "false"
-    'navbar_fixed_top': "true",
-
-    # Location of link to source.
-    # Options are "nav" (default), "footer" or anything else to exclude.
-    'source_link_position': "nav",
-
-    # Bootswatch (http://bootswatch.com/) theme.
-    #
-    # Options are nothing (default) or the name of a valid theme
-    # such as "cosmo" or "sandstone".
-    #
-    # The set of valid themes depend on the version of Bootstrap
-    # that's used (the next config option).
-    #
-    # Currently, the supported themes are:
-    # - Bootstrap 2: https://bootswatch.com/2
-    # - Bootstrap 3: https://bootswatch.com/3
-    'bootswatch_theme': "paper",
-
-    # Choose Bootstrap version.
-    # Values: "3" (default) or "2" (in quotes)
-    'bootstrap_version': "3",
+    'display_version': True,
 }
+
+# -- Options for manual page output ---------------------------------------
+
+# One entry per manual page. List of tuples
+# (source start file, name, description, authors, manual section).
+man_pages = [
+    (master_doc, 'kami', u'Kami: Agent-Based Modeling in Modern C++',
+     [author], 3)
+]
+
+# If true, show URL addresses after external links.
+# man_show_urls = False

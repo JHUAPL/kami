@@ -1,8 +1,8 @@
 Docs
 ====
 
-.. doxygennamespace:: kami
-   :members:
-
 .. toctree::
-   :titlesonly:
+   :maxdepth: 2
+
+   about
+   api/library_root
