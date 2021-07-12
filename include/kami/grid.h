@@ -27,7 +27,6 @@
 #ifndef KAMI_GRID_H
 #define KAMI_GRID_H
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/domain.h>
 #include <kami/kami.h>
 
@@ -35,40 +34,68 @@
 
 namespace kami {
 
-///  \brief Neighborhood types for orthogonal grid domains
+/**
+ * Neighborhood types for orthogonal grid domains of cells.
+ *
+ * Orthogonal grid domains are those that provide cells equidistant along a
+ * standard Cartesian grid.  `GridNeighborhoodType` allows for the distinction
+ * between those neighborhoods that include those cells touching on the corners
+ * or diagonally and those neighborhoods that do not.
+ */
 enum LIBKAMI_EXPORT GridNeighborhoodType {
-    ///  \brief Moore neighborhood.
-    ///  \details Moore neighborhood types include diagonally
-    ///  adjacent cells as neighbors.
+    /**
+     * Moore neighborhood
+     *
+     * Moore neighborhood types include diagonally-adjacent cells as neighbors.
+     */
     Moore,
 
-    ///  \brief Von Neumann neighborhood.
-    ///  \details Von Neumann neighborhood types do not include
-    ///  diagonally adjacent cells as neighbors.
+    /**
+     * Von Neumann neighborhood
+     *
+     * Von Neumann neighborhood types do not include diagonally-adjacent cells
+     * as neighbors.
+     */
     VonNeumann
 };
 
-///  \brief Distance types for orthogonal grid domains
+/**
+ * @brief Distance types for orthogonal grid domains
+ */
 enum LIBKAMI_EXPORT GridDistanceType {
-    ///  \brief Euclidean distance
-    ///  \details The Euclidean distance is the length of the line segment
-    ///  connecting two points.
+    /**
+     * Euclidean distance.
+     *
+     * The Euclidean distance is the length of the line segment connecting two
+     * points.  This is commonly called a "beeline" or "as the crow flies."
+     */
     Euclidean,
 
-    ///  \brief Manhattan distance
-    ///  \details The Manhattan distance is the sum of the absolute values
-    ///  differences of the elements.
+    /**
+     * Manhattan distance.
+     *
+     * The Manhattan distance is the sum of the absolute value of the
+     * differences of the elements. This is commonly called the "taxicab
+     * distance," "rectilinear distance," or many other [formal
+     * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
+     */
     Manhattan
 };
 
-///  \brief An abstract domain based on a grid with integer steps
+/**
+ * An abstract domain based on a gridded environment.
+ *
+ * All gridded domains are expected to consist of cells in a rectilinear
+ * grid where the cells are equal size and laid out in an ordered fashion.
+ */
 class LIBKAMI_EXPORT GridDomain : public Domain {};
 
-///  \brief An abstract for integer coordinates
-class LIBKAMI_EXPORT GridCoord : public Coord {
-   public:
-    std::string to_string() const { return std::string(); };
-};
+/**
+ * An abstract for gridded coordinates.
+ *
+ * All gridded coordinates are expected to subclass `GridCoord`.
+ */
+class LIBKAMI_EXPORT GridCoord : public Coord {};
 
 }  // namespace kami
 

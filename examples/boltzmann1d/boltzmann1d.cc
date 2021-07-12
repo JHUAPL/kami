@@ -26,10 +26,9 @@
 #include "boltzmann1d.h"
 
 #include <kami/agent.h>
-#include <kami/config.h>
-#include <kami/grid2d.h>
+#include <kami/grid1d.h>
 #include <kami/kami.h>
-#include <kami/multigrid2d.h>
+#include <kami/multigrid1d.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 #include <spdlog/stopwatch.h>
@@ -42,161 +41,156 @@
 #include <map>
 #include <string>
 
-MultiGrid1D *MoneyAgent::world = nullptr;
-BoltzmannWealthModel *MoneyAgent::model = nullptr;
+using namespace kami;
+using namespace std;
+
+MultiGrid1D *MoneyAgent1D::_world = nullptr;
+BoltzmannWealthModel1D *MoneyAgent1D::_model = nullptr;
 shared_ptr<spdlog::logger> console;
 
 template <>
 struct fmt::formatter<AgentID> : fmt::formatter<string> {
-    auto format(AgentID agentID, format_context &ctx) {
-        return format_to(ctx.out(), "{}", agentID.to_string());
+    auto format(AgentID agent_id, format_context &ctx) {
+        return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template <>
 struct fmt::formatter<GridCoord1D> : fmt::formatter<string> {
     auto format(GridCoord1D coord, format_context &ctx) {
-        return format_to(ctx.out(), "{}", coord.toString());
+        return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
 
-MoneyAgent::MoneyAgent() {
-    stepCounter = 0;
-    agentWealth = 1;
+void MoneyAgent1D::step() {
+    _step_counter++;
+
+    console->trace("Agent {} is moving", this->get_agent_id());
+    move_agent();
+    console->trace("Agent {} is giving money", this->get_agent_id());
+    if (_agent_wealth > 0) give_money();
 }
 
-void MoneyAgent::step() {
-    stepCounter++;
+void MoneyAgent1D::set_world(MultiGrid1D *world) { _world = world; }
 
-    moveAgent();
-    if (agentWealth > 0)
-        giveMoney();
+void MoneyAgent1D::set_model(BoltzmannWealthModel1D *model) { _model = model; }
+
+void MoneyAgent1D::move_agent() {
+    console->trace("Entering move_agent");
+    auto agent_id = get_agent_id();
+    auto move_list = _world->get_neighborhood(agent_id, false);
+    auto new_location =
+        move_list[static_cast<unsigned int>(rand()) % move_list.size()];
+
+    console->trace("Moving Agent {} to location {}", agent_id, new_location);
+    _world->move_agent(agent_id, new_location);
+    console->trace("Exiting move_agent");
 }
 
-void MoneyAgent::setWorld(MultiGrid1D *w) {
-    world = w;
-}
+int MoneyAgent1D::get_wealth() { return _agent_wealth; }
 
-void MoneyAgent::setModel(class BoltzmannWealthModel *m) {
-    model = m;
-}
+void MoneyAgent1D::set_wealth(int wealth) { _agent_wealth = wealth; }
 
-void MoneyAgent::moveAgent() {
-    auto agentID = this->get_agent_id();
-    auto moveList = world->getNeighborhood(agentID, false);
-    auto newLocation = moveList[static_cast<unsigned int>(rand()) % moveList.size()];
+void MoneyAgent1D::give_money() {
+    AgentID agent_id = get_agent_id();
+    GridCoord1D location = _world->get_location_by_agent(agent_id);
+    vector<AgentID> *cell_mates = _world->get_location_contents(location);
 
-    console->trace("Moving Agent {} to location {}", agentID, newLocation);
-    world->moveAgent(agentID, newLocation);
-}
+    if (cell_mates->size() > 1) {
+        AgentID other_agent_id = cell_mates->at(
+            static_cast<unsigned int>(rand()) % cell_mates->size());
+        auto other_agent = _model->get_agent_by_id(other_agent_id);
 
-int MoneyAgent::getWealth() {
-    return agentWealth;
-}
-
-void MoneyAgent::setWealth(int newWealth) {
-    agentWealth = newWealth;
-}
-
-void MoneyAgent::giveMoney() {
-    AgentID agentID = get_agent_id();
-    GridCoord1D location = world->getLocationByAgent(agentID);
-    vector<AgentID> *cellMates = world->getCellContents(location);
-
-    if (cellMates->size() > 1) {
-        AgentID otherAgentID = cellMates->at(static_cast<unsigned int>(rand()) % cellMates->size());
-        auto otherAgent = model->getAgentByID(otherAgentID);
-
-        console->trace("Agent {} giving unit of wealth to agent {}", agentID, otherAgentID);
-        otherAgent->agentWealth += 1;
-        agentWealth -= 1;
+        console->trace("Agent {} giving unit of wealth to agent {}", agent_id,
+                       other_agent_id);
+        other_agent->_agent_wealth += 1;
+        _agent_wealth -= 1;
     }
 }
 
-void MoneyAgent::prinfo(void) const {
-    AgentID agentID = get_agent_id();
-    GridCoord1D location = world->getLocationByAgent(agentID);
+BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents,
+                                               unsigned int length_x,
+                                               unsigned int new_seed) {
+    _world = new MultiGrid1D(length_x, true);
+    _sched = new RandomScheduler(this, new_seed);
 
-    console->trace("Agent state for agent {}, step {}, wealth {}, location {}", agentID, stepCounter, agentWealth, location);
-}
+    console->debug("Scheduler initiated with seed {}", _sched->get_seed());
 
-BoltzmannWealthModel::BoltzmannWealthModel(unsigned int numberAgents, unsigned int lengthX, unsigned int newSeed) {
-    world = new MultiGrid1D(lengthX, true);
-    sched = new RandomScheduler(this, newSeed);
+    _step_count = 0;
+    MoneyAgent1D::set_world(_world);
+    MoneyAgent1D::set_model(this);
 
-    console->debug("Scheduler initiated with seed {}", sched->get_seed());
+    for (unsigned int i = 0; i < number_agents; i++) {
+        MoneyAgent1D *new_agent = new MoneyAgent1D();
 
-    stepCount = 0;
-    MoneyAgent::setWorld(world);
-    MoneyAgent::setModel(this);
-
-    for (unsigned int i = 0; i < numberAgents; i++) {
-        MoneyAgent *newAgent = new MoneyAgent();
-
-        agentList.insert(pair<AgentID, MoneyAgent *>(newAgent->get_agent_id(), newAgent));
-        sched->add_agent(newAgent->get_agent_id());
-        world->addAgent(newAgent->get_agent_id(), GridCoord1D(rand() % static_cast<int>(lengthX)));
+        _agent_list.insert(pair<AgentID, MoneyAgent1D *>(
+            new_agent->get_agent_id(), new_agent));
+        _sched->add_agent(new_agent->get_agent_id());
+        _world->add_agent(new_agent->get_agent_id(),
+                          GridCoord1D(rand() % static_cast<int>(length_x)));
     }
 }
 
-BoltzmannWealthModel::~BoltzmannWealthModel() {
-    for (auto agentPair = agentList.begin(); agentPair != agentList.end(); agentPair++) {
-        delete agentPair->second;
+BoltzmannWealthModel1D::~BoltzmannWealthModel1D() {
+    for (auto agent_pair = _agent_list.begin(); agent_pair != _agent_list.end();
+         agent_pair++) {
+        delete agent_pair->second;
     }
 
-    delete sched;
-    delete world;
+    delete _sched;
+    delete _world;
 }
 
-void BoltzmannWealthModel::step() {
-    stepCount++;
-    sched->step();
+void BoltzmannWealthModel1D::step() {
+    _step_count++;
+    _sched->step();
 }
 
-void BoltzmannWealthModel::run(unsigned int n) {
-    for (unsigned int i = 0; i < n; i++)
-        step();
+void BoltzmannWealthModel1D::run(unsigned int steps) {
+    for (auto i = 0; i < steps; i++) step();
 }
 
-void BoltzmannWealthModel::prinfo(void) const {
-    console->trace("Model state step {}", stepCount);
-    for (auto agent = agentList.begin(); agent != agentList.end(); ++agent) {
-        agent->second->prinfo();
-    }
-}
+MoneyAgent1D *BoltzmannWealthModel1D::get_agent_by_id(AgentID _agent_id) const {
+    MoneyAgent1D *_agent_pair = _agent_list.at(_agent_id);
 
-MoneyAgent *BoltzmannWealthModel::getAgentByID(AgentID agentID) const {
-    MoneyAgent *agentPair = agentList.at(agentID);
-
-    return agentPair;
+    return _agent_pair;
 }
 
 int main(int argc, char **argv) {
     string ident = "boltzmann1d";
     CLI::App app{ident};
-    string logLevelOption = "info";
-    unsigned int xSize = 16, agentCount = xSize, maxSteps = 100, initialSeed = 42;
+    string log_level_option = "info";
+    unsigned int x_size = 16, agent_count = x_size, max_steps = 100,
+                 initial_seed = 42;
 
-    app.add_option("-c", agentCount, "Set the number of agents")->check(CLI::PositiveNumber);
-    app.add_option("-l", logLevelOption, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
-    app.add_option("-n", maxSteps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
-    app.add_option("-s", initialSeed, "Set the initial seed")->check(CLI::Number);
-    app.add_option("-x", xSize, "Set the number of colums")->check(CLI::PositiveNumber);
+    app.add_option("-c", agent_count, "Set the number of agents")
+        ->check(CLI::PositiveNumber);
+    app.add_option("-l", log_level_option, "Set the logging level")
+        ->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
+    app.add_option("-n", max_steps, "Set the number of steps to run the model")
+        ->check(CLI::PositiveNumber);
+    app.add_option("-s", initial_seed, "Set the initial seed")
+        ->check(CLI::Number);
+    app.add_option("-x", x_size, "Set the number of colums")
+        ->check(CLI::PositiveNumber);
     CLI11_PARSE(app, argc, argv);
 
     console = spdlog::stdout_color_st(ident);
-    console->set_level(spdlog::level::from_str(logLevelOption));
-    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
-    console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agentCount, xSize, maxSteps);
+    console->set_level(spdlog::level::from_str(log_level_option));
+    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING,
+                  log_level_option);
+    console->info(
+        "Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for "
+        "{} steps",
+        agent_count, x_size, max_steps);
 
-    BoltzmannWealthModel model(agentCount, xSize, initialSeed);
+    BoltzmannWealthModel1D model(agent_count, x_size, initial_seed);
 
     spdlog::stopwatch sw;
-    for (int i = 0; i < maxSteps; i++) {
+    for (int i = 0; i < max_steps; i++) {
         console->trace("Initiating model step {}", i);
         model.step();
     }
-    console->info("Boltzman Wealth Model simulation complete, requiring {} seconds", sw);
-
-    model.prinfo();
+    console->info(
+        "Boltzman Wealth Model simulation complete, requiring {} seconds", sw);
 }

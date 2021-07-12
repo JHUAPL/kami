@@ -44,12 +44,10 @@ void SequentialScheduler::add_agent(AgentID agent_id) {
 
 void SequentialScheduler::delete_agent(AgentID agent_id) {
     for (auto agent_list_iter = _agent_list.begin();
-         agent_list_iter < _agent_list.end(); agent_list_iter++) {
-        if (*agent_list_iter == agent_id) {
-            _agent_list.erase(agent_list_iter);
-            return;
-        }
-    }
+         agent_list_iter < _agent_list.end(); agent_list_iter++)
+        if (*agent_list_iter == agent_id) _agent_list.erase(agent_list_iter);
+    return;
+
     // ERROR HERE
 }
 
@@ -58,9 +56,8 @@ void SequentialScheduler::step() {
 
     for (auto agent_list_iter = _agent_list.begin();
          agent_list_iter < _agent_list.end(); agent_list_iter++) {
-        Agent *agent = _model->getAgentByID(*agent_list_iter);
+        Agent *agent = _model->get_agent_by_id(*agent_list_iter);
         if (agent != nullptr) agent->step();
-        // ERROR HERE
     }
 }
 

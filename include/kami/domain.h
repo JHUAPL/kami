@@ -27,7 +27,6 @@
 #ifndef KAMI_DOMAIN_H
 #define KAMI_DOMAIN_H
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/kami.h>
 
 #include <string>
@@ -35,27 +34,42 @@
 namespace kami {
 
 /**
- * Provides an environment for the agents to participate in.  Implementations
- * of virtual environments are expected to subclass Domain.
+ * Provides an environment for the agents to participate in.
+ *
+ * Implementations of virtual environments are expected to subclass `Domain`.
  */
 class LIBKAMI_EXPORT Domain {};
 
 /**
- * Provides a coordinate system for each Domain.  The coordinate system must
- * be able to produce a human-readable version of the coordinates given.  For
- * instance, an integer grid in two dimensions would provide standard Descartes
- * coordinates like (0, 0) for the origin, or (2, 3) for the position that is 
- * two units "up" and three units to the "right" of the origin.
+ * Provides a coordinate system for each `Domain`.
+ *
+ * The coordinate system must be able to produce a human-readable version of the
+ * coordinates given.  For instance, an integer grid in two dimensions would
+ * provide standard Descartes coordinates like (0, 0) for the origin, or (2, 3)
+ * for the position that is two units "up" and three units to the "right" of the
+ * origin.  Implementation of a coordinate system is left up to the user, though
+ * there are several established systems provided.
+ *
+ * @see GridCoord
  */
 class LIBKAMI_EXPORT Coord {
    public:
     /**
-     * Convert the coordinate to a human readable string.
+     * Convert the coordinate to a human-readable string.
+     *
+     * @return a human-readable form of the `Coord` as `std::string`.
      */
     virtual std::string to_string() const = 0;
 
     /**
-     * Output an Coord to the specified output stream.
+     * Output a `Coord` to the specified output stream
+     *
+     * The form of the output will be the same as that produced by the
+     * `to_string()` member function.
+     *
+     * @param lhs is the stream to output the `Coord` to
+     * @param rhs is the `Coord` to output
+     * @return the output stream for reuse
      */
     friend std::ostream &operator<<(std::ostream &lhs, const Coord &rhs);
 };

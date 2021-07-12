@@ -32,17 +32,19 @@
 
 namespace kami {
 
-MultiGrid2D::MultiGrid2D(unsigned int newMaxX, unsigned int newMaxY, bool newWrapX, bool newWrapY)
-    : Grid2D(newMaxX, newMaxY, newWrapX, newWrapY) {}
+MultiGrid2D::MultiGrid2D(unsigned int maximum_x, unsigned int maximum_y,
+                         bool wrap_x, bool wrap_y)
+    : Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {}
 
-bool MultiGrid2D::addAgent(AgentID agentID, GridCoord2D location) {
-    if (isLocationValid(location)) {
-        agentIndex->insert(std::pair<AgentID, GridCoord2D>(agentID, location));
-        agentGrid[location.getX()][location.getY()].push_back(agentID);
-        return (true);
+bool MultiGrid2D::add_agent(AgentID agent_id, GridCoord2D coord) {
+    if (is_location_valid(coord)) {
+        _agent_index->insert(std::pair<AgentID, GridCoord2D>(agent_id, coord));
+        _agent_grid[coord.get_x_location()][coord.get_y_location()].push_back(
+            agent_id);
+        return true;
     }
 
-    return (false);
+    return false;
 }
 
 }  // namespace kami

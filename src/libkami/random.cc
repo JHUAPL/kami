@@ -36,6 +36,7 @@
 namespace kami {
 
 RandomScheduler::RandomScheduler(Model *model) : SequentialScheduler(model) {
+    //  First, let's get a seed, since we do not have one
     using namespace std::chrono;
 
     auto time_now = system_clock::now();

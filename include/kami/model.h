@@ -27,24 +27,40 @@
 #ifndef KAMI_MODEL_H
 #define KAMI_MODEL_H
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
+#include <kami/kami.h>
 
 namespace kami {
 
-/// An abstract for generic models
+/**
+ * An abstract for generic models
+ */
 class LIBKAMI_EXPORT Model {
    public:
-    /// Get a reference to an Agent by AgentID
-    virtual Agent *getAgentByID(AgentID) const = 0;
+    /**
+     * Get a reference to an `Agent` by `AgentID`
+     *
+     * @param[in] agent_id the `AgentID` to search for.
+     *
+     * @return a reference to the desired `Agent` or `nullptr` if not found.
+     */
+    virtual Agent *get_agent_by_id(AgentID agent_id) const = 0;
 
-    /// Run the model for a fixed number of steps.
-    virtual void run(unsigned int) = 0;
+    /**
+     * Execute a fixed number of time-steps for the model.
+     *
+     * This function should execute a fixed number of time-steps for the model.
+     *
+     * @param[in] n the number of time steps to execute.
+     */
+    virtual void run(unsigned int n) = 0;
 
-    /// Execute a time-step for the model.
-    ///
-    /// This function should step the model instance.  Any activities that the
-    /// model should perform as part of its time step should be in this function.
+    /**
+     * Execute a single time-step for the model.
+     *
+     * This function should step the model instance.  Any activities that the
+     * model should perform as part of its time step should be in this function.
+     */
     virtual void step() = 0;
 };
 

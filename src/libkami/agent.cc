@@ -25,6 +25,7 @@
 
 #include <kami/agent.h>
 
+#include <iostream>
 #include <string>
 
 namespace kami {

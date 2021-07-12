@@ -27,110 +27,207 @@
 #ifndef KAMI_GRID1D_H
 #define KAMI_GRID1D_H
 
-#include <iostream>
-#include <kami/KAMI_EXPORT.h>
 #include <kami/domain.h>
 #include <kami/grid.h>
 #include <kami/kami.h>
+
+#include <iostream>
 #include <map>
 #include <vector>
 
 namespace kami {
 
-///  \brief Onem-dimensional coordinates.
+/**
+ * One-dimensional coordinates
+ */
 class LIBKAMI_EXPORT GridCoord1D : public GridCoord {
    public:
-    ///  \brief  Constructor for one-dimensional coordinates.
-    GridCoord1D(int);
+    /**
+     * Constructor for one-dimensional coordinates
+     */
+    GridCoord1D(int x_coord) : _x_coord(x_coord){};
 
-    ///  Get the `X` coordinate.
-    int getX(void) const;
+    /**
+     * Return the `x` coordinate
+     */
+    int get_x_location(void) const;
 
-    ///  \brief Convert the identifier to a human readable string.
-    std::string toString() const;
+    /**
+     * Convert the coordinate to a human-readable string.
+     *
+     * @return a human-readable form of the `Coord` as `std::string`.
+     */
+    std::string to_string() const;
 
-    ///  Test if two coordinates are equal.
-    friend bool operator==(const GridCoord1D &, const GridCoord1D &);
+    /**
+     * Test if two coordinates are equal
+     */
+    friend bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs);
 
-    ///  Test if two coordinates are not equal.
-    friend bool operator!=(const GridCoord1D &, const GridCoord1D &);
+    /**
+     * Test if two coordinates are not equal
+     */
+    friend bool operator!=(const GridCoord1D &lhs, const GridCoord1D &rhs);
 
-    ///  Output a given coordinate to the specified stream.
-    friend std::ostream &operator<<(std::ostream &, const GridCoord1D &);
+    /**
+     * Output a given coordinate to the specified stream
+     */
+    friend std::ostream &operator<<(std::ostream &lhs, const GridCoord1D &rhs);
 
    private:
-    int x;
+    int _x_coord;
 };
 
-///  \brief A one-dimensional grid where each cell may contain
-///  agents.
-///
-///  \details The grid is linear and may wrap around in either
-///  dimension.
+/**
+ * A one-dimensional grid where each cell may contain agents
+ *
+ * The grid is linear and may wrap around in its only dimension.
+ * 
+ * @see `MultiGrid1D`
+ * @see `SoloGrid1D`
+ */
 class LIBKAMI_EXPORT Grid1D : public GridDomain {
    public:
-    ///  Constructor
-    Grid1D(unsigned int, bool);
+    /**
+     * Constructor
+     *
+     * @param[in] maximum_x the length of the grid.
+     * @param[in] wrap_x should the grid wrap around on itself.
+     */
+    Grid1D(unsigned int maximum_x, bool wrap_x = false);
 
-    ///  Deconstructor
+    /**
+     * Deconstructor
+     */
     virtual ~Grid1D();
 
-    /// \brief Place agent on the grid at the specified location.
-    bool addAgent(AgentID, int);
+    /**
+     * Place agent on the grid at the specified location.
+     *
+     * @param[in] agent_id the `AgentID` of the agent to add.
+     * @param[in] coord the coordinates of the agent.
+     *
+     * @returns false if the agent is not placed at the specified
+     * location, otherwise, true.
+     */
+    virtual bool add_agent(AgentID agent_id, GridCoord1D coord) = 0;
 
-    /// \brief Place agent on the grid at the specified location.
-    virtual bool addAgent(AgentID, GridCoord1D) = 0;
+    /**
+     * Remove agent from the grid.
+     *
+     * @param[in] agent_id the `AgentID` of the agent to remove.
+     * 
+     * @returns false if the agent is not removed, otherwise, true.
+     */
+    bool delete_agent(AgentID agent_id);
 
-    /// Remove agent from the grid
-    bool deleteAgent(AgentID);
+    /**
+     * Remove agent from the grid at the specified location
+     *
+     * @param[in] agent_id the `AgentID` of the agent to remove.
+     * @param[in] coord the coordinates of the agent.
+     *
+     * @returns false if the agent is not removed, otherwise, true.
+     */
+    virtual bool delete_agent(AgentID agent_id, GridCoord1D coord);
 
-    /// Remove agent from the grid
-    bool deleteAgent(AgentID, int);
+    /**
+     * Move an agent to the specified location.
+     *
+     * @param[in] agent_id the `AgentID` of the agent to move.
+     * @param[in] coord the coordinates of the agent.
+     */
+    bool move_agent(AgentID agent_id, GridCoord1D coord);
 
-    /// Remove agent from the grid
-    bool deleteAgent(AgentID, GridCoord1D);
+    /**
+     * Inquire if the specified location is empty.
+     *
+     * @param[in] coord the coordinates of the query.
+     *
+     * @return true if the location has no `Agent`s occupying it, false
+     * otherwise.
+     */
+    bool is_location_empty(GridCoord1D coord) const;
 
-    ///  Move an agent to the specified location.
-    bool moveAgent(AgentID, GridCoord1D);
+    /**
+     * Inquire if the specified location is valid within the grid.
+     *
+     * @param[in] coord the coordinates of the query.
+     *
+     * @return true if the location specified is valid, false otherwise.
+     */
+    bool is_location_valid(GridCoord1D coord) const;
 
-    ///  Inquire if the specified location is empty.
-    bool isEmpty(GridCoord1D) const;
+    /**
+     * Get the location of the specified agent.
+     *
+     * @param[in] agent_id the `AgentID` of the agent in question.
+     * 
+     * @return the location of the specified `Agent`
+     */
+    GridCoord1D get_location_by_agent(AgentID agent_id) const;
 
-    ///  Inquire if the specified location is valid within the grid.
-    bool isLocationValid(GridCoord1D) const;
+    /**
+     * Get the contents of the specified location.
+     *
+     * @param[in] coord the coordinates of the query.
+     *
+     * @return a pointer to a `vector` of `AgentID`s.  The pointer is to the
+     * internal copy of the agent list at the location, therefore, any changes
+     * to that object will update the state of the gird.  Further, the pointer
+     * should not be deleted when no longer used.
+     */
+    std::vector<AgentID> *get_location_contents(GridCoord1D coord) const;
 
-    ///  Get the location of the specified agent.
-    GridCoord1D getLocationByAgent(AgentID) const;
+    /**
+     * Inquire to whether the grid wraps in the `x` dimension.
+     * 
+     * @return true if the grid wraps, and false otherwise
+     */
+    bool get_wrap_x(void) const;
 
-    ///  Get the contents of the specified location.
-    std::vector<AgentID> *getCellContents(GridCoord1D) const;
+    /**
+     * Return the neighborhood of the specified Agent
+     *
+     * @param[in] agent_id the `AgentID` of the agent in question
+     * @param[in] include_center should the center-point, occupied by the agent,
+     * be in the list.
+     *
+     * @return a vector of `GridCoord1D` that includes all of the coordinates
+     * for all adjacent points.
+     */
+    std::vector<GridCoord1D> get_neighborhood(AgentID agent_id,
+                                              bool include_center) const;
 
-    ///  Set the wrapping in the `X` dimension.
-    void setWrapX(bool);
+    /**
+     * Return the neighborhood of the specified location
+     * 
+     * @param[in] coord the coordinates of the specified location.
+     * @param[in] include_center should the center-point, occupied by the agent,
+     * be in the list.
+     *
+     * @return a vector of `GridCoord1D` that includes all of the coordinates
+     * for all adjacent points.
+     */
+    std::vector<GridCoord1D> get_neighborhood(GridCoord1D coord,
+                                              bool include_center) const;
 
-    ///  Inquire to whether the grid wraps in the `X` dimension.
-    bool getWrapX(void) const;
-
-    ///  Return the neighborhood of the specified Agent
-    std::vector<GridCoord1D> getNeighborhood(AgentID, bool) const;
-
-    ///  Return the neighborhood of the specified Agent
-    std::vector<GridCoord1D> getNeighborhood(GridCoord1D, bool) const;
-
-    ///  Get the length of the grid in the `X` dimension.
-    unsigned int getMaxX(void) const;
+    /**
+     * Get the size of the grid in the `x` dimension.
+     * 
+     * @return the length of the grid in the `x` dimension
+     */
+    unsigned int get_maximum_x(void) const;
 
    protected:
-    std::vector<AgentID> *agentGrid;
-    std::map<AgentID, GridCoord1D> *agentIndex;
-    unsigned int maxX;
-    bool wrapX;
+    std::vector<AgentID> *_agent_grid;
+    std::map<AgentID, GridCoord1D> *_agent_index;
 
-    GridCoord1D locationWrap(int) const;
-    GridCoord1D locationWrap(GridCoord1D) const;
+    GridCoord1D coord_wrap(GridCoord1D coord) const;
 
    private:
-    void setMaxX(unsigned int);
+    unsigned int _maximum_x;
+    bool _wrap_x;
 };
 
 }  // namespace kami

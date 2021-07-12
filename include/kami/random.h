@@ -27,7 +27,6 @@
 #ifndef KAMI_RANDOM_H
 #define KAMI_RANDOM_H
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/kami.h>
 #include <kami/sequential.h>
 
@@ -37,42 +36,59 @@
 
 namespace kami {
 
-///  \brief     Will execute all agent steps in a random order.
-///  \details   A random scheduler will iterate over the agents assigned
-///  to the scheduler and call their `step()` function in a random order.
-///  That order should be different for each subsequent call to `step()`,
-///  but is not gauranteed not to repeat.
-///  \pre       First create a Model for the scheduler to live in.
+/**
+ * Will execute all agent steps in a random order.
+ * 
+*  A random scheduler will iterate over the agents assigned
+ *   to the scheduler and call their `step()` function in a random order.
+ *   That order should be different for each subsequent call to `step()`,
+ *   but is not gauranteed not to repeat.
+* @note First create a Model for the scheduler to live in.
+*/
 class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
    public:
-    ///  \brief Constructor.
-    ///  \details   The Model parameter is used by the scheduler to get
-    ///  access to an Agent.  The Model is presumed to maintain a master
-    ///  list of all Agents in the Model and the Model can be queried for
-    ///  a reference to any particular Agent at `step()` time.
+    /**
+     * Constructor.
+     *
+     * The Model parameter is used by the scheduler to get
+     * access to an Agent.  The Model is presumed to maintain a master
+     * list of all Agents in the Model and the Model can be queried for
+     * a reference to any particular Agent at `step()` time.
+     */
     RandomScheduler(Model *model);
 
-    ///  \brief Constructor.
-    ///  \details   The Model parameter is used by the scheduler to get
-    ///  access to an Agent.  The Model is presumed to maintain a master
-    ///  list of all Agents in the Model and the Model can be queried for
-    ///  a reference to any particular Agent at `step()` time.
+    /**
+     * Constructor.
+     * 
+     * The Model parameter is used by the scheduler to get
+     * access to an Agent.  The Model is presumed to maintain a master
+     * list of all Agents in the Model and the Model can be queried for
+     * a reference to any particular Agent at `step()` time.
+     */
     RandomScheduler(Model *model, int seed);
 
-    ///  \brief Execute a single time step.
-    ///  \details   This method will randomize the list of Agents in the
-    ///  scheduler's internal queue and then execute the `Agent::step()`
-    ///  method for every Agent assigned to this scheduler in the
-    ///  randomized order.
+    /**
+     * Execute a single time step.
+     *
+     * This method will randomize the list of Agents in the scheduler's internal
+     * queue and then execute the `Agent::step()` method for every Agent
+     * assigned to this scheduler in the randomized order.
+     */
     void step();
 
-    ///  \brief Get the seed used.
-    ///  \details Returns the seed used to initialize the random number
-    ///  generator.
+    /**
+     * Get the seed used.
+     *
+     * Returns the seed used to initialize the random number
+     * generator.
+     */
     int get_seed(void) const;
 
-    ///  \brief Set the seed used.
-    ///  \details Sets the seed used to initialize the random number generator.
+    /**
+     * Set the seed used to initialize the random number generator.
+     * 
+     * @param seed The random number seed
+     */
     void set_seed(int seed);
 
    private:

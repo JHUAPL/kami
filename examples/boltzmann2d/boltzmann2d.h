@@ -27,57 +27,124 @@
 #ifndef BOLTZMAN2D_H
 #define BOLTZMAN2D_H
 
-#include <iostream>
 #include <kami/agent.h>
 #include <kami/kami.h>
 #include <kami/multigrid2d.h>
 #include <kami/random.h>
+
+#include <iostream>
 #include <map>
 
 using namespace kami;
 using namespace std;
 
-class MoneyAgent : public Agent {
+/**
+ * A sample agent for a two-dimensional Boltzmann wealth model
+ */
+class MoneyAgent2D : public Agent {
    public:
-    MoneyAgent();
+    /**
+     * Create the agent
+     */
+    MoneyAgent2D() : _step_counter(0), _agent_wealth(1) {}
 
+    /**
+     * Execute a single time-step for the agent
+     */
     void step();
 
-    static void setWorld(MultiGrid2D *w);
-    static void setModel(class BoltzmannWealthModel *m);
+    /**
+     * Give the agent a reference copy of the domain it is expected to work in
+     */
+    static void set_world(MultiGrid2D *world);
 
-    void moveAgent();
+    /**
+     * Give the agent a reference copy of the model it is expected to work in
+     */
+    static void set_model(class BoltzmannWealthModel2D *model);
 
-    int getWealth();
-    void setWealth(int newWealth);
-    void giveMoney();
+    /**
+     * Move the agent to a random location on the world
+     */
+    void move_agent();
 
-    void prinfo(void) const;
+    /**
+     * Return the wealth of the agent
+     */
+    int get_wealth();
+
+    /**
+     * Set the wealth of the agent
+     */
+    void set_wealth(int wealth);
+
+    /**
+     * Give money to a random agent
+     */
+    void give_money();
 
    private:
-    static MultiGrid2D *world;
-    static BoltzmannWealthModel *model;
-    int stepCounter;
-    int agentWealth;
+    static MultiGrid2D *_world;
+    static BoltzmannWealthModel2D *_model;
+    int _step_counter;
+    int _agent_wealth;
 };
 
-class BoltzmannWealthModel : public Model {
+/**
+ * The two-dimensional Boltzmann wealth model
+ */
+class BoltzmannWealthModel2D : public Model {
    public:
-    BoltzmannWealthModel(unsigned int numberAgents = 100, unsigned int lengthX = 10, unsigned int lengthY = 10, unsigned int newSeed = 42);
-    ~BoltzmannWealthModel();
+    /**
+     * Create an instance of the two-dimensional Boltzman wealth model.
+     *
+     * @param[in] number_agents the number of agents to assign to the model.
+     * @param[in] length_x the length of the two-dimensional world the agents
+     * occupy in the first dimension
+     * @param[in] length_y the length of the two-dimensional world the agents
+     * occupy in the second dimension
+     * @param[in] new_seed the initial seed used for the random number
+     * generator.
+     */
+    BoltzmannWealthModel2D(unsigned int number_agents = 10,
+                           unsigned int length_x = 10,
+                           unsigned int length_y = 10,
+                           unsigned int new_seed = 42);
 
+    /**
+     * Destroy the instance
+     */
+    ~BoltzmannWealthModel2D();
+
+    /**
+     * Execute a single time-step for the model.
+     */
     void step();
-    void run(unsigned int n);
-    void prinfo(void) const;
-    int getSeed() const;
 
-    MoneyAgent *getAgentByID(AgentID agentID) const;
+    /**
+     * Execute a number of time-steps for the model.
+     *
+     * @param[in] n the number of steps to execute.
+     */
+    void run(unsigned int n);
+
+    /**
+     * Return the seed used to initialize the model.
+     */
+    int get_seed() const;
+
+    /**
+     * Get the MoneyAgent2D instance associated with the given `AgentID`
+     *
+     * @returns an pointer to the `MoneyAgent2D` that was requested.
+     */
+    MoneyAgent2D *get_agent_by_id(AgentID agent_id) const;
 
    private:
-    map<AgentID, MoneyAgent *> agentList;
-    RandomScheduler *sched;
-    MultiGrid2D *world;
-    unsigned int stepCount;
+    map<AgentID, MoneyAgent2D *> _agent_list;
+    RandomScheduler *_sched;
+    MultiGrid2D *_world;
+    unsigned int _step_count;
 };
 
 #endif  // BOLTZMAN2D_H

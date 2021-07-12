@@ -5,7 +5,8 @@ Docs
    :members:
 
 .. toctree::
-   :maxdepth: 2
+   :titlesonly:
 
-   about
+   about.rst
    api/library_root
+   

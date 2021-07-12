@@ -32,12 +32,10 @@
 
 namespace kami {
 
-MultiGrid1D::MultiGrid1D(unsigned int newMaxX, bool newWrapX) : Grid1D(newMaxX, newWrapX) {}
-
-bool MultiGrid1D::addAgent(AgentID agentID, GridCoord1D location) {
-    if (isLocationValid(location)) {
-        agentIndex->insert(std::pair<AgentID, GridCoord1D>(agentID, location));
-        agentGrid[location.getX()].push_back(agentID);
+bool MultiGrid1D::add_agent(AgentID agent_id, GridCoord1D coord) {
+    if (is_location_valid(coord)) {
+        _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
+        _agent_grid[coord.get_x_location()].push_back(agent_id);
         return (true);
     }
 

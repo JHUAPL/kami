@@ -28,25 +28,20 @@
 #include <kami/grid.h>
 #include <kami/grid1d.h>
 #include <kami/kami.h>
+
 #include <map>
 #include <vector>
 
 namespace kami {
 
-GridCoord1D::GridCoord1D(int newX) {
-    x = newX;
-}
+int GridCoord1D::get_x_location() const { return _x_coord; }
 
-int GridCoord1D::getX() const {
-    return x;
-}
-
-std::string GridCoord1D::toString() const {
-    return std::string("(" + std::to_string(x) + ")");
+std::string GridCoord1D::to_string() const {
+    return std::string("(" + std::to_string(_x_coord) + ")");
 }
 
 bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs) {
-    return (lhs.x == rhs.x);
+    return (lhs._x_coord == rhs._x_coord);
 }
 
 bool operator!=(const GridCoord1D &lhs, const GridCoord1D &rhs) {
@@ -54,55 +49,47 @@ bool operator!=(const GridCoord1D &lhs, const GridCoord1D &rhs) {
 }
 
 std::ostream &operator<<(std::ostream &lhs, const GridCoord1D &rhs) {
-    return lhs << "(" << rhs.x << ")";
+    return lhs << rhs.to_string();
 }
 
-Grid1D::Grid1D(unsigned int newMaxX, bool newWrapX = false) {
-    setMaxX(newMaxX);
-    setWrapX(newWrapX);
-
-    agentGrid = new std::vector<AgentID>[maxX];
-    agentIndex = new std::map<AgentID, GridCoord1D>;
+Grid1D::Grid1D(unsigned int maximum_x, bool wrap_x) {
+    _agent_grid = new std::vector<AgentID>[maximum_x];
+    _agent_index = new std::map<AgentID, GridCoord1D>;
+    
+    _maximum_x = maximum_x;
+    _wrap_x = wrap_x;
 }
 
 Grid1D::~Grid1D(void) {
-    delete agentIndex;
-    delete[] agentGrid;
+    delete _agent_index;
+    delete[] _agent_grid;
 }
 
-bool Grid1D::addAgent(AgentID agentID, int coord) {
-    return addAgent(agentID, GridCoord1D(coord));
+bool Grid1D::delete_agent(AgentID agent_id) {
+    GridCoord1D coord = get_location_by_agent(agent_id);
+
+    return delete_agent(agent_id, coord);
 }
 
-bool Grid1D::deleteAgent(AgentID agentID) {
-    GridCoord1D location = getLocationByAgent(agentID);
-
-    return deleteAgent(agentID, location);
+bool Grid1D::is_location_valid(GridCoord1D coord) const {
+    auto x = coord.get_x_location();
+    return (x >= 0 && x < static_cast<int>(_maximum_x));
 }
 
-bool Grid1D::deleteAgent(AgentID agentID, int coord) {
-    return deleteAgent(agentID, GridCoord1D(coord));
+bool Grid1D::is_location_empty(GridCoord1D coord) const {
+    auto x = coord.get_x_location();
+
+    return _agent_grid[x].size() == 0;
 }
 
-bool Grid1D::isLocationValid(GridCoord1D location) const {
-    auto x = location.getX();
+bool Grid1D::delete_agent(AgentID agent_id, GridCoord1D coord) {
+    auto agent_list = _agent_grid[static_cast<int>(coord.get_x_location())];
 
-    return (x >= 0 && x < static_cast<int>(maxX));
-}
-
-bool Grid1D::isEmpty(GridCoord1D location) const {
-    auto x = location.getX();
-
-    return agentGrid[x].size() == 0;
-}
-
-bool Grid1D::deleteAgent(AgentID agentID, GridCoord1D location) {
-    auto agentList = agentGrid[static_cast<int>(location.getX())];
-
-    for (auto testAgentID = agentList.begin(); testAgentID < agentList.end(); testAgentID++) {
-        if (*testAgentID == agentID) {
-            agentList.erase(testAgentID);
-            agentIndex->erase(agentID);
+    for (auto test_agent_id = agent_list.begin();
+         test_agent_id < agent_list.end(); test_agent_id++) {
+        if (*test_agent_id == agent_id) {
+            agent_list.erase(test_agent_id);
+            _agent_index->erase(agent_id);
             return true;
         }
     }
@@ -110,68 +97,62 @@ bool Grid1D::deleteAgent(AgentID agentID, GridCoord1D location) {
     return false;
 }
 
-bool Grid1D::moveAgent(AgentID agentID, GridCoord1D nextLocation) {
-    GridCoord1D currLocation = getLocationByAgent(agentID);
+bool Grid1D::move_agent(AgentID agent_id, GridCoord1D coord) {
+    GridCoord1D coord_current = get_location_by_agent(agent_id);
 
-    if (deleteAgent(agentID, currLocation) == true)
-        return addAgent(agentID, nextLocation);
+    if (delete_agent(agent_id, coord_current) == true)
+        return add_agent(agent_id, coord);
     return false;
 }
 
-std::vector<GridCoord1D> Grid1D::getNeighborhood(AgentID agentID, bool includeCenter) const {
-    GridCoord1D currLocation = getLocationByAgent(agentID);
+std::vector<GridCoord1D> Grid1D::get_neighborhood(AgentID agent_id,
+                                                  bool include_center) const {
+    GridCoord1D coord = get_location_by_agent(agent_id);
 
-    return getNeighborhood(currLocation, includeCenter);
+    return get_neighborhood(coord, include_center);
 }
 
-std::vector<GridCoord1D> Grid1D::getNeighborhood(GridCoord1D location, bool includeCenter) const {
+std::vector<GridCoord1D> Grid1D::get_neighborhood(GridCoord1D coord,
+                                                  bool include_center) const {
     std::vector<GridCoord1D> neighborhood;
-    auto x = location.getX();
+    auto x = coord.get_x_location();
 
-    if (includeCenter == true)
-        neighborhood.push_back(location);
+    // We assume our starting position is valid
+    if (include_center == true) neighborhood.push_back(coord);
 
     // E, W
-    neighborhood.push_back(locationWrap(x + 1));
-    neighborhood.push_back(locationWrap(x - 1));
+    {
+        auto new_location = coord_wrap(GridCoord1D(x + 1));
+        if (is_location_valid(new_location))
+            neighborhood.push_back(coord_wrap(new_location));
+    }
+    {
+        auto new_location = coord_wrap(GridCoord1D(x - 1));
+        if (is_location_valid(new_location))
+            neighborhood.push_back(coord_wrap(new_location));
+    }
 
     return neighborhood;
 }
 
-std::vector<AgentID> *Grid1D::getCellContents(GridCoord1D location) const {
-    if (isLocationValid(location)) {
-        return &agentGrid[location.getX()];
-    }
-
+std::vector<AgentID> *Grid1D::get_location_contents(GridCoord1D coord) const {
+    if (is_location_valid(coord)) return &_agent_grid[coord.get_x_location()];
     return nullptr;
 }
 
-void Grid1D::setWrapX(bool newWrapX) {
-    wrapX = newWrapX;
-}
-bool Grid1D::getWrapX(void) const {
-    return wrapX;
+bool Grid1D::get_wrap_x(void) const { return _wrap_x; }
+
+unsigned int Grid1D::get_maximum_x(void) const { return _maximum_x; }
+
+GridCoord1D Grid1D::get_location_by_agent(AgentID agent_id) const {
+    return _agent_index->at(agent_id);
 }
 
-void Grid1D::setMaxX(unsigned int newMaxX)  {
-    maxX = newMaxX;
-}
+GridCoord1D Grid1D::coord_wrap(GridCoord1D coord) const {
+    auto x = coord.get_x_location();
 
-unsigned int Grid1D::getMaxX(void) const {
-    return maxX;
-}
-
-GridCoord1D Grid1D::getLocationByAgent(AgentID agentID) const {
-    return agentIndex->at(agentID);
-}
-
-GridCoord1D Grid1D::locationWrap(GridCoord1D location) const {
-    return locationWrap(location.getX());
-}
-
-GridCoord1D Grid1D::locationWrap(int x) const {
-    if (wrapX == true)
-        x = (x + static_cast<int>(maxX)) % static_cast<int>(maxX);
+    if (_wrap_x == true)
+        x = (x + static_cast<int>(_maximum_x)) % static_cast<int>(_maximum_x);
     return GridCoord1D(x);
 }
 

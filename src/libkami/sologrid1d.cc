@@ -32,12 +32,10 @@
 
 namespace kami {
 
-SoloGrid1D::SoloGrid1D(unsigned int newMaxX, bool newWrapX) : Grid1D(newMaxX, newWrapX) {}
-
-bool SoloGrid1D::addAgent(AgentID agentID, GridCoord1D location) {
-    if (isLocationValid(location) & isEmpty(location)) {
-        agentIndex->insert(std::pair<AgentID, GridCoord1D>(agentID, location));
-        agentGrid[location.getX()].push_back(agentID);
+bool SoloGrid1D::add_agent(AgentID agent_id, GridCoord1D coord) {
+    if (is_location_valid(coord) & is_location_empty(coord)) {
+        _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
+        _agent_grid[coord.get_x_location()].push_back(agent_id);
         return true;
     }
 

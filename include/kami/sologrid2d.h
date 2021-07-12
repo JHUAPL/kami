@@ -27,21 +27,39 @@
 #ifndef KAMI_SOLOGRID2D_H
 #define KAMI_SOLOGRID2D_H
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
 #include <kami/domain.h>
 #include <kami/grid.h>
 #include <kami/grid2d.h>
 #include <kami/kami.h>
+
 #include <vector>
 
 namespace kami {
 
 class LIBKAMI_EXPORT SoloGrid2D : public Grid2D {
    public:
-    SoloGrid2D(unsigned int, unsigned int, bool, bool);
+    /**
+     * Constructor
+     *
+     * @param[in] maximum_x the length of the grid in the first dimension
+     * @param[in] maximum_y the length of the grid in the second dimension
+     * @param[in] wrap_x should the grid wrap around on itself in the first dimension
+     * @param[in] wrap_y should the grid wrap around on itself in the second dimension
+     */
+    SoloGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x,
+               bool wrap_y);
 
-    bool addAgent(AgentID, GridCoord2D);
+    /**
+     * Place agent on the grid at the specified location.
+     *
+     * @param[in] agent_id the `AgentID` of the agent to add.
+     * @param[in] coord the coordinates of the agent.
+     *
+     * @returns false if the agent is not placed at the specified
+     * location, otherwise, true
+     */
+    bool add_agent(AgentID agent_id, GridCoord2D coord);
 };
 
 }  // namespace kami

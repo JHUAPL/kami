@@ -70,12 +70,20 @@ class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     void step();
 
    protected:
-    ///  \brief A vector containing the `AgentID`s of all agents assgined to
-    ///  this scheduler
+    /**
+     * A vector containing the `AgentID`s of all agents assgined to this
+     * scheduler
+     */
     std::vector<AgentID> _agent_list;
-    ///  \brief A pointer to the `Model` this scehduler belongs to.
+
+    /** 
+     * A pointer to the `Model` this scehduler belongs to
+     */
     Model *_model;
-    ///  \brief Counter to increment on each step.
+
+    /**
+     * Counter to increment on each step
+     */
     int _step_counter;
 };
 

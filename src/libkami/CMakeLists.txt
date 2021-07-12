@@ -12,15 +12,12 @@ create_library(NAME         libkami
                    domain.cc
                    grid1d.cc
                    grid2d.cc
-                   grid3d.cc
                    multigrid1d.cc
                    multigrid2d.cc
-                   multigrid3d.cc
                    random.cc
                    sequential.cc
                    sologrid1d.cc
                    sologrid2d.cc
-                   sologrid3d.cc
                    staged.cc
                PUBLIC_INCLUDE_PATHS
                    "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"

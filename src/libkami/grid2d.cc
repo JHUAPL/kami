@@ -33,25 +33,21 @@
 
 namespace kami {
 
-GridCoord2D::GridCoord2D(int newX, int newY) {
-    x = newX;
-    y = newY;
+int GridCoord2D::get_x_location(void) const {
+    return _x_coord;
 }
 
-int GridCoord2D::getX(void) const {
-    return x;
+int GridCoord2D::get_y_location(void) const {
+    return _y_coord;
 }
 
-int GridCoord2D::getY(void) const {
-    return y;
-}
-
-std::string GridCoord2D::toString() const {
-    return std::string("(" + std::to_string(x) + ", " + std::to_string(y) + ")");
+std::string GridCoord2D::to_string() const {
+    return std::string("(" + std::to_string(_x_coord) + ", " +
+                       std::to_string(_y_coord) + ")");
 }
 
 bool operator==(const GridCoord2D &lhs, const GridCoord2D &rhs) {
-    return (lhs.x == rhs.x && lhs.y == rhs.y);
+    return (lhs._x_coord == rhs._x_coord && lhs._y_coord == rhs._y_coord);
 }
 
 bool operator!=(const GridCoord2D &lhs, const GridCoord2D &rhs) {
@@ -59,51 +55,44 @@ bool operator!=(const GridCoord2D &lhs, const GridCoord2D &rhs) {
 }
 
 std::ostream &operator<<(std::ostream &lhs, const GridCoord2D &rhs) {
-    return lhs << "(" << rhs.x << ", " << rhs.y << ")";
+    return lhs << rhs.to_string();
 }
 
-Grid2D::Grid2D(unsigned int newMaxX, unsigned int newMaxY, bool newWrapX = false, bool newWrapY = false) {
-    setMaxX(newMaxX);
-    setMaxY(newMaxY);
+Grid2D::Grid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x,
+               bool wrap_y) {
+    _maximum_x = maximum_x;
+    _maximum_y = maximum_y;
+    _wrap_x = wrap_x;
+    _wrap_y = wrap_y;
 
-    setWrapX(newWrapX);
-    setWrapY(newWrapY);
+    _agent_grid = new std::vector<AgentID> *[_maximum_x];
+    for (auto i = 0; i < _maximum_x; i++)
+        _agent_grid[i] = new std::vector<AgentID>[_maximum_y];
 
-    agentGrid = new std::vector<AgentID> *[maxX];
-    for (unsigned int i = 0; i < maxX; i++)
-        agentGrid[i] = new std::vector<AgentID>[maxY];
-
-    agentIndex = new std::map<AgentID, GridCoord2D>;
+    _agent_index = new std::map<AgentID, GridCoord2D>;
 }
 
 Grid2D::~Grid2D(void) {
-    delete agentIndex;
+    delete _agent_index;
 
-    for (unsigned int i = 0; i < maxX; i++)
-        delete[] agentGrid[i];
-    delete[] agentGrid;
+    for (auto i = 0; i < _maximum_x; i++) delete[] _agent_grid[i];
+    delete[] _agent_grid;
 }
 
-bool Grid2D::addAgent(AgentID agentID, int x, int y) {
-    return addAgent(agentID, GridCoord2D(x, y));
+bool Grid2D::delete_agent(AgentID agent_id) {
+    auto location = get_location_by_agent(agent_id);
+
+    return delete_agent(agent_id, location);
 }
 
-bool Grid2D::deleteAgent(AgentID agentID) {
-    GridCoord2D location = getLocationByAgent(agentID);
-
-    return deleteAgent(agentID, location);
-}
-
-bool Grid2D::deleteAgent(AgentID agentID, int x, int y) {
-    return deleteAgent(agentID, GridCoord2D(x, y));
-}
-
-bool Grid2D::deleteAgent(AgentID agentID, GridCoord2D location) {
-    auto agentList = agentGrid[static_cast<int>(location.getX())][static_cast<int>(location.getY())];
-    for (auto testAgentID = agentList.begin(); testAgentID < agentList.end(); testAgentID++) {
-        if (*testAgentID == agentID) {
-            agentList.erase(testAgentID);
-            agentIndex->erase(agentID);
+bool Grid2D::delete_agent(AgentID agent_id, GridCoord2D location) {
+    auto agent_list = _agent_grid[static_cast<int>(location.get_x_location())]
+                                 [static_cast<int>(location.get_y_location())];
+    for (auto test_agent_id = agent_list.begin();
+         test_agent_id < agent_list.end(); test_agent_id++) {
+        if (*test_agent_id == agent_id) {
+            agent_list.erase(test_agent_id);
+            _agent_index->erase(agent_id);
             return true;
         }
     }
@@ -111,98 +100,125 @@ bool Grid2D::deleteAgent(AgentID agentID, GridCoord2D location) {
     return false;
 }
 
-bool Grid2D::isLocationValid(GridCoord2D location) const {
-    auto x = location.getX();
-    auto y = location.getY();
+bool Grid2D::is_location_valid(GridCoord2D location) const {
+    auto x = location.get_x_location();
+    auto y = location.get_y_location();
 
-    return (x >= 0 && x < static_cast<int>(maxX) &&
-            y >= 0 && y < static_cast<int>(maxY));
+    return (x >= 0 && x < static_cast<int>(_maximum_x) && y >= 0 &&
+            y < static_cast<int>(_maximum_y));
 }
 
-GridCoord2D Grid2D::getLocationByAgent(AgentID agentID) const {
-    return agentIndex->at(agentID);
+GridCoord2D Grid2D::get_location_by_agent(AgentID agent_id) const {
+    return _agent_index->at(agent_id);
 }
 
-bool Grid2D::moveAgent(AgentID agentID, GridCoord2D nextLocation) {
-    GridCoord2D currLocation = getLocationByAgent(agentID);
+bool Grid2D::move_agent(AgentID agent_id, GridCoord2D coord) {
+    GridCoord2D current_location = get_location_by_agent(agent_id);
 
-    if (deleteAgent(agentID, currLocation) == true)
-        return addAgent(agentID, nextLocation);
+    if (delete_agent(agent_id, current_location) == true)
+        return add_agent(agent_id, coord);
     return false;
 }
 
-void Grid2D::setWrapX(bool newWrapX) { wrapX = newWrapX; }
-void Grid2D::setWrapY(bool newWrapY) { wrapY = newWrapY; }
-bool Grid2D::getWrapX(void) const { return wrapX; }
-bool Grid2D::getWrapY(void) const { return wrapY; }
+bool Grid2D::get_wrap_x(void) const { return _wrap_x; }
+bool Grid2D::get_wrap_y(void) const { return _wrap_y; }
 
-void Grid2D::setMaxX(unsigned int newMaxX) {
-    maxX = newMaxX;
+std::vector<GridCoord2D> Grid2D::get_neighborhood(
+    AgentID agent_id, GridNeighborhoodType neighborhood_type,
+    bool includeCenter) const {
+    GridCoord2D location = get_location_by_agent(agent_id);
+
+    return get_neighborhood(location, neighborhood_type, includeCenter);
 }
 
-void Grid2D::setMaxY(unsigned int newMaxY) {
-    maxY = newMaxY;
-}
-
-std::vector<GridCoord2D> Grid2D::getNeighborhood(AgentID agentID, GridNeighborhoodType nType, bool includeCenter) const {
-    GridCoord2D location = getLocationByAgent(agentID);
-
-    return getNeighborhood(location, nType, includeCenter);
-}
-
-std::vector<GridCoord2D> Grid2D::getNeighborhood(GridCoord2D location, GridNeighborhoodType nType, bool includeCenter) const {
+std::vector<GridCoord2D> Grid2D::get_neighborhood(
+    GridCoord2D location, GridNeighborhoodType neighborhood_type,
+    bool include_center) const {
     std::vector<GridCoord2D> neighborhood;
-    auto x = location.getX();
-    auto y = location.getY();
+    auto x = location.get_x_location();
+    auto y = location.get_y_location();
 
-    if (includeCenter == true)
-        neighborhood.push_back(location);
+    // We assume our starting position is valid
+    if (include_center) neighborhood.push_back(location);
 
     // N, E, S, W
-    neighborhood.push_back(locationWrap(x, y - 1));
-    neighborhood.push_back(locationWrap(x, y + 1));
-    neighborhood.push_back(locationWrap(x + 1, y));
-    neighborhood.push_back(locationWrap(x - 1, y));
+    {
+        auto new_location = coord_wrap(GridCoord2D(x, y - 1));
+        if (is_location_valid(new_location))
+            neighborhood.push_back(coord_wrap(new_location));
+    }
+    {
+        auto new_location = coord_wrap(GridCoord2D(x, y + 1));
+        if (is_location_valid(new_location))
+            neighborhood.push_back(coord_wrap(new_location));
+    }
+    {
+        auto new_location = coord_wrap(GridCoord2D(x + 1, y));
+        if (is_location_valid(new_location))
+            neighborhood.push_back(coord_wrap(new_location));
+    }
+    {
+        auto new_location = coord_wrap(GridCoord2D(x - 1, y));
+        if (is_location_valid(new_location))
+            neighborhood.push_back(coord_wrap(new_location));
+    }
 
-    if (nType == GridNeighborhoodType::Moore) {
+    if (neighborhood_type == GridNeighborhoodType::Moore) {
         // NE, SE, SW, NW
-        neighborhood.push_back(locationWrap(x + 1, y - 1));
-        neighborhood.push_back(locationWrap(x + 1, y + 1));
-        neighborhood.push_back(locationWrap(x - 1, y + 1));
-        neighborhood.push_back(locationWrap(x - 1, y - 1));
+        {
+            auto new_location = coord_wrap(GridCoord2D(x + 1, y - 1));
+            if (is_location_valid(new_location))
+                neighborhood.push_back(coord_wrap(new_location));
+        }
+        {
+            auto new_location = coord_wrap(GridCoord2D(x + 1, y + 1));
+            if (is_location_valid(new_location))
+                neighborhood.push_back(coord_wrap(new_location));
+        }
+        {
+            auto new_location = coord_wrap(GridCoord2D(x - 1, y + 1));
+            if (is_location_valid(new_location))
+                neighborhood.push_back(coord_wrap(new_location));
+        }
+        {
+            auto new_location = coord_wrap(GridCoord2D(x - 1, y - 1));
+            if (is_location_valid(new_location))
+                neighborhood.push_back(coord_wrap(new_location));
+        }
     }
 
     return neighborhood;
 }
 
-std::vector<AgentID> *Grid2D::getCellContents(GridCoord2D location) const {
-    if (isLocationValid(location)) {
-        return &agentGrid[location.getX()][location.getY()];
+std::vector<AgentID> *Grid2D::get_location_contents(
+    GridCoord2D location) const {
+    if (is_location_valid(location) && !is_location_empty(location)) {
+        return &_agent_grid[location.get_x_location()]
+                           [location.get_y_location()];
     }
 
     return nullptr;
 }
 
-unsigned int Grid2D::getMaxX(void) const { return maxX; }
-unsigned int Grid2D::getMaxY(void) const { return maxY; }
+unsigned int Grid2D::get_maximum_x(void) const { return _maximum_x; }
+unsigned int Grid2D::get_maximum_y(void) const { return _maximum_y; }
 
-GridCoord2D Grid2D::locationWrap(GridCoord2D location) const {
-    return locationWrap(location.getX(), location.getY());
-}
+GridCoord2D Grid2D::coord_wrap(GridCoord2D location) const {
+    auto x = location.get_x_location();
+    auto y = location.get_y_location();
 
-GridCoord2D Grid2D::locationWrap(int x, int y) const {
-    if (wrapX == true)
-        x = (x + static_cast<int>(maxX)) % static_cast<int>(maxX);
-    if (wrapY == true)
-        y = (y + static_cast<int>(maxY)) % static_cast<int>(maxY);
+    if (_wrap_x)
+        x = (x + static_cast<int>(_maximum_x)) % static_cast<int>(_maximum_x);
+    if (_wrap_x)
+        y = (y + static_cast<int>(_maximum_y)) % static_cast<int>(_maximum_y);
     return GridCoord2D(x, y);
 }
 
-bool Grid2D::isEmpty(GridCoord2D location) const {
-    auto x = location.getX();
-    auto y = location.getY();
+bool Grid2D::is_location_empty(GridCoord2D location) const {
+    auto x = location.get_x_location();
+    auto y = location.get_y_location();
 
-    return agentGrid[x][y].size() == 0;
+    return _agent_grid[x][y].size() == 0;
 }
 
 }  // namespace kami
