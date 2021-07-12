@@ -10,7 +10,7 @@ class KamiConan(ConanFile):
     description = "Agent-Based Modeling in Modern C++"
     topics = ("agent-based modeling", "simulation", "orms")
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake"
+    generators = "cmake", "cmake_find_package"
     exports_sources = "*"
 
     options = {"shared": [True, False], "fPIC": [True, False]}
@@ -25,7 +25,9 @@ class KamiConan(ConanFile):
 
 
     def build(self):
-        cmake = self._configure_cmake()
+        cmake = CMake(self) # it will find the packages by using our auto-generated FindXXX.cmake files
+        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
+        cmake.configure()
         cmake.build()
 
 
