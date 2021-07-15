@@ -35,26 +35,27 @@
 namespace kami {
 
 /**
- * Neighborhood types for orthogonal grid domains of cells.
+ * @brief Neighborhood types for orthogonal grid domains of cells.
  *
- * Orthogonal grid domains are those that provide cells equidistant along a
- * standard Cartesian grid.  `GridNeighborhoodType` allows for the distinction
- * between those neighborhoods that include those cells touching on the corners
- * or diagonally and those neighborhoods that do not.
+ * @details Orthogonal grid domains are those that provide cells equidistant
+ * along a standard Cartesian grid.  `GridNeighborhoodType` allows for the
+ * distinction between those neighborhoods that include those cells touching on
+ * the corners or diagonally and those neighborhoods that do not.
  */
-enum LIBKAMI_EXPORT GridNeighborhoodType {
+enum class GridNeighborhoodType {
     /**
-     * Moore neighborhood
+     * @brief Moore neighborhood
      *
-     * Moore neighborhood types include diagonally-adjacent cells as neighbors.
+     * @details Moore neighborhood types include diagonally-adjacent cells as
+     * neighbors.
      */
     Moore,
 
     /**
-     * Von Neumann neighborhood
+     * @brief Von Neumann neighborhood
      *
-     * Von Neumann neighborhood types do not include diagonally-adjacent cells
-     * as neighbors.
+     * @details Von Neumann neighborhood types do not include
+     * diagonally-adjacent cells as neighbors.
      */
     VonNeumann
 };
@@ -62,38 +63,40 @@ enum LIBKAMI_EXPORT GridNeighborhoodType {
 /**
  * @brief Distance types for orthogonal grid domains
  */
-enum LIBKAMI_EXPORT GridDistanceType {
+enum class GridDistanceType {
     /**
-     * Euclidean distance.
+     * @brief Euclidean distance.
      *
-     * The Euclidean distance is the length of the line segment connecting two
-     * points.  This is commonly called a "beeline" or "as the crow flies."
+     * @details The Euclidean distance is the length of the line segment
+     * connecting two points.  This is commonly called a "beeline" or 
+     * "as the crow flies."
      */
     Euclidean,
 
     /**
-     * Manhattan distance.
+     * @brief Manhattan distance.
      *
-     * The Manhattan distance is the sum of the absolute value of the
-     * differences of the elements. This is commonly called the "taxicab
-     * distance," "rectilinear distance," or many other [formal
+     * @details The Manhattan distance is the sum of the absolute value of the
+     * differences of the elements. This is commonly called the 
+     * "taxicab distance," "rectilinear distance," or many other [formal
      * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
      */
     Manhattan
 };
 
 /**
- * An abstract domain based on a gridded environment.
+ * @brief An abstract domain based on a gridded environment.
  *
- * All gridded domains are expected to consist of cells in a rectilinear
- * grid where the cells are equal size and laid out in an ordered fashion.
+ * @details All gridded domains are expected to consist of cells in a
+ * rectilinear grid where the cells are equal size and laid out in an ordered
+ * fashion.
  */
 class LIBKAMI_EXPORT GridDomain : public Domain {};
 
 /**
- * An abstract for gridded coordinates.
+ * @brief An abstract for gridded coordinates.
  *
- * All gridded coordinates are expected to subclass `GridCoord`.
+ * @details All gridded coordinates are expected to subclass `GridCoord`.
  */
 class LIBKAMI_EXPORT GridCoord : public Coord {};
 

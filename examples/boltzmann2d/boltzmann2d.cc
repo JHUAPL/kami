@@ -23,10 +23,8 @@
  * SOFTWARE.
  */
 
-#include "boltzmann2d.h"
-
 #include <kami/agent.h>
-#include <kami/grid1d.h>
+#include <kami/grid2d.h>
 #include <kami/kami.h>
 #include <kami/multigrid1d.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -39,14 +37,19 @@
 #include <CLI/Formatter.hpp>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <random>
 #include <string>
+
+#include "boltzmann2d.h"
 
 using namespace kami;
 using namespace std;
 
 MultiGrid2D *MoneyAgent2D::_world = nullptr;
 BoltzmannWealthModel2D *MoneyAgent2D::_model = nullptr;
-shared_ptr<spdlog::logger> console;
+shared_ptr<spdlog::logger> console = nullptr;
+shared_ptr<mt19937> rng = nullptr;
 
 template <>
 struct fmt::formatter<AgentID> : fmt::formatter<string> {
@@ -79,8 +82,8 @@ void MoneyAgent2D::move_agent() {
     console->trace("Entering move_agent");
     auto agent_id = get_agent_id();
     auto move_list = _world->get_neighborhood(agent_id, GridNeighborhoodType::Moore, false);
-    auto new_location =
-        move_list[static_cast<unsigned int>(rand()) % move_list.size()];
+    std::uniform_int_distribution<int> dist(0, move_list.size() - 1);
+    auto new_location = move_list[dist(*rng)];
 
     console->trace("Moving Agent {} to location {}", agent_id, new_location);
     _world->move_agent(agent_id, new_location);
@@ -97,8 +100,8 @@ void MoneyAgent2D::give_money() {
     vector<AgentID> *cell_mates = _world->get_location_contents(location);
 
     if (cell_mates->size() > 1) {
-        AgentID other_agent_id = cell_mates->at(
-            static_cast<unsigned int>(rand()) % cell_mates->size());
+        std::uniform_int_distribution<int> dist(0, cell_mates->size() - 1);
+        AgentID other_agent_id = cell_mates->at(dist(*rng));
         auto other_agent = _model->get_agent_by_id(other_agent_id);
 
         console->trace("Agent {} giving unit of wealth to agent {}", agent_id,
@@ -112,14 +115,20 @@ BoltzmannWealthModel2D::BoltzmannWealthModel2D(unsigned int number_agents,
                                                unsigned int length_x,
                                                unsigned int length_y,
                                                unsigned int new_seed) {
-    _world = new MultiGrid2D(length_x, length_y, true, true);
-    _sched = new RandomScheduler(this, new_seed);
+    rng = make_shared<mt19937>();
+    rng->seed(new_seed);
 
-    console->debug("Scheduler initiated with seed {}", _sched->get_seed());
+    _world = new MultiGrid2D(length_x, length_y, true, true);
+    _sched = new RandomScheduler(this, rng);
+
+    console->debug("Scheduler initiated with seed {}", new_seed);
 
     _step_count = 0;
     MoneyAgent2D::set_world(_world);
     MoneyAgent2D::set_model(this);
+
+    std::uniform_int_distribution<int> dist_x(0, length_x - 1);
+    std::uniform_int_distribution<int> dist_y(0, length_y - 1);
 
     for (unsigned int i = 0; i < number_agents; i++) {
         MoneyAgent2D *new_agent = new MoneyAgent2D();
@@ -128,8 +137,7 @@ BoltzmannWealthModel2D::BoltzmannWealthModel2D(unsigned int number_agents,
             new_agent->get_agent_id(), new_agent));
         _sched->add_agent(new_agent->get_agent_id());
         _world->add_agent(new_agent->get_agent_id(),
-                          GridCoord2D(rand() % static_cast<int>(length_x),
-                                      rand() % static_cast<int>(length_y)));
+                          GridCoord2D(dist_x(*rng), dist_x(*rng)));
     }
 }
 
@@ -158,7 +166,7 @@ MoneyAgent2D *BoltzmannWealthModel2D::get_agent_by_id(AgentID agent_id) const {
 }
 
 int main(int argc, char **argv) {
-    std::string ident = "boltzmann1d";
+    std::string ident = "boltzmann2d";
     CLI::App app{ident};
     string log_level_option = "info";
     unsigned int x_size = 16, y_size = 16, agent_count = x_size * y_size,

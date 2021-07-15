@@ -39,6 +39,8 @@
 #include <CLI/Formatter.hpp>
 #include <iostream>
 #include <map>
+#include <memory>
+#include <random>
 #include <string>
 
 using namespace kami;
@@ -46,7 +48,8 @@ using namespace std;
 
 MultiGrid1D *MoneyAgent1D::_world = nullptr;
 BoltzmannWealthModel1D *MoneyAgent1D::_model = nullptr;
-shared_ptr<spdlog::logger> console;
+shared_ptr<spdlog::logger> console = nullptr;
+shared_ptr<mt19937> rng = nullptr;
 
 template <>
 struct fmt::formatter<AgentID> : fmt::formatter<string> {
@@ -79,8 +82,8 @@ void MoneyAgent1D::move_agent() {
     console->trace("Entering move_agent");
     auto agent_id = get_agent_id();
     auto move_list = _world->get_neighborhood(agent_id, false);
-    auto new_location =
-        move_list[static_cast<unsigned int>(rand()) % move_list.size()];
+    std::uniform_int_distribution<int> dist(0, move_list.size() - 1);
+    auto new_location = move_list[dist(*rng)];
 
     console->trace("Moving Agent {} to location {}", agent_id, new_location);
     _world->move_agent(agent_id, new_location);
@@ -97,8 +100,8 @@ void MoneyAgent1D::give_money() {
     vector<AgentID> *cell_mates = _world->get_location_contents(location);
 
     if (cell_mates->size() > 1) {
-        AgentID other_agent_id = cell_mates->at(
-            static_cast<unsigned int>(rand()) % cell_mates->size());
+        std::uniform_int_distribution<int> dist(0, cell_mates->size() - 1);
+        AgentID other_agent_id = cell_mates->at(dist(*rng));
         auto other_agent = _model->get_agent_by_id(other_agent_id);
 
         console->trace("Agent {} giving unit of wealth to agent {}", agent_id,
@@ -111,14 +114,19 @@ void MoneyAgent1D::give_money() {
 BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents,
                                                unsigned int length_x,
                                                unsigned int new_seed) {
-    _world = new MultiGrid1D(length_x, true);
-    _sched = new RandomScheduler(this, new_seed);
+    rng = make_shared<mt19937>();
+    rng->seed(new_seed);
 
-    console->debug("Scheduler initiated with seed {}", _sched->get_seed());
+    _world = new MultiGrid1D(length_x, true);
+    _sched = new RandomScheduler(this, rng);
+
+    console->debug("Scheduler initiated with seed {}", new_seed);
 
     _step_count = 0;
     MoneyAgent1D::set_world(_world);
     MoneyAgent1D::set_model(this);
+
+    std::uniform_int_distribution<int> dist(0, length_x - 1);
 
     for (unsigned int i = 0; i < number_agents; i++) {
         MoneyAgent1D *new_agent = new MoneyAgent1D();
@@ -126,8 +134,7 @@ BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents,
         _agent_list.insert(pair<AgentID, MoneyAgent1D *>(
             new_agent->get_agent_id(), new_agent));
         _sched->add_agent(new_agent->get_agent_id());
-        _world->add_agent(new_agent->get_agent_id(),
-                          GridCoord1D(rand() % static_cast<int>(length_x)));
+        _world->add_agent(new_agent->get_agent_id(), GridCoord1D(dist(*rng)));
     }
 }
 

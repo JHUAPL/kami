@@ -35,31 +35,23 @@
 
 namespace kami {
 
-RandomScheduler::RandomScheduler(Model *model) : SequentialScheduler(model) {
-    //  First, let's get a seed, since we do not have one
-    using namespace std::chrono;
+RandomScheduler::RandomScheduler(Model *model) : SequentialScheduler(model) {}
 
-    auto time_now = system_clock::now();
-    auto time_seconds = time_point_cast<seconds>(time_now);
-    auto seed = time_seconds.time_since_epoch().count();
-
-    this->set_seed(seed);
-}
-
-RandomScheduler::RandomScheduler(Model *model, int seed)
+RandomScheduler::RandomScheduler(Model *model,
+                                 std::shared_ptr<std::mt19937> rng)
     : SequentialScheduler(model) {
-    this->set_seed(seed);
+    this->set_rng(rng);
 }
 
 void RandomScheduler::step() {
-    shuffle(_agent_list.begin(), _agent_list.end(), _rng);
+    shuffle(_agent_list.begin(), _agent_list.end(), *_rng);
     this->SequentialScheduler::step();
 }
 
-void RandomScheduler::set_seed(int seed) {
-    this->_rng.seed(this->_original_seed = seed);
+void RandomScheduler::set_rng(std::shared_ptr<std::mt19937> rng) {
+    this->_rng = rng;
 }
 
-int RandomScheduler::get_seed(void) const { return (this->_original_seed); }
+std::shared_ptr<std::mt19937> RandomScheduler::get_rng() { return (_rng); }
 
 }  // namespace kami
