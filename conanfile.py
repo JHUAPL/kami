@@ -3,10 +3,10 @@ from conans import ConanFile, CMake
 
 class KamiConan(ConanFile):
     name = "kami"
-    version = "0.3.0"
+    version = "0.3.1"
     license = "MIT"
     author = "James P. Howard, II <james.howard@jhu.edu>"
-    url = "http://github.com/GavinNL/cpp_library_template"
+    url = "http://github.com/jhuapl/kami"
     description = "Agent-Based Modeling in Modern C++"
     topics = ("agent-based modeling", "simulation", "orms")
     settings = "os", "compiler", "build_type", "arch"
@@ -44,6 +44,6 @@ class KamiConan(ConanFile):
 
 
     def requirements(self):
-        # Or add a new requirement!
+        self.requires("fmt/7.1.3")
         self.requires("spdlog/1.8.0")
         self.requires("cli11/1.9.1")
