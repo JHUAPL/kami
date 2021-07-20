@@ -43,8 +43,8 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
 	'breathe',
-    'exhale'
-]
+    'exhale',
+    'myst_parser']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -105,7 +105,10 @@ release = version
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-source_suffix = ['.rst', '.md']
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
 
 # The master toctree document.
 master_doc = 'index'
@@ -175,3 +178,4 @@ man_pages = [
 
 # If true, show URL addresses after external links.
 # man_show_urls = False
+html_show_sphinx = False
