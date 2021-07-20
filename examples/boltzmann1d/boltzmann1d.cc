@@ -112,15 +112,9 @@ void MoneyAgent1D::give_money() {
 }
 
 BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents,
-                                               unsigned int length_x,
-                                               unsigned int new_seed) {
-    rng = make_shared<mt19937>();
-    rng->seed(new_seed);
-
+                                               unsigned int length_x) {
     _world = new MultiGrid1D(length_x, true);
     _sched = new RandomScheduler(this, rng);
-
-    console->debug("Scheduler initiated with seed {}", new_seed);
 
     _step_count = 0;
     MoneyAgent1D::set_world(_world);
@@ -191,7 +185,8 @@ int main(int argc, char **argv) {
         "{} steps",
         agent_count, x_size, max_steps);
 
-    BoltzmannWealthModel1D model(agent_count, x_size, initial_seed);
+    rng = make_shared<mt19937>(initial_seed);
+    BoltzmannWealthModel1D model(agent_count, x_size);
 
     spdlog::stopwatch sw;
     for (int i = 0; i < max_steps; i++) {

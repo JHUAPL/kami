@@ -102,12 +102,9 @@ class BoltzmannWealthModel1D : public Model {
      * @param[in] number_agents the number of agents to assign to the model.
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
-     * @param[in] new_seed the initial seed used for the random number
-     * generator.
      */
     BoltzmannWealthModel1D(unsigned int number_agents = 10,
-                           unsigned int length_x = 10,
-                           unsigned int new_seed = 42);
+                           unsigned int length_x = 10);
 
     /**
      * Destroy the instance
@@ -125,11 +122,6 @@ class BoltzmannWealthModel1D : public Model {
      * @param[in] n the number of steps to execute.
      */
     void run(unsigned int n);
-
-    /**
-     * Return the seed used to initialize the model.
-     */
-    int get_seed() const;
 
     /**
      * Get the MoneyAgent instance associated with the given `AgentID`
