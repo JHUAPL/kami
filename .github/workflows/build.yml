@@ -34,10 +34,15 @@ jobs:
       id: conan
       uses: turtlebrowser/get-conan@main
 
-    - name: Conan version
-      run: echo "${{ steps.conan.outputs.version }}"
+    - name: Conan The Frogarian
+      run: conan frogarian
 
-    - name: Conan install dependencies
+    - name: Conan Profile Setup
+      run: |
+        conan profile new default
+        conan profile update settings.compiler.libcxx=libstdc++11 default
+
+    - name: Conan Install Dependencies
       run: conan install -if build . 
 
     - name: Configure CMake
