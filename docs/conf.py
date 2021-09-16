@@ -4,25 +4,24 @@ from documenteer.sphinxconfig.utils import form_ltd_edition_name
 
 def configureDoxyfile(input_dir, output_dir):
 
-	with open('Doxyfile.in', 'r') as file :
-		filedata = file.read()
+    with open('Doxyfile.in', 'r') as file :
+        filedata = file.read()
 
-	filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
-	filedata = filedata.replace('@DOXYGEN_OUTPUT_DIR@', output_dir)
-	
-	with open('Doxyfile', 'w') as file:
-		file.write(filedata)
+    filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
+    filedata = filedata.replace('@DOXYGEN_OUTPUT_DIR@', output_dir)
+
+    with open('Doxyfile', 'w') as file:
+        file.write(filedata)
 
 # Check if we're running on Read the Docs' servers
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
-	input_dir = '../include/kami'
-	output_dir = 'build'
-	configureDoxyfile(input_dir, output_dir)
-	subprocess.call('doxygen', shell=True)
-	breathe_projects['kami'] = output_dir + 'docs/xml'
-
+    input_dir = '../include/kami'
+    output_dir = 'build'
+    configureDoxyfile(input_dir, output_dir)
+    subprocess.call('doxygen', shell=True)
+    breathe_projects = { "kami": output_dir + 'docs/xml' }
 
 # -- Project information -----------------------------------------------------
 
@@ -42,7 +41,7 @@ author = 'James P. Howard, II <james.howard@jhu.edu>'
 extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.githubpages',
-	'breathe',
+    'breathe',
     'exhale',
     'myst_parser']
 
