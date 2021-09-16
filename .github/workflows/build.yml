@@ -25,7 +25,11 @@ jobs:
       run: |
         sudo apt-get install -y doxygen
         sudo apt-get install -y python3-sphinx
-    
+
+    - name: Install Clang
+        sudo apt-get install clang
+        sudo update-alternatives --set c++ /usr/bin/g++
+
     - name: Install Conan
       id: conan
       uses: turtlebrowser/get-conan@main
@@ -54,4 +58,3 @@ jobs:
     - name: Install
       # Build your program with the given configuration
       run: cmake --build build --target install --config ${{env.BUILD_TYPE}}
-
