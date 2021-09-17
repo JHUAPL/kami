@@ -35,9 +35,7 @@ jobs:
 
     - name: Conan Profile Setup
       run: |
-        conan profile new default
-        conan profile update settings.arch=x86_64 default
-        conan profile update settings.compiler=gcc default
+        conan config init
         conan profile update settings.compiler.libcxx=libstdc++11 default
 
     - name: Conan Install Dependencies
