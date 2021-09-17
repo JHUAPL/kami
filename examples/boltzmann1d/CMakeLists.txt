@@ -4,9 +4,7 @@ cmake_minimum_required(VERSION 3.13)
 
 set(EXAMPLE_NAME "boltzmann1d")
 
-project(${EXAMPLE_NAME}
-        LANGUAGES CXX
-)
+project(${EXAMPLE_NAME} LANGUAGES CXX)
 
 create_executable(  NAME ${EXAMPLE_NAME}
                     SOURCES

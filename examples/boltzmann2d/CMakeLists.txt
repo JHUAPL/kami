@@ -4,10 +4,7 @@ cmake_minimum_required(VERSION 3.13)
 
 set(EXAMPLE_NAME "boltzmann2d")
 
-project(${EXAMPLE_NAME}
-            LANGUAGES CXX)
-
-find_package(spdlog)
+project(${EXAMPLE_NAME} LANGUAGES CXX)
 
 create_executable(  NAME ${EXAMPLE_NAME}
                     SOURCES
