@@ -14,7 +14,7 @@ class KamiConan(ConanFile):
     exports_sources = "*"
 
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    default_options = {"shared": True, "fPIC": True}
 
 
     def _configure_cmake(self):
@@ -40,10 +40,10 @@ class KamiConan(ConanFile):
         # These libraries are required when using the
         # following generators:
         #  cmake, cmake_paths, cmake_
-        self.cpp_info.libs = ["kami", "kamidata"]
+        self.cpp_info.libs = ["kami"]
 
 
     def requirements(self):
         self.requires("fmt/7.1.3")
-        self.requires("spdlog/1.8.0")
+        self.requires("spdlog/1.8.5")
         self.requires("cli11/1.9.1")

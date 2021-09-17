@@ -40,7 +40,7 @@ set(KAMI_VERSION_STRING ${KAMI_VERSION_MAJOR}.${KAMI_VERSION_MINOR}.${KAMI_VERSI
 project(kami  VERSION       ${KAMI_VERSION_STRING}
               LANGUAGES     CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -54,9 +54,8 @@ set(PROJECT_NAMESPACE        kami  )  # The project namespace. Library targets
                                       # the same as the project.
 ################################################################################
 
-
-
-
+find_package(spdlog)
+find_package(Threads)
 
 if(CMAKE_COMPILER_IS_GNUCC)
     option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
