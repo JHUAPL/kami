@@ -1,3 +1,7 @@
+[![ConanCenter package](https://repology.org/badge/version-for-repo/conancenter/kami.svg)](https://repology.org/project/kami/versions)
+[![Build (main)](https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/JHUAPL/kami/actions/workflows/build.yml)
+[![Build (develop)](https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/JHUAPL/kami/actions/workflows/build.yml)
+
 # Kami is Agent-Based Modeling in Modern C++
 
 ## Compiling
@@ -8,7 +12,7 @@
 git clone https://github.com/k3jph/kami.git
 cd kami
 conan install -if build .
-cmake -B build -DCMAKE_INSTALL_PREFIX=/tmp/kami -DBUILD_SHARED_LIBS:BOOL=FALSE
+cmake -B build -DBUILD_SHARED_LIBS:BOOL=FALSE
 cmake --build build
 cmake --build build --target test
 cmake --build build --target install
