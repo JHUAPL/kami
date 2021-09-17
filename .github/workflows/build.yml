@@ -26,6 +26,10 @@ jobs:
         sudo apt-get install -y doxygen
         sudo apt-get install -y python3-sphinx
 
+    - name: Install Python Support Packages
+      run: |
+        pip install -U documenteer
+
     - name: Install Conan
       id: conan
       uses: turtlebrowser/get-conan@main
