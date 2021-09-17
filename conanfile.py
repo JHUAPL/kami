@@ -3,7 +3,7 @@ from conans import ConanFile, CMake
 
 class KamiConan(ConanFile):
     name = "kami"
-    version = "0.3.1"
+    version = "0.3.0"
     license = "MIT"
     author = "James P. Howard, II <james.howard@jhu.edu>"
     url = "http://github.com/jhuapl/kami"
