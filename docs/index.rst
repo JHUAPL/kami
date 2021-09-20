@@ -12,7 +12,7 @@ Introduction
     :target: https://kami.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 ..  image:: https://img.shields.io/github/release/JHUAPL/kami.svg
-    :target: https://github.com/JHUAPL/spdlog/kami/latest
+    :target: https://github.com/JHUAPL/kami/latest
     :alt: Release Status
 ..  image:: https://repology.org/badge/version-for-repo/conancenter/kami.svg
     :target: https://repology.org/project/kami/versions
