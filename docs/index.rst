@@ -14,9 +14,6 @@ Introduction
 ..  image:: https://img.shields.io/github/release/JHUAPL/kami.svg
     :target: https://github.com/JHUAPL/kami/releases
     :alt: Release Status
-..  image:: https://repology.org/badge/version-for-repo/conancenter/kami.svg
-    :target: https://repology.org/project/kami/versions
-    :alt: ConanCenter Package Status
 ..  image:: https://img.shields.io/github/license/JHUAPL/kami
     :alt: License Information
 
