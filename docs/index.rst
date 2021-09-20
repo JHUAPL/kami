@@ -12,11 +12,13 @@ Introduction
     :target: https://kami.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 ..  image:: https://img.shields.io/github/release/JHUAPL/kami.svg
-    :target: https://github.com/JHUAPL/kami/latest
+    :target: https://github.com/JHUAPL/kami/releases
     :alt: Release Status
 ..  image:: https://repology.org/badge/version-for-repo/conancenter/kami.svg
     :target: https://repology.org/project/kami/versions
     :alt: ConanCenter Package Status
+..  image:: https://img.shields.io/github/license/JHUAPL/kami
+    :alt: License Information
 
 Kami is agent-based modeling modern C++.  The objectives in writing
 Kami are that it be lightweight, memory-efficient, and fast.  It
