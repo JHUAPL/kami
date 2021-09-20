@@ -27,12 +27,11 @@ extensively on the `Mesa
 Python, which itself was inspired by the `MASON
 <https://cs.gmu.edu/~eclab/projects/mason/>`_ library in Java.
 
-blah blah blah
-
 .. toctree::
    :maxdepth: 2
    :hidden:
 
+   installation
    tutorial
    api/library_root
    license
