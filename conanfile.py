@@ -3,39 +3,35 @@ from conans import ConanFile, CMake
 
 class KamiConan(ConanFile):
     name = "kami"
-    version = "0.2.0"
+    version = "0.3.0"
+    license = "MIT"
     author = "James P. Howard, II <james.howard@jhu.edu>"
-    url = "http://github.com/GavinNL/cpp_library_template"
+    url = "http://github.com/jhuapl/kami"
     description = "Agent-Based Modeling in Modern C++"
     topics = ("agent-based modeling", "simulation", "orms")
     settings = "os", "compiler", "build_type", "arch"
-    generators = "cmake"
+    generators = "cmake", "cmake_find_package"
     exports_sources = "*"
 
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": False, "fPIC": True}
+    default_options = {"shared": True, "fPIC": True}
 
 
     def _configure_cmake(self):
         cmake = CMake(self)
-
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
-
         cmake.configure()
-
         return cmake
 
 
     def build(self):
-        cmake = self._configure_cmake()
+        cmake = CMake(self) # it will find the packages by using our auto-generated FindXXX.cmake files
+        cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
+        cmake.configure()
         cmake.build()
 
+
     def package(self):
-        '''
-            Create a package using "cmake --build . --target install"
-            All installation files are defined in the CMakeLists.txt file rather
-            than in the conan package.
-        '''
         cmake = self._configure_cmake()
         cmake.install()
 
@@ -44,9 +40,10 @@ class KamiConan(ConanFile):
         # These libraries are required when using the
         # following generators:
         #  cmake, cmake_paths, cmake_
-        self.cpp_info.libs = ["dog", "cat", "bar", "kami", "kamidata"]
+        self.cpp_info.libs = ["kami"]
+
 
     def requirements(self):
-        # Or add a new requirement!
-        self.requires("spdlog/1.7.0")
+        self.requires("fmt/7.1.3")
+        self.requires("spdlog/1.8.5")
         self.requires("cli11/1.9.1")

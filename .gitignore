@@ -38,3 +38,6 @@ build/*
 
 # Qtcreator files
 *.user
+
+# VSCode files
+.vscode

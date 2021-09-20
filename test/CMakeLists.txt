@@ -6,12 +6,13 @@ cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
 find_package(spdlog)
 
-create_test( NAME  
+create_test( NAME
                 unit-kami-agentid
              SOURCES
-                unit-kami-agentid.cpp
+                unit-kami-agentid.cc
              PUBLIC_LINKED_TARGETS
-                kami::kami
+                kami::libkami
+                fmt
                 spdlog::spdlog
                 ${COVERAGE_LIBS}
              COMMAND
@@ -19,12 +20,13 @@ create_test( NAME
              PUBLIC_COMPILE_FEATURES
                 ${COVERAGE_FLAGS})
 
-create_test( NAME  
+create_test( NAME
                 unit-kami-agent
              SOURCES
-                unit-kami-agent.cpp
+                unit-kami-agent.cc
              PUBLIC_LINKED_TARGETS
-                kami::kami
+                kami::libkami
+                fmt
                 spdlog::spdlog
                 ${COVERAGE_LIBS}
              COMMAND

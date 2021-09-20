@@ -28,7 +28,7 @@
 cmake_minimum_required(VERSION 3.13) # GENERATOR_IS_MULTI_CONFIG
 
 set(KAMI_VERSION_MAJOR 0)
-set(KAMI_VERSION_MINOR 2)
+set(KAMI_VERSION_MINOR 3)
 set(KAMI_VERSION_PATCH 0)
 set(KAMI_VERSION_STRING ${KAMI_VERSION_MAJOR}.${KAMI_VERSION_MINOR}.${KAMI_VERSION_PATCH})
 
@@ -40,10 +40,11 @@ set(KAMI_VERSION_STRING ${KAMI_VERSION_MAJOR}.${KAMI_VERSION_MINOR}.${KAMI_VERSI
 project(kami  VERSION       ${KAMI_VERSION_STRING}
               LANGUAGES     CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}" CACHE STRING "Modules for CMake" FORCE)
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
@@ -53,9 +54,8 @@ set(PROJECT_NAMESPACE        kami  )  # The project namespace. Library targets
                                       # the same as the project.
 ################################################################################
 
-
-
-
+find_package(spdlog)
+find_package(Threads)
 
 if(CMAKE_COMPILER_IS_GNUCC)
     option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
@@ -149,7 +149,7 @@ write_basic_package_version_file(
 #   * TARGETS_EXPORT_NAME
 #   * PROJECT_NAME
 configure_package_config_file(
-    "cmake/Config.cmake.in"
+    "cmake/config.cmake.in"
     "${project_config}"
     INSTALL_DESTINATION "${config_install_dir}"
 )
