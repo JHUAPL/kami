@@ -1,8 +1,6 @@
 Introduction
 ============
 
-|Build|
-
 ..  |Build (main)| image:: https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=main
     :target: https://github.com/JHUAPL/kami/actions/workflows/build.yml
 ..  |Build (develop)| image:: https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=develop
