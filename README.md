@@ -1,7 +1,7 @@
 [![Build status (main)](https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/JHUAPL/kami/actions/workflows/build.yml)
 [![Build status (develop)](https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/JHUAPL/kami/actions/workflows/build.yml)
 [![Documentation status](https://readthedocs.org/projects/kami/badge/?version=latest)](https://kami.readthedocs.io/en/latest/?badge=latest)
-[![Release status](https://img.shields.io/github/release/gabime/spdlog.svg)](https://github.com/gabime/spdlog/releases/latest)
+[![Release status](https://img.shields.io/github/release/JHUAPL/kami.svg)](https://github.com/JHUAPL/kami/releases/latest)
 [![ConanCenter status](https://repology.org/badge/version-for-repo/conancenter/kami.svg)](https://repology.org/project/kami/versions)
 
 # Kami is Agent-Based Modeling in Modern C++
