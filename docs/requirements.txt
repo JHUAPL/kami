@@ -3,3 +3,4 @@ sphinx
 exhale
 documenteer
 myst-parser
+sphinx_bootstrap_theme
