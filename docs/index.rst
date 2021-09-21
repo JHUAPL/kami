@@ -33,4 +33,5 @@ Python, which itself was inspired by the `MASON
    installation
    tutorial
    api/library_root
+   changelog
    license
