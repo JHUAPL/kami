@@ -5,4 +5,4 @@ documenteer
 myst-parser
 sphinx_bootstrap_theme
 sphinx_rtd_theme
-git+https://github.com/bitprophet/releases/#egg=releases
+releases
