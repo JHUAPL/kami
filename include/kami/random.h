@@ -37,13 +37,14 @@
 
 namespace kami {
 
-/*
+/**
  * Will execute all agent steps in a random order.
  *
- *  A random scheduler will iterate over the agents assigned
- *   to the scheduler and call their `step()` function in a random order.
- *   That order should be different for each subsequent call to `step()`,
- *   but is not gauranteed not to repeat.
+ * A random scheduler will iterate over the agents assigned
+ * to the scheduler and call their `step()` function in a random order.
+ * That order should be different for each subsequent call to `step()`,
+ * but is not guaranteed not to repeat.
+ *
  * @note First create a Model for the scheduler to live in.
  */
 class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
