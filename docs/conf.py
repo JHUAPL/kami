@@ -43,7 +43,11 @@ extensions = [
     'sphinx.ext.githubpages',
     'breathe',
     'exhale',
-    'myst_parser']
+    'myst_parser',
+    'releases']
+
+# 'releases' (changelog) settings
+releases_github_path = "JHUAPL/kami"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
