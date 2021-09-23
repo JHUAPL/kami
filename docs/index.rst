@@ -47,15 +47,16 @@ Accordingly, Kami is single-threaded and multiple cores should be
 taken advantage of through multiple parallel runs of the supervising
 model.
 
-.. _MASON: https://cs.gmu.edu/~eclab/projects/mason/
-.. _Mesa: https://mesa.readthedocs.io
+..  _MASON: https://cs.gmu.edu/~eclab/projects/mason/
+..  _Mesa: https://mesa.readthedocs.io
 
-.. toctree::
-   :maxdepth: 2
-   :hidden:
+..  toctree::
+    :maxdepth: 2
+    :hidden:
 
-   installation
-   tutorial
-   api/library_root
-   changelog
-   license
+    index
+    installation
+    tutorial
+    api/library_root
+    changelog
+    license
