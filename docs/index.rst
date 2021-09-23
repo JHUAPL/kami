@@ -17,7 +17,7 @@ Introduction
 ..  image:: https://img.shields.io/github/license/JHUAPL/kami
     :alt: License Information
 
-Agent-based models (ABM)s are models for simulating the actions of
+Agent-based models (ABMs) are models for simulating the actions of
 individual actors within a provided environment to understand the
 behavior of the agents, most individually and collectively.  ABMs
 are particularly suited for addressing problems governed by nonlinear
@@ -36,9 +36,8 @@ Kami provides agent-based modeling modern C++.  The objectives in
 writing Kami are that it be lightweight, memory-efficient, and fast.
 It should be possible to develop a simple working model in under
 one hour of C++ development time.  Accordingly, the platform is
-modeled on the [Mesa](https://mesa.readthedocs.io/en/stable/overview.html)
-library in Python, which itself was inspired by the
-[MASON](https://cs.gmu.edu/~eclab/projects/mason/) library in Java.
+modeled on the Mesa_ library in Python, which itself was inspired
+by the MASON_ library in Java.
 
 Many ABM platforms are designed around interaction and real time
 observation of the agent dynamics.  Kami does not provide a
@@ -47,6 +46,9 @@ ABMs requiring many runs with different starting conditions.
 Accordingly, Kami is single-threaded and multiple cores should be
 taken advantage of through multiple parallel runs of the supervising
 model.
+
+.. _MASON: https://cs.gmu.edu/~eclab/projects/mason/
+.. _Mesa: https://mesa.readthedocs.io
 
 .. toctree::
    :maxdepth: 2
