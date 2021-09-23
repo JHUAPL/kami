@@ -7,3 +7,5 @@ Changelog
 
 - :release:`0.3.0 <2021.09.20>`
 - :feature:`0` Initial public release.
+
+..  toctree::
