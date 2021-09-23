@@ -17,14 +17,35 @@ Introduction
 ..  image:: https://img.shields.io/github/license/JHUAPL/kami
     :alt: License Information
 
-Kami is agent-based modeling modern C++.  The objectives in writing
-Kami are that it be lightweight, memory-efficient, and fast.  It
-should be possible to develop a simple working model in under one
-hour of C++ development time.  Accordingly, the platform is modeled
-extensively on the `Mesa
-<https://mesa.readthedocs.io/en/stable/overview.html>`_ library in
-Python, which itself was inspired by the `MASON
-<https://cs.gmu.edu/~eclab/projects/mason/>`_ library in Java.
+Agent-based models (ABM)s are models for simulating the actions of
+individual actors within a provided environment to understand the
+behavior of the agents, most individually and collectively.  ABMs
+are particularly suited for addressing problems governed by nonlinear
+processes or where there is a wide variety of potential responses
+an individual agent may provide depending on the environment and
+behavior of other agents.  Because of this, ABMs have become powerful
+tools in both simulation and modeling, especially in public health
+and ecology, where they are also known as individual-based models.
+ABMs also provide support in economic, business, robotics, and many
+other fields.
+
+## Design Objectivies
+
+Kami provides agent-based modeling modern C++.  The objectives in
+writing Kami are that it be lightweight, memory-efficient, and fast.
+It should be possible to develop a simple working model in under
+one hour of C++ development time.  Accordingly, the platform is
+modeled on the [Mesa](https://mesa.readthedocs.io/en/stable/overview.html)
+library in Python, which itself was inspired by the
+[MASON](https://cs.gmu.edu/~eclab/projects/mason/) library in Java.
+
+Many ABM platforms are designed around interaction and real time
+observation of the agent dynamics.  Kami does not provide a
+visualization interface.  Instead, Kami is meant to be used for
+ABMs requiring many runs with different starting conditions.
+Accordingly, Kami is single-threaded and multiple cores should be
+taken advantage of through multiple parallel runs of the supervising
+model.
 
 .. toctree::
    :maxdepth: 2
