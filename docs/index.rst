@@ -29,7 +29,8 @@ and ecology, where they are also known as individual-based models.
 ABMs also provide support in economic, business, robotics, and many
 other fields.
 
-## Design Objectivies
+Design Objectives
+-----------------
 
 Kami provides agent-based modeling modern C++.  The objectives in
 writing Kami are that it be lightweight, memory-efficient, and fast.
