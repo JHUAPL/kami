@@ -1,6 +1,8 @@
 Changelog
 =========
 
+- :feature:`0` Added a new overview to the documents
+- :feature:`0` Added basic installation instructions
 - :bug:`0` Retagged previous versions using pure Semantic Versioning
 - :feature:`0` Documentation for `kami::RandomScheduler`
 - :feature:`0` Added a changelog!
