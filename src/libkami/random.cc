@@ -23,35 +23,29 @@
  * SOFTWARE.
  */
 
-#include <kami/agent.h>
-#include <kami/model.h>
-#include <kami/random.h>
-#include <kami/scheduler.h>
-
-#include <chrono>
-#include <iostream>
 #include <random>
 #include <string>
+#include <utility>
+
+#include <kami/model.h>
+#include <kami/random.h>
 
 namespace kami {
 
-RandomScheduler::RandomScheduler(Model *model) : SequentialScheduler(model) {}
+    RandomScheduler::RandomScheduler(Model *model, std::shared_ptr<std::mt19937> rng)
+            : SequentialScheduler(model) {
+        this->set_rng(std::move(rng));
+    }
 
-RandomScheduler::RandomScheduler(Model *model,
-                                 std::shared_ptr<std::mt19937> rng)
-    : SequentialScheduler(model) {
-    this->set_rng(rng);
-}
+    void RandomScheduler::step() {
+        shuffle(_agent_list.begin(), _agent_list.end(), *_rng);
+        this->SequentialScheduler::step();
+    }
 
-void RandomScheduler::step() {
-    shuffle(_agent_list.begin(), _agent_list.end(), *_rng);
-    this->SequentialScheduler::step();
-}
+    void RandomScheduler::set_rng(std::shared_ptr<std::mt19937> rng) {
+        this->_rng = std::move(rng);
+    }
 
-void RandomScheduler::set_rng(std::shared_ptr<std::mt19937> rng) {
-    this->_rng = rng;
-}
-
-std::shared_ptr<std::mt19937> RandomScheduler::get_rng() { return (_rng); }
+    [[maybe_unused]] std::shared_ptr<std::mt19937> RandomScheduler::get_rng() { return (_rng); }
 
 }  // namespace kami

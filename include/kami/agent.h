@@ -27,10 +27,11 @@
 #ifndef KAMI_AGENT_H
 #define KAMI_AGENT_H
 
-#include <kami/kami.h>
-
 #include <iostream>
 #include <string>
+
+#include <kami/kami.h>
+
 
 namespace kami {
 
@@ -43,77 +44,77 @@ namespace kami {
  *
  * @see Agent
  */
-class LIBKAMI_EXPORT AgentID {
-   public:
-    /**
-     * Constructs a new unique identifier.
-     */
-    AgentID() : _id(_id_next++){};
+    class LIBKAMI_EXPORT AgentID {
+    public:
+        /**
+         * Constructs a new unique identifier.
+         */
+        AgentID() : _id(_id_next++){};
 
-    /**
-     * Convert the identifier to a human-readable string.
-     *
-     * @return a human-readable form of the `AgentID` as `std::string`.
-     */
-    std::string to_string() const { return std::to_string(_id); }
+        /**
+         * Convert the identifier to a human-readable string.
+         *
+         * @return a human-readable form of the `AgentID` as `std::string`.
+         */
+        [[nodiscard]] std::string to_string() const { return std::to_string(_id); }
 
-    /**
-     * Test if two `AgentID` instances are equal.
-     *
-     * @param lhs is the left-hand side of the equality test.
-     * @param rhs is the right-hand side of the equality test.
-     * @return true is they are equal and false if not.
-     */
-    friend bool operator==(const AgentID &lhs, const AgentID &rhs);
+        /**
+         * Test if two `AgentID` instances are equal.
+         *
+         * @param lhs is the left-hand side of the equality test.
+         * @param rhs is the right-hand side of the equality test.
+         * @return true is they are equal and false if not.
+         */
+        friend bool operator==(const AgentID &lhs, const AgentID &rhs);
 
-    /**
-     * Test if two `AgentID` instances are not equal.
-     *
-     * @param lhs is the left-hand side of the equality test.
-     * @param rhs is the right-hand side of the equality test.
-     * @return true is they are not equal and false if they are.
-     */
-    friend bool operator!=(const AgentID &lhs, const AgentID &rhs);
+        /**
+         * Test if two `AgentID` instances are not equal.
+         *
+         * @param lhs is the left-hand side of the equality test.
+         * @param rhs is the right-hand side of the equality test.
+         * @return true is they are not equal and false if they are.
+         */
+        friend bool operator!=(const AgentID &lhs, const AgentID &rhs);
 
-    /**
-     * Test if one AgentID is less than another.
-     *
-     * Due to the way AgentID instances are used internally,
-     * the AgentID must be orderable.  The `<` operator provides a
-     * basic ordering sufficient for `std::map`.
-     *
-     * @param lhs is the left-hand side of the ordering test.
-     * @param rhs is the right-hand side of the ordering test.
-     * @return true if `lhs` is "less than" `rhs` as determined by the
-     * underlying implementation of the `AgentID`.
-     */
-    friend bool operator<(const AgentID &lhs, const AgentID &rhs);
+        /**
+         * Test if one AgentID is less than another.
+         *
+         * Due to the way AgentID instances are used internally,
+         * the AgentID must be orderable.  The `<` operator provides a
+         * basic ordering sufficient for `std::map`.
+         *
+         * @param lhs is the left-hand side of the ordering test.
+         * @param rhs is the right-hand side of the ordering test.
+         * @return true if `lhs` is "less than" `rhs` as determined by the
+         * underlying implementation of the `AgentID`.
+         */
+        friend bool operator<(const AgentID &lhs, const AgentID &rhs);
 
-    /**
-     * Output an AgentID to the specified output stream
-     *
-     * The form of the output will be the same as that produced by the
-     * `to_string()` member function.
-     *
-     * @param lhs is the stream to output the `AgentID` to
-     * @param rhs is the `AgentID` to output
-     * @return the output stream for reuse
-     */
-    friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
+        /**
+         * Output an AgentID to the specified output stream
+         *
+         * The form of the output will be the same as that produced by the
+         * `to_string()` member function.
+         *
+         * @param lhs is the stream to output the `AgentID` to
+         * @param rhs is the `AgentID` to output
+         * @return the output stream for reuse
+         */
+        friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
 
-   private:
-    inline static long long _id_next = 1;
+    private:
+        inline static long long _id_next = 1;
 
-    /**
-     * The unique identifier is a `long long`.
-     *
-     * The unique identifier is an unsigned integer that increments
-     * monotonically with each new `AgentID` instantiated.  This is
-     * substantially faster than other potential identifiers, such
-     * as MD5 hashes or UUID objects.
-     */
-    long long _id;
-};
+        /**
+         * The unique identifier is a `long long`.
+         *
+         * The unique identifier is an unsigned integer that increments
+         * monotonically with each new `AgentID` instantiated.  This is
+         * substantially faster than other potential identifiers, such
+         * as MD5 hashes or UUID objects.
+         */
+        long long _id;
+    };
 
 /**
  * A superclass for all agents.
@@ -124,58 +125,58 @@ class LIBKAMI_EXPORT AgentID {
  *
  * @see `StagedAgent`
  */
-class LIBKAMI_EXPORT Agent {
-   public:
-    /**
-     * Get the `Agent`'s `AgentID`.
-     *
-     * @return the `AgentID`
-     */
-    AgentID get_agent_id() const;
+    class LIBKAMI_EXPORT Agent {
+    public:
+        /**
+         * Get the `Agent`'s `AgentID`.
+         *
+         * @return the `AgentID`
+         */
+        [[nodiscard]] AgentID get_agent_id() const;
 
-    /**
-     * Execute a time-step for the agent
-     *
-     * This function should step the agent instance.  Any activities that the
-     * agent should perform as part of its time step should be in this function.
-     */
-    virtual void step() = 0;
+        /**
+         * Execute a time-step for the agent
+         *
+         * This function should step the agent instance.  Any activities that the
+         * agent should perform as part of its time step should be in this function.
+         */
+        virtual void step() = 0;
 
-    /**
-     * Compare if two `Agent`s are the same `Agent`.
-     * 
-     * @param lhs is the left-hand side of the equality test.
-     * @param rhs is the right-hand side of the equality test.
-     * @return true is they are equal and false if not.
-     *
-     * @note This does not compare that two Agent instances are
-     * identical.  Accordingly, this can be used to compare two instances
-     * of the same Agent at different points in its time stream.
-     *
-     * Subclasses of Agent may chose to extend this operator to tighten
-     * the restrictioons on the comparison.
-     */
-    friend bool operator==(const Agent &lhs, const Agent &rhs);
+        /**
+         * Compare if two `Agent`s are the same `Agent`.
+         *
+         * @param lhs is the left-hand side of the equality test.
+         * @param rhs is the right-hand side of the equality test.
+         * @return true is they are equal and false if not.
+         *
+         * @note This does not compare that two Agent instances are
+         * identical.  Accordingly, this can be used to compare two instances
+         * of the same Agent at different points in its time stream.
+         *
+         * Subclasses of Agent may chose to extend this operator to tighten
+         * the restrictions on the comparison.
+         */
+        friend bool operator==(const Agent &lhs, const Agent &rhs);
 
-    /**
-     * Compare if two `Agent`s are not the same `Agent`.
-     *
-     * @param lhs is the left-hand side of the equality test.
-     * @param rhs is the right-hand side of the equality test.
-     * @return true is they are not equal and false if they are.
-     *
-     * @note This does not compare that two Agent instances are
-     * identical.  Accordingly, this can be used to compare two instances
-     * of the same `Agent` at different points in its time stream.
-     *
-     * Subclasses of `Agent` may chose to extend this operator to tighten
-     * the restrictioons on the comparison.
-     */
-    friend bool operator!=(const Agent &lhs, const Agent &rhs);
+        /**
+         * Compare if two `Agent`s are not the same `Agent`.
+         *
+         * @param lhs is the left-hand side of the equality test.
+         * @param rhs is the right-hand side of the equality test.
+         * @return true is they are not equal and false if they are.
+         *
+         * @note This does not compare that two Agent instances are
+         * identical.  Accordingly, this can be used to compare two instances
+         * of the same `Agent` at different points in its time stream.
+         *
+         * Subclasses of `Agent` may chose to extend this operator to tighten
+         * the restrictions on the comparison.
+         */
+        friend bool operator!=(const Agent &lhs, const Agent &rhs);
 
-   private:
-    const AgentID _agent_id;
-};
+    private:
+        const AgentID _agent_id;
+    };
 
 /**
  * A superclass for all staged agents.
@@ -189,17 +190,17 @@ class LIBKAMI_EXPORT Agent {
  *
  * `StagedAgents` must implement both the `step()` and `advance()` functions.
  */
-class LIBKAMI_EXPORT StagedAgent : public Agent {
-   public:
-    /**
-     * Post-step advance the agent
-     *
-     * This method should be called after `step()`.  Any updates or cleanups to
-     * the agent that must happen for the `StagedAgent` to complete its step must
-     * happen here.
-     */
-    virtual void advance() = 0;
-};
+    class LIBKAMI_EXPORT StagedAgent : public Agent {
+    public:
+        /**
+         * Post-step advance the agent
+         *
+         * This method should be called after `step()`.  Any updates or cleanups to
+         * the agent that must happen for the `StagedAgent` to complete its step must
+         * happen here.
+         */
+        virtual void advance() = 0;
+    };
 
 }  // namespace kami
 

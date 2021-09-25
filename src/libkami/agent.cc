@@ -30,28 +30,28 @@
 
 namespace kami {
 
-bool operator==(const AgentID &lhs, const AgentID &rhs) {
-    return lhs._id == rhs._id;
-}
+    bool operator==(const AgentID &lhs, const AgentID &rhs) {
+        return lhs._id == rhs._id;
+    }
 
-bool operator!=(const AgentID &lhs, const AgentID &rhs) {
-    return !(lhs == rhs);
-}
+    bool operator!=(const AgentID &lhs, const AgentID &rhs) {
+        return !(lhs == rhs);
+    }
 
-bool operator<(const AgentID &lhs, const AgentID &rhs) {
-    return lhs._id < rhs._id;
-}
+    bool operator<(const AgentID &lhs, const AgentID &rhs) {
+        return lhs._id < rhs._id;
+    }
 
-std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs) {
-    return lhs << rhs.to_string();
-}
+    std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs) {
+        return lhs << rhs.to_string();
+    }
 
-AgentID Agent::get_agent_id() const { return this->_agent_id; }
+    AgentID Agent::get_agent_id() const { return this->_agent_id; }
 
-bool operator==(const Agent &lhs, const Agent &rhs) {
-    return lhs._agent_id == rhs._agent_id;
-}
+    bool operator==(const Agent &lhs, const Agent &rhs) {
+        return lhs._agent_id == rhs._agent_id;
+    }
 
-bool operator!=(const Agent &lhs, const Agent &rhs) { return !(lhs == rhs); }
+    bool operator!=(const Agent &lhs, const Agent &rhs) { return !(lhs == rhs); }
 
 }  // namespace kami

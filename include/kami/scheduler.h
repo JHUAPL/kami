@@ -39,29 +39,29 @@ namespace kami {
  * scheduler will have a collection of agents assigned to it and will execute
  * the step function for each agent based on the type of scheduling implemented.
  */
-class LIBKAMI_EXPORT Scheduler {
-   public:
-    /** 
-     * Add an Agent to the Scheduler.
-     * 
-     * @param agent_id The AgentID of the agent to add.
-     */
-    virtual void add_agent(AgentID agent_id) = 0;
+    class LIBKAMI_EXPORT Scheduler {
+    public:
+        /**
+         * Add an Agent to the Scheduler.
+         *
+         * @param agent_id The AgentID of the agent to add.
+         */
+        virtual void add_agent(AgentID agent_id) = 0;
 
-    /**
-     * Remove an Agent from the Scheduler.
-     * 
-     * @param agent_id The AgentID of the agent to remove.
-     */
-    virtual void delete_agent(AgentID agent_id) = 0;
+        /**
+         * Remove an Agent from the Scheduler.
+         *
+         * @param agent_id The AgentID of the agent to remove.
+         */
+        [[maybe_unused]] virtual void delete_agent(AgentID agent_id) = 0;
 
-    /**
-     * Step the Scheduler.
-     * 
-     * A generic step function that executes a single time step.
-     */
-    virtual void step() = 0;
-};
+        /**
+         * Step the Scheduler.
+         *
+         * A generic step function that executes a single time step.
+         */
+        virtual void step() = 0;
+    };
 
 }  // namespace kami
 

@@ -24,22 +24,18 @@
  */
 
 #include <kami/agent.h>
-#include <kami/domain.h>
-#include <kami/grid.h>
-#include <kami/grid1d.h>
-#include <kami/kami.h>
 #include <kami/sologrid1d.h>
 
 namespace kami {
 
-bool SoloGrid1D::add_agent(AgentID agent_id, GridCoord1D coord) {
-    if (is_location_valid(coord) & is_location_empty(coord)) {
-        _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
-        _agent_grid[coord.get_x_location()].push_back(agent_id);
-        return true;
-    }
+    bool SoloGrid1D::add_agent(AgentID agent_id, GridCoord1D coord) {
+        if (is_location_valid(coord) & is_location_empty(coord)) {
+            _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
+            _agent_grid[coord.get_x_location()].push_back(agent_id);
+            return true;
+        }
 
-    return false;
-}
+        return false;
+    }
 
 }  // namespace kami

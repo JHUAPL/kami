@@ -30,8 +30,8 @@
 
 namespace kami {
 
-std::ostream &operator<<(std::ostream &lhs, const Coord &rhs) {
-    return lhs << rhs.to_string();
-}
+    std::ostream &operator<<(std::ostream &lhs, const Coord &rhs) {
+        return lhs << rhs.to_string();
+    }
 
 }  // namespace kami

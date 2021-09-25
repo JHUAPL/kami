@@ -23,55 +23,40 @@
  * SOFTWARE.
  */
 
+#include <string>
+
 #include <kami/agent.h>
 #include <kami/model.h>
-#include <kami/scheduler.h>
-#include <kami/sequential.h>
 #include <kami/staged.h>
-
-#include <random>
-#include <string>
 
 namespace kami {
 
-StagedScheduler::StagedScheduler(Model *model) {
-    _step_counter = 0;
-    _model = model;
-}
-
-StagedScheduler::~StagedScheduler() {}
-
-void StagedScheduler::add_agent(AgentID agent_id) {
-    _agent_list.push_back(agent_id);
-}
-
-void StagedScheduler::delete_agent(AgentID agent_id) {
-    for (auto agent_list_iter = _agent_list.begin();
-         agent_list_iter < _agent_list.end(); agent_list_iter++)
-        if (*agent_list_iter == agent_id) _agent_list.erase(agent_list_iter);
-    return;
-}
-
-void StagedScheduler::step() {
-    _step_counter++;
-
-    for (auto agent_list_iter = _agent_list.begin();
-         agent_list_iter < _agent_list.end(); agent_list_iter++) {
-        StagedAgent *agent = dynamic_cast<StagedAgent *>(
-            _model->get_agent_by_id(*agent_list_iter));
-        if (agent != nullptr) agent->step();
-        // ERROR HERE
+    StagedScheduler::StagedScheduler(Model *model) {
+        _step_counter = 0;
+        _model = model;
     }
 
-    for (auto agent_list_iter = _agent_list.begin();
-         agent_list_iter < _agent_list.end(); agent_list_iter++) {
-        StagedAgent *agent = dynamic_cast<StagedAgent *>(
-            _model->get_agent_by_id(*agent_list_iter));
-        if (agent != nullptr) agent->advance();
-        // ERROR HERE
+    void StagedScheduler::add_agent(AgentID agent_id) {
+        _agent_list.push_back(agent_id);
     }
 
-    return;
-}
+    void StagedScheduler::delete_agent(AgentID agent_id) {
+        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++)
+            if (*agent_list_iter == agent_id) _agent_list.erase(agent_list_iter);
+    }
+
+    void StagedScheduler::step() {
+        _step_counter++;
+
+        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++) {
+            auto *agent = dynamic_cast<StagedAgent *>(_model->get_agent_by_id(*agent_list_iter));
+            if (agent != nullptr) agent->step();
+        }
+
+        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++) {
+            auto *agent = dynamic_cast<StagedAgent *>(_model->get_agent_by_id(*agent_list_iter));
+            if (agent != nullptr) agent->advance();
+        }
+    }
 
 }  // namespace kami
