@@ -24,17 +24,16 @@
  */
 
 #pragma once
-#ifndef BOLTZMAN1D_H
-#define BOLTZMAN1D_H
+#ifndef BOLTZMANN1D_H
+#define BOLTZMANN1D_H
+
+#include <iostream>
+#include <map>
 
 #include <kami/agent.h>
 #include <kami/kami.h>
 #include <kami/multigrid1d.h>
 #include <kami/random.h>
-#include <spdlog/spdlog.h>
-
-#include <iostream>
-#include <map>
 
 using namespace kami;
 using namespace std;
@@ -43,7 +42,7 @@ using namespace std;
  * A sample agent for a one-dimensional Boltzmann wealth model
  */
 class MoneyAgent1D : public Agent {
-   public:
+public:
     /**
      * Create the agent
      */
@@ -52,7 +51,7 @@ class MoneyAgent1D : public Agent {
     /**
      * Execute a single time-step for the agent
      */
-    void step();
+    void step() override;
 
     /**
      * Give the agent a reference copy of the domain it is expected to work in
@@ -70,21 +69,11 @@ class MoneyAgent1D : public Agent {
     void move_agent();
 
     /**
-     * Return the wealth of the agent
-     */
-    int get_wealth();
-
-    /**
-     * Set the wealth of the agent
-     */
-    void set_wealth(int wealth);
-
-    /**
      * Give money to a random agent
      */
     void give_money();
 
-   private:
+private:
     static MultiGrid1D *_world;
     static BoltzmannWealthModel1D *_model;
     int _step_counter;
@@ -95,16 +84,15 @@ class MoneyAgent1D : public Agent {
  * The one-dimensional Boltzmann wealth model
  */
 class BoltzmannWealthModel1D : public Model {
-   public:
+public:
     /**
-     * Create an instance of the one-dimensional Boltzman wealth model.
+     * Create an instance of the one-dimensional Boltzmann wealth model.
      *
      * @param[in] number_agents the number of agents to assign to the model.
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
      */
-    BoltzmannWealthModel1D(unsigned int number_agents = 10,
-                           unsigned int length_x = 10);
+    explicit BoltzmannWealthModel1D(unsigned int number_agents = 10, unsigned int length_x = 10);
 
     /**
      * Destroy the instance
@@ -114,27 +102,27 @@ class BoltzmannWealthModel1D : public Model {
     /**
      * Execute a single time-step for the model.
      */
-    void step();
+    void step() override;
 
     /**
      * Execute a number of time-steps for the model.
-     * 
+     *
      * @param[in] n the number of steps to execute.
      */
-    void run(unsigned int n);
+    void run(unsigned int n) override;
 
     /**
      * Get the MoneyAgent instance associated with the given `AgentID`
-     * 
+     *
      * @returns an pointer to the `MoneyAgent` that was requested.
      */
-    MoneyAgent1D *get_agent_by_id(AgentID agent_id) const;
+    [[nodiscard]] MoneyAgent1D *get_agent_by_id(AgentID agent_id) const override;
 
-   private:
+private:
     map<AgentID, MoneyAgent1D *> _agent_list;
     RandomScheduler *_sched;
     MultiGrid1D *_world;
     unsigned int _step_count;
 };
 
-#endif  // BOLTZMAN1D_H
+#endif  // BOLTZMANN1D_H

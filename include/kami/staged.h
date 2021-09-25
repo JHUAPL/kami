@@ -46,54 +46,54 @@ namespace kami {
  *
  * @note First create a Model for the scheduler to live in.
  */
-class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
-   public:
-    /**
-     * Constructor.
-     * The Model parameter is used by the scheduler to get access to an Agent.
-     * The Model is presumed to maintain a master list of all Agents in the
-     * Model and the Model can be queried for  a reference to any particular
-     * Agent at `step()` time.
-     */
-    StagedScheduler(Model *);
+    class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
+    public:
+        /**
+         * Constructor.
+         * The Model parameter is used by the scheduler to get access to an Agent.
+         * The Model is presumed to maintain a master list of all Agents in the
+         * Model and the Model can be queried for  a reference to any particular
+         * Agent at `step()` time.
+         */
+        explicit StagedScheduler(Model *);
 
-    /**
-     * A deconstructor.
-     */
-    virtual ~StagedScheduler();
+        /**
+         * A deconstructor.
+         */
+        ~StagedScheduler() = default;
 
-    /**
-     * Add an agent to the scheduler.
-     *
-     * The scheduler maintains a list of all AgentIDs currently assigned.  This
-     * function adds a new Agent to the list.
-     */
-    void add_agent(AgentID agent_id);
+        /**
+         * Add an agent to the scheduler.
+         *
+         * The scheduler maintains a list of all AgentIDs currently assigned.  This
+         * function adds a new Agent to the list.
+         */
+        void add_agent(AgentID agent_id) override;
 
-    /**
-     * Remove an agent from the scheduler.
-     *
-     * The scheduler maintains a list of all AgentIDs currently assigned.  This
-     * function removes an Agent from the list.
-     */
-    void delete_agent(AgentID agent_id);
+        /**
+         * Remove an agent from the scheduler.
+         *
+         * The scheduler maintains a list of all AgentIDs currently assigned.  This
+         * function removes an Agent from the list.
+         */
+        void delete_agent(AgentID agent_id) override;
 
-    /**
-     * Execute a single time step.
-     *
-     * This method will step through the list of Agents in the scheduler's
-     * internal queue and execute the `Agent::step()` method for  each `Agent`
-     * in the same order.  Finally, it will execute the  `Agent::advance()`
-     * method for each Agent in the same order.
-     */
-    void step();
+        /**
+         * Execute a single time step.
+         *
+         * This method will step through the list of Agents in the scheduler's
+         * internal queue and execute the `Agent::step()` method for  each `Agent`
+         * in the same order.  Finally, it will execute the  `Agent::advance()`
+         * method for each Agent in the same order.
+         */
+        void step() override;
 
-   private:
-    std::vector<AgentID> _agent_list;
-    Model *_model;
-    int _step_counter;
-};
+    private:
+        std::vector<AgentID> _agent_list;
+        Model *_model;
+        int _step_counter;
+    };
 
-};  // namespace kami
+}  // namespace kami
 
 #endif  // KAMI_STAGED_H

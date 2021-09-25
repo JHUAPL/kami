@@ -24,8 +24,8 @@
  */
 
 #pragma once
-#ifndef BOLTZMAN2D_H
-#define BOLTZMAN2D_H
+#ifndef BOLTZMANN2D_H
+#define BOLTZMANN2D_H
 
 #include <kami/agent.h>
 #include <kami/kami.h>
@@ -42,7 +42,7 @@ using namespace std;
  * A sample agent for a two-dimensional Boltzmann wealth model
  */
 class MoneyAgent2D : public Agent {
-   public:
+public:
     /**
      * Create the agent
      */
@@ -51,7 +51,7 @@ class MoneyAgent2D : public Agent {
     /**
      * Execute a single time-step for the agent
      */
-    void step();
+    void step() override;
 
     /**
      * Give the agent a reference copy of the domain it is expected to work in
@@ -69,21 +69,11 @@ class MoneyAgent2D : public Agent {
     void move_agent();
 
     /**
-     * Return the wealth of the agent
-     */
-    int get_wealth();
-
-    /**
-     * Set the wealth of the agent
-     */
-    void set_wealth(int wealth);
-
-    /**
      * Give money to a random agent
      */
     void give_money();
 
-   private:
+private:
     static MultiGrid2D *_world;
     static BoltzmannWealthModel2D *_model;
     int _step_counter;
@@ -94,9 +84,9 @@ class MoneyAgent2D : public Agent {
  * The two-dimensional Boltzmann wealth model
  */
 class BoltzmannWealthModel2D : public Model {
-   public:
+public:
     /**
-     * Create an instance of the two-dimensional Boltzman wealth model.
+     * Create an instance of the two-dimensional Boltzmann wealth model.
      *
      * @param[in] number_agents the number of agents to assign to the model.
      * @param[in] length_x the length of the two-dimensional world the agents
@@ -106,10 +96,7 @@ class BoltzmannWealthModel2D : public Model {
      * @param[in] new_seed the initial seed used for the random number
      * generator.
      */
-    BoltzmannWealthModel2D(unsigned int number_agents = 10,
-                           unsigned int length_x = 10,
-                           unsigned int length_y = 10,
-                           unsigned int new_seed = 42);
+    explicit BoltzmannWealthModel2D(unsigned int number_agents = 10, unsigned int length_x = 10, unsigned int length_y = 10, unsigned int new_seed = 42);
 
     /**
      * Destroy the instance
@@ -119,32 +106,27 @@ class BoltzmannWealthModel2D : public Model {
     /**
      * Execute a single time-step for the model.
      */
-    void step();
+    void step() override;
 
     /**
      * Execute a number of time-steps for the model.
      *
      * @param[in] n the number of steps to execute.
      */
-    void run(unsigned int n);
-
-    /**
-     * Return the seed used to initialize the model.
-     */
-    int get_seed() const;
+    void run(unsigned int n) override;
 
     /**
      * Get the MoneyAgent2D instance associated with the given `AgentID`
      *
      * @returns an pointer to the `MoneyAgent2D` that was requested.
      */
-    MoneyAgent2D *get_agent_by_id(AgentID agent_id) const;
+    [[nodiscard]] MoneyAgent2D *get_agent_by_id(AgentID agent_id) const override;
 
-   private:
+private:
     map<AgentID, MoneyAgent2D *> _agent_list;
     RandomScheduler *_sched;
     MultiGrid2D *_world;
     unsigned int _step_count;
 };
 
-#endif  // BOLTZMAN2D_H
+#endif  // BOLTZMANN2D_H

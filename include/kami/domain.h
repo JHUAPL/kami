@@ -27,9 +27,9 @@
 #ifndef KAMI_DOMAIN_H
 #define KAMI_DOMAIN_H
 
-#include <kami/kami.h>
-
 #include <string>
+
+#include <kami/kami.h>
 
 namespace kami {
 
@@ -38,7 +38,7 @@ namespace kami {
  *
  * Implementations of virtual environments are expected to subclass `Domain`.
  */
-class LIBKAMI_EXPORT Domain {};
+    class LIBKAMI_EXPORT Domain {};
 
 /**
  * Provides a coordinate system for each `Domain`.
@@ -52,27 +52,27 @@ class LIBKAMI_EXPORT Domain {};
  *
  * @see GridCoord
  */
-class LIBKAMI_EXPORT Coord {
-   public:
-    /**
-     * Convert the coordinate to a human-readable string.
-     *
-     * @return a human-readable form of the `Coord` as `std::string`.
-     */
-    virtual std::string to_string() const = 0;
+    class LIBKAMI_EXPORT Coord {
+    public:
+        /**
+         * Convert the coordinate to a human-readable string.
+         *
+         * @return a human-readable form of the `Coord` as `std::string`.
+         */
+        [[nodiscard]] virtual std::string to_string() const = 0;
 
-    /**
-     * Output a `Coord` to the specified output stream
-     *
-     * The form of the output will be the same as that produced by the
-     * `to_string()` member function.
-     *
-     * @param lhs is the stream to output the `Coord` to
-     * @param rhs is the `Coord` to output
-     * @return the output stream for reuse
-     */
-    friend std::ostream &operator<<(std::ostream &lhs, const Coord &rhs);
-};
+        /**
+         * Output a `Coord` to the specified output stream
+         *
+         * The form of the output will be the same as that produced by the
+         * `to_string()` member function.
+         *
+         * @param lhs is the stream to output the `Coord` to
+         * @param rhs is the `Coord` to output
+         * @return the output stream for reuse
+         */
+        friend std::ostream &operator<<(std::ostream &lhs, const Coord &rhs);
+    };
 
 }  // namespace kami
 

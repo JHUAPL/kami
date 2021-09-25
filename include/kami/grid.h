@@ -27,10 +27,10 @@
 #ifndef KAMI_GRID_H
 #define KAMI_GRID_H
 
+#include <string>
+
 #include <kami/domain.h>
 #include <kami/kami.h>
-
-#include <string>
 
 namespace kami {
 
@@ -42,47 +42,47 @@ namespace kami {
  * distinction between those neighborhoods that include those cells touching on
  * the corners or diagonally and those neighborhoods that do not.
  */
-enum class GridNeighborhoodType {
-    /**
-     * @brief Moore neighborhood
-     *
-     * @details Moore neighborhood types include diagonally-adjacent cells as
-     * neighbors.
-     */
-    Moore,
+    enum class GridNeighborhoodType {
+        /**
+         * @brief Moore neighborhood
+         *
+         * @details Moore neighborhood types include diagonally-adjacent cells as
+         * neighbors.
+         */
+        Moore [[maybe_unused]],
 
-    /**
-     * @brief Von Neumann neighborhood
-     *
-     * @details Von Neumann neighborhood types do not include
-     * diagonally-adjacent cells as neighbors.
-     */
-    VonNeumann
-};
+        /**
+         * @brief Von Neumann neighborhood
+         *
+         * @details Von Neumann neighborhood types do not include
+         * diagonally-adjacent cells as neighbors.
+         */
+        VonNeumann [[maybe_unused]]
+    };
 
 /**
  * @brief Distance types for orthogonal grid domains
  */
-enum class GridDistanceType {
-    /**
-     * @brief Euclidean distance.
-     *
-     * @details The Euclidean distance is the length of the line segment
-     * connecting two points.  This is commonly called a "beeline" or 
-     * "as the crow flies."
-     */
-    Euclidean,
+    enum class GridDistanceType {
+        /**
+         * @brief Euclidean distance.
+         *
+         * @details The Euclidean distance is the length of the line segment
+         * connecting two points.  This is commonly called a "beeline" or
+         * "as the crow flies."
+         */
+        Euclidean [[maybe_unused]],
 
-    /**
-     * @brief Manhattan distance.
-     *
-     * @details The Manhattan distance is the sum of the absolute value of the
-     * differences of the elements. This is commonly called the 
-     * "taxicab distance," "rectilinear distance," or many other [formal
-     * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
-     */
-    Manhattan
-};
+        /**
+         * @brief Manhattan distance.
+         *
+         * @details The Manhattan distance is the sum of the absolute value of the
+         * differences of the elements. This is commonly called the
+         * "taxicab distance," "rectilinear distance," or many other [formal
+         * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
+         */
+        Manhattan [[maybe_unused]]
+    };
 
 /**
  * @brief An abstract domain based on a gridded environment.
@@ -91,15 +91,15 @@ enum class GridDistanceType {
  * rectilinear grid where the cells are equal size and laid out in an ordered
  * fashion.
  */
-class LIBKAMI_EXPORT GridDomain : public Domain {};
+    class LIBKAMI_EXPORT GridDomain : public Domain {};
 
 /**
  * @brief An abstract for gridded coordinates.
  *
  * @details All gridded coordinates are expected to subclass `GridCoord`.
  */
-class LIBKAMI_EXPORT GridCoord : public Coord {};
+    class LIBKAMI_EXPORT GridCoord : public Coord {};
 
 }  // namespace kami
 
-#endif  // KAMI_DOMAIN_H
+#endif  // KAMI_GRID_H

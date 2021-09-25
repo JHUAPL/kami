@@ -37,71 +37,60 @@
 
 namespace kami {
 
-/*
+/**
  * Will execute all agent steps in a random order.
  *
- *  A random scheduler will iterate over the agents assigned
- *   to the scheduler and call their `step()` function in a random order.
- *   That order should be different for each subsequent call to `step()`,
- *   but is not gauranteed not to repeat.
+ * A random scheduler will iterate over the agents assigned
+ * to the scheduler and call their `step()` function in a random order.
+ * That order should be different for each subsequent call to `step()`,
+ * but is not guaranteed not to repeat.
+ *
  * @note First create a Model for the scheduler to live in.
  */
-class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
-   public:
-    /**
-     * @brief Constructor.
-     *
-     * @details The `model` parameter is used by the scheduler to get
-     * access to an `Agent`.  The `Model` is presumed to maintain a master
-     * list of all `Agent`s in the `Model` and the `Model` can be queried for
-     * a reference to any particular `Agent` at `step()` time.
-     *
-     * @param model [in] A reference to the model the scheduler is timing.
-     */
-    RandomScheduler(Model *model);
+    class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
+    public:
+        /**
+         * @brief Constructor.
+         *
+         * @details The `model` parameter is used by the scheduler to get
+         * access to an `Agent`.  The `Model` is presumed to maintain a master
+         * list of all `Agent`s in the `Model` and the `Model` can be queried for
+         * a reference to any particular `Agent` at `step()` time.
+         *
+         * @param model [in] A reference to the model the scheduler is timing.
+         * @param rng [in] A uniform random number generator of type
+         * `std::mt19937`, used as the source of randomness.
+         */
+        RandomScheduler(Model *model, std::shared_ptr<std::mt19937> rng);
 
-    /**
-     * @brief Constructor.
-     *
-     * @details The `model` parameter is used by the scheduler to get
-     * access to an `Agent`.  The `Model` is presumed to maintain a master
-     * list of all `Agent`s in the `Model` and the `Model` can be queried for
-     * a reference to any particular `Agent` at `step()` time.
-     *
-     * @param model [in] A reference to the model the scheduler is timing.
-     * @param rng [in] A uniform random number generator of type
-     * `std::mt19937`, used as the source of randomness.
-     */
-    RandomScheduler(Model *model, std::shared_ptr<std::mt19937> rng);
+        /**
+         * @brief Execute a single time step.
+         *
+         * @details This method will randomize the list of Agents in the scheduler's
+         * internal queue and then execute the `Agent::step()` method for every
+         * Agent assigned to this scheduler in the randomized order.
+         */
+        void step() override;
 
-    /**
-     * @brief Execute a single time step.
-     *
-     * @details This method will randomize the list of Agents in the scheduler's
-     * internal queue and then execute the `Agent::step()` method for every
-     * Agent assigned to this scheduler in the randomized order.
-     */
-    void step();
+        /**
+         * Set the random number generator used to randomize the order of agent
+         * stepping.
+         *
+         * @param rng [in] A uniform random number generator of type `std::mt19937`,
+         * used as the source of randomness.
+         */
+        void set_rng(std::shared_ptr<std::mt19937> rng);
 
-    /**
-     * Set the random number generator used to randomize the order of agent
-     * stepping.
-     *
-     * @param rng [in] A uniform random number generator of type `std::mt19937`,
-     * used as the source of randomness.
-     */
-    void set_rng(std::shared_ptr<std::mt19937> rng);
+        /**
+         * Get a reference to the random number generator used to randomize
+         * the order of agent stepping.
+         */
+        [[maybe_unused]] std::shared_ptr<std::mt19937> get_rng();
 
-    /**
-     * Get a reference to the random number generator used to randomize
-     * the order of agent stepping.
-     */
-    std::shared_ptr<std::mt19937> get_rng();
+    private:
+        std::shared_ptr<std::mt19937> _rng;
+    };
 
-   private:
-    std::shared_ptr<std::mt19937> _rng;
-};
-
-};  // namespace kami
+}  // namespace kami
 
 #endif  // KAMI_RANDOM_H
