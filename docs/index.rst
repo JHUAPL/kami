@@ -1,11 +1,11 @@
 Introduction
 ============
 
-..  image:: https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=main
-    :target: https://github.com/JHUAPL/kami/actions/workflows/build.yml
+..  image:: https://github.com/JHUAPL/kami/actions/workflows/build-main.yml/badge.svg?branch=main
+    :target: https://github.com/JHUAPL/kami/actions/workflows/build-main.yml
     :alt: Build Status (main)
-..  image:: https://github.com/JHUAPL/kami/actions/workflows/build.yml/badge.svg?branch=develop
-    :target: https://github.com/JHUAPL/kami/actions/workflows/build.yml
+..  image:: https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml/badge.svg?branch=develop
+    :target: https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml
     :alt: Build Status (develop)
 ..  image:: https://readthedocs.org/projects/kami/badge/?version=latest
     :target: https://kami.readthedocs.io/en/latest/?badge=latest
