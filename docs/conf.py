@@ -48,6 +48,7 @@ extensions = [
 
 # 'releases' (changelog) settings
 releases_github_path = "JHUAPL/kami"
+releases_unstable_prehistory = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
