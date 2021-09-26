@@ -1,6 +1,8 @@
 Changelog
 =========
 
+- :bug:`0` Corrected the badge link in the README file
+
 - :release:`0.4.2 <2021.09.25>`
 - :bug:`0` Fixed Changelog to move docs to support
 - :bug:`0` Fixed Changelog with current releases added
