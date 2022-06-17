@@ -41,3 +41,7 @@ build/*
 
 # VSCode files
 .vscode
+
+# IDEA files
+.idea
+cmake-build-*
