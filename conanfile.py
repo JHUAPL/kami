@@ -6,7 +6,7 @@ class KamiConan(ConanFile):
     version = "0.4.2"
     license = "MIT"
     author = "James P. Howard, II <james.howard@jhu.edu>"
-    url = "http://github.com/jhuapl/kami"
+    url = "https://github.com/jhuapl/kami"
     description = "Agent-Based Modeling in Modern C++"
     topics = ("agent-based modeling", "simulation", "orms")
     settings = "os", "compiler", "build_type", "arch"
