@@ -75,7 +75,6 @@ endif()
 
 include(cmake/functions.cmake)
 include(cmake/warnings.cmake)
-include(cmake/cppcheck.cmake)
 
 ################################################################################
 # Sub libraries.
