@@ -6,20 +6,13 @@ set(EXAMPLE_NAME "boltzmann2d")
 
 project(${EXAMPLE_NAME} LANGUAGES CXX)
 
-create_executable(  NAME ${EXAMPLE_NAME}
-                    SOURCES
-                        boltzmann2d.cc
-                    PUBLIC_DEFINITIONS
-                        USE_DOUBLE_PRECISION=1
-                    PRIVATE_DEFINITIONS
-                        DEBUG_VERBOSE
-                    PRIVATE_INCLUDE_PATHS
-                        ${CMAKE_SOURCE_DIR}/include
-                    PUBLIC_LINKED_TARGETS
-                        kami::libkami
-                        fmt
-                        spdlog::spdlog
- )
+create_executable(
+        NAME ${EXAMPLE_NAME}
+        SOURCES boltzmann2d.cc
+        PUBLIC_DEFINITIONS USE_DOUBLE_PRECISION=1
+        PRIVATE_DEFINITIONS DEBUG_VERBOSE
+        PRIVATE_INCLUDE_PATHS ${CMAKE_SOURCE_DIR}/include
+        PUBLIC_LINKED_TARGETS fmt spdlog kami::libkami
+)
 
 set_target_properties(${EXAMPLE_NAME} PROPERTIES VERSION ${KAMI_VERSION_STRING})
-
