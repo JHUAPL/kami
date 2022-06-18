@@ -161,7 +161,7 @@ int main(int argc, char **argv) {
 
     console = spdlog::stdout_color_st(ident);
     console->set_level(spdlog::level::from_str(log_level_option));
-    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, log_level_option);
+    console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), log_level_option);
     console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps",agent_count, x_size, max_steps);
 
     rng = make_shared<mt19937>(initial_seed);

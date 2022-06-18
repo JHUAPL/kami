@@ -47,3 +47,4 @@ class KamiConan(ConanFile):
         self.requires("fmt/7.1.3")
         self.requires("spdlog/1.8.5")
         self.requires("cli11/1.9.1")
+        self.requires("neargye-semver/0.3.0")

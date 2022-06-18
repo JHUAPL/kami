@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
     CLI11_PARSE(app, argc, argv);
 
     console->set_level(spdlog::level::from_str(logLevelOption));
-    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
+    console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), logLevelOption);
 
     TestAgent test_agent;
     console->debug("Successfully created Agent with ID {}", test_agent.get_agent_id().to_string());
