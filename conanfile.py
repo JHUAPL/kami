@@ -14,7 +14,7 @@ class KamiConan(ConanFile):
     exports_sources = "*"
 
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": True, "fPIC": True}
+    default_options = {"shared": False, "fPIC": False}
 
 
     def _configure_cmake(self):
