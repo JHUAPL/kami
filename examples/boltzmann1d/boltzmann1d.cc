@@ -23,42 +23,39 @@
  * SOFTWARE.
  */
 
+#include "boltzmann1d.h"
+
 #include <map>
 #include <memory>
 #include <random>
-
-#include <kami/agent.h>
-#include <kami/kami.h>
-#include <kami/multigrid1d.h>
-
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
-#include <spdlog/stopwatch.h>
 
 #include <CLI/App.hpp>
 #include <CLI/Config.hpp>
 #include <CLI/Formatter.hpp>
 
-#include "boltzmann1d.h"
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/stopwatch.h>
 
-using namespace kami;
-using namespace std;
+#include <kami/agent.h>
+#include <kami/kami.h>
+#include <kami/multigrid1d.h>
 
-MultiGrid1D *MoneyAgent1D::_world = nullptr;
+kami::MultiGrid1D *MoneyAgent1D::_world = nullptr;
 BoltzmannWealthModel1D *MoneyAgent1D::_model = nullptr;
-shared_ptr<spdlog::logger> console = nullptr;
-shared_ptr<mt19937> rng = nullptr;
+std::shared_ptr<spdlog::logger> console = nullptr;
+std::shared_ptr<std::mt19937> rng = nullptr;
 
 template <>
-struct fmt::formatter<AgentID> : fmt::formatter<string> {
-    [[maybe_unused]] static auto format(AgentID agent_id, format_context &ctx) {
+struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
+    [[maybe_unused]] static auto format(kami::AgentID agent_id, format_context &ctx) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template <>
-struct fmt::formatter<GridCoord1D> : fmt::formatter<string> {
-    [[maybe_unused]] static auto format(const GridCoord1D& coord, format_context &ctx) {
+struct fmt::formatter<kami::GridCoord1D> : fmt::formatter<std::string> {
+    [[maybe_unused]] static auto format(const kami::GridCoord1D& coord, format_context &ctx) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
@@ -72,7 +69,7 @@ void MoneyAgent1D::step() {
     if (_agent_wealth > 0) give_money();
 }
 
-void MoneyAgent1D::set_world(MultiGrid1D *world) { _world = world; }
+void MoneyAgent1D::set_world(kami::MultiGrid1D *world) { _world = world; }
 
 void MoneyAgent1D::set_model(BoltzmannWealthModel1D *model) { _model = model; }
 
@@ -89,13 +86,13 @@ void MoneyAgent1D::move_agent() {
 }
 
 void MoneyAgent1D::give_money() {
-    AgentID agent_id = get_agent_id();
-    GridCoord1D location = _world->get_location_by_agent(agent_id);
-    vector<AgentID> *cell_mates = _world->get_location_contents(location);
+    kami::AgentID agent_id = get_agent_id();
+    kami::GridCoord1D location = _world->get_location_by_agent(agent_id);
+    std::vector<kami::AgentID> *cell_mates = _world->get_location_contents(location);
 
     if (cell_mates->size() > 1) {
         std::uniform_int_distribution<int> dist(0, (int)cell_mates->size() - 1);
-        AgentID other_agent_id = cell_mates->at(dist(*rng));
+        kami::AgentID other_agent_id = cell_mates->at(dist(*rng));
         auto other_agent = _model->get_agent_by_id(other_agent_id);
 
         console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
@@ -105,8 +102,8 @@ void MoneyAgent1D::give_money() {
 }
 
 BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents, unsigned int length_x) {
-    _world = new MultiGrid1D(length_x, true);
-    _sched = new RandomScheduler(this, rng);
+    _world = new kami::MultiGrid1D(length_x, true);
+    _sched = new kami::RandomScheduler(this, rng);
 
     _step_count = 0;
     MoneyAgent1D::set_world(_world);
@@ -117,9 +114,9 @@ BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents, unsig
     for (unsigned int i = 0; i < number_agents; i++) {
         auto *new_agent = new MoneyAgent1D();
 
-        _agent_list.insert(pair<AgentID, MoneyAgent1D *>(new_agent->get_agent_id(), new_agent));
+        _agent_list.insert(std::pair<kami::AgentID, MoneyAgent1D *>(new_agent->get_agent_id(), new_agent));
         _sched->add_agent(new_agent->get_agent_id());
-        _world->add_agent(new_agent->get_agent_id(), GridCoord1D(dist(*rng)));
+        _world->add_agent(new_agent->get_agent_id(), kami::GridCoord1D(dist(*rng)));
     }
 }
 
@@ -140,16 +137,16 @@ void BoltzmannWealthModel1D::run(unsigned int steps) {
     for (auto i = 0; i < steps; i++) step();
 }
 
-MoneyAgent1D *BoltzmannWealthModel1D::get_agent_by_id(AgentID _agent_id) const {
+MoneyAgent1D *BoltzmannWealthModel1D::get_agent_by_id(kami::AgentID _agent_id) const {
     MoneyAgent1D *_agent_pair = _agent_list.at(_agent_id);
 
     return _agent_pair;
 }
 
 int main(int argc, char **argv) {
-    string ident = "boltzmann1d";
+    std::string ident = "boltzmann1d";
+    std::string log_level_option = "info";
     CLI::App app{ident};
-    string log_level_option = "info";
     unsigned int x_size = 16, agent_count = x_size, max_steps = 100, initial_seed = 42;
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
@@ -164,7 +161,7 @@ int main(int argc, char **argv) {
     console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), log_level_option);
     console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps",agent_count, x_size, max_steps);
 
-    rng = make_shared<mt19937>(initial_seed);
+    rng = std::make_shared<std::mt19937>(initial_seed);
     BoltzmannWealthModel1D model(agent_count, x_size);
 
     spdlog::stopwatch sw;

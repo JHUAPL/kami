@@ -27,21 +27,18 @@
 #ifndef BOLTZMANN2D_H
 #define BOLTZMANN2D_H
 
+#include <iostream>
+#include <map>
+
 #include <kami/agent.h>
 #include <kami/kami.h>
 #include <kami/multigrid2d.h>
 #include <kami/random.h>
 
-#include <iostream>
-#include <map>
-
-using namespace kami;
-using namespace std;
-
 /**
  * A sample agent for a two-dimensional Boltzmann wealth model
  */
-class MoneyAgent2D : public Agent {
+class MoneyAgent2D : public kami::Agent {
 public:
     /**
      * Create the agent
@@ -56,7 +53,7 @@ public:
     /**
      * Give the agent a reference copy of the domain it is expected to work in
      */
-    static void set_world(MultiGrid2D *world);
+    static void set_world(kami::MultiGrid2D *world);
 
     /**
      * Give the agent a reference copy of the model it is expected to work in
@@ -74,7 +71,7 @@ public:
     void give_money();
 
 private:
-    static MultiGrid2D *_world;
+    static kami::MultiGrid2D *_world;
     static BoltzmannWealthModel2D *_model;
     int _step_counter;
     int _agent_wealth;
@@ -83,7 +80,7 @@ private:
 /**
  * The two-dimensional Boltzmann wealth model
  */
-class BoltzmannWealthModel2D : public Model {
+class BoltzmannWealthModel2D : public kami::Model {
 public:
     /**
      * Create an instance of the two-dimensional Boltzmann wealth model.
@@ -120,12 +117,12 @@ public:
      *
      * @returns an pointer to the `MoneyAgent2D` that was requested.
      */
-    [[nodiscard]] MoneyAgent2D *get_agent_by_id(AgentID agent_id) const override;
+    [[nodiscard]] MoneyAgent2D *get_agent_by_id(kami::AgentID agent_id) const override;
 
 private:
-    map<AgentID, MoneyAgent2D *> _agent_list;
-    RandomScheduler *_sched;
-    MultiGrid2D *_world;
+    std::map<kami::AgentID, MoneyAgent2D *> _agent_list;
+    kami::RandomScheduler *_sched;
+    kami::MultiGrid2D *_world;
     unsigned int _step_count;
 };
 
