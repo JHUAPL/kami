@@ -27,7 +27,17 @@
 #ifndef KAMI_KAMI_H
 #define KAMI_KAMI_H
 
+#include <semver.hpp>
+
 #include <kami/KAMI_EXPORT.h>
 #include <kami/config.h>
+
+namespace kami {
+
+    inline semver::version get_version() {
+        return version;
+    }
+
+}  // namespace kami
 
 #endif  // KAMI_KAMI_H

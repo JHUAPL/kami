@@ -2,7 +2,7 @@ Changelog
 =========
 
 - :bug:`0` Numerous build process cleanups
-- :feature:`0` Added support semver versioning via neargye-semv er
+- :feature:`0` Added support semver versioning via neargye-semver
 - :bug:`0` Make library static by default
 - :bug:`0` Corrected the badge link in the README file
 
