@@ -91,7 +91,9 @@ namespace kami {
  * rectilinear grid where the cells are equal size and laid out in an ordered
  * fashion.
  */
-    class LIBKAMI_EXPORT GridDomain : public Domain {};
+    class LIBKAMI_EXPORT GridDomain : public Domain {
+        bool get_bool() override { return true; }
+    };
 
 /**
  * @brief An abstract for gridded coordinates.

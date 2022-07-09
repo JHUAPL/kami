@@ -108,7 +108,7 @@ namespace kami {
                bool wrap_y = false);
 
         /**
-         * Deconstructor
+         * Destructor
          */
         virtual ~Grid2D();
 

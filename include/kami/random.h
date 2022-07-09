@@ -27,13 +27,13 @@
 #ifndef KAMI_RANDOM_H
 #define KAMI_RANDOM_H
 
-#include <kami/kami.h>
-#include <kami/sequential.h>
-
-#include <algorithm>
 #include <memory>
 #include <random>
 #include <vector>
+
+#include <kami/kami.h>
+#include <kami/scheduler.h>
+#include <kami/sequential.h>
 
 namespace kami {
 
@@ -51,26 +51,26 @@ namespace kami {
     public:
         /**
          * @brief Constructor.
+         */
+        RandomScheduler() = default;
+
+        /**
+         * @brief Constructor.
          *
-         * @details The `model` parameter is used by the scheduler to get
-         * access to an `Agent`.  The `Model` is presumed to maintain a master
-         * list of all `Agent`s in the `Model` and the `Model` can be queried for
-         * a reference to any particular `Agent` at `step()` time.
-         *
-         * @param model [in] A reference to the model the scheduler is timing.
          * @param rng [in] A uniform random number generator of type
          * `std::mt19937`, used as the source of randomness.
          */
-        RandomScheduler(Model *model, std::shared_ptr<std::mt19937> rng);
+        explicit RandomScheduler(std::shared_ptr<std::mt19937> rng);
 
         /**
          * @brief Execute a single time step.
          *
-         * @details This method will randomize the list of Agents in the scheduler's
-         * internal queue and then execute the `Agent::step()` method for every
-         * Agent assigned to this scheduler in the randomized order.
+         * @details This method will randomize the list of Agents provided
+         * then execute the `Agent::step()` method for every Agent listed.
+         *
+         * @param agent_list list of agents to execute the step
          */
-        void step() override;
+        void step(std::shared_ptr<std::vector<AgentID>> agent_list) override;
 
         /**
          * Set the random number generator used to randomize the order of agent
@@ -85,10 +85,10 @@ namespace kami {
          * Get a reference to the random number generator used to randomize
          * the order of agent stepping.
          */
-        [[maybe_unused]] std::shared_ptr<std::mt19937> get_rng();
+        [[maybe_unused]] [[maybe_unused]] std::shared_ptr<std::mt19937> get_rng();
 
     private:
-        std::shared_ptr<std::mt19937> _rng;
+        std::shared_ptr<std::mt19937> _rng = nullptr;
     };
 
 }  // namespace kami

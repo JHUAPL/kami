@@ -29,7 +29,7 @@
  * In the source code, include "exampleConfig.h" (no .in suffix).
  * This header file will be generated, and filled with the
  * right definition values. Change the namings as you wish,
- * but make sure they match up with whats in CMakeLists.txt.
+ * but make sure they match up with what's in CMakeLists.txt.
  */
 
 #pragma once

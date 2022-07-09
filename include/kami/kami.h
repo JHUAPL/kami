@@ -34,9 +34,14 @@
 
 namespace kami {
 
-    inline semver::version get_version() {
-        return version;
-    }
+    class Agent;
+    class AgentID;
+    class Domain;
+    class Model;
+    class Population;
+    class Scheduler;
+
+    [[maybe_unused]] inline semver::version get_version() { return version; }
 
 }  // namespace kami
 

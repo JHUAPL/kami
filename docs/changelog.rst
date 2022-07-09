@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :feature:`0` Restructured the entire interface
 - :bug:`0` Numerous build process cleanups
 - :feature:`0` Added support semver versioning via neargye-semver
 - :bug:`0` Make library static by default

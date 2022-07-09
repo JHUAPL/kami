@@ -23,36 +23,21 @@
  * SOFTWARE.
  */
 
-#include <string>
-
 #include <kami/agent.h>
-#include <kami/model.h>
 #include <kami/sequential.h>
 
 namespace kami {
 
-    SequentialScheduler::SequentialScheduler(Model *model) {
-        _step_counter = 0;
-        _model = model;
-    }
-
-    void SequentialScheduler::add_agent(AgentID agent_id) {
-        _agent_list.push_back(agent_id);
-    }
-
-    void SequentialScheduler::delete_agent(AgentID agent_id) {
-        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++)
-            if (*agent_list_iter == agent_id) _agent_list.erase(agent_list_iter);
-        // ERROR HERE
-    }
-
     void SequentialScheduler::step() {
-        _step_counter++;
+        this->step(Scheduler::get_model()->get_population()->get_agent_list());
+    }
 
-        for (auto agent_list_iter = _agent_list.begin();
-             agent_list_iter < _agent_list.end(); agent_list_iter++) {
-            Agent *agent = _model->get_agent_by_id(*agent_list_iter);
-            if (agent != nullptr) agent->step();
+    void SequentialScheduler::step(std::shared_ptr<std::vector<AgentID>> agent_list) {
+        Scheduler::_step_counter++;
+
+        for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
+            auto agent = Scheduler::get_model()->get_population()->get_agent_by_id(*agent_id);
+            if(agent != nullptr) agent->step();
         }
     }
 

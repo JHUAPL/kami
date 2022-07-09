@@ -39,6 +39,13 @@
  * A sample agent for a one-dimensional Boltzmann wealth model
  */
 class MoneyAgent1D : public kami::Agent {
+private:
+    inline static std::shared_ptr<kami::MultiGrid1D> _world = nullptr;
+    inline static std::shared_ptr<kami::Population> _population = nullptr;
+
+    int _step_counter;
+    int _agent_wealth;
+
 public:
     /**
      * Create the agent
@@ -51,16 +58,6 @@ public:
     void step() override;
 
     /**
-     * Give the agent a reference copy of the domain it is expected to work in
-     */
-    static void set_world(kami::MultiGrid1D *world);
-
-    /**
-     * Give the agent a reference copy of the model it is expected to work in
-     */
-    static void set_model(class BoltzmannWealthModel1D *model);
-
-    /**
      * Move the agent to a random location on the world
      */
     void move_agent();
@@ -70,17 +67,22 @@ public:
      */
     void give_money();
 
-private:
-    static kami::MultiGrid1D *_world;
-    static BoltzmannWealthModel1D *_model;
-    int _step_counter;
-    int _agent_wealth;
+    static void set_world(std::shared_ptr<kami::MultiGrid1D> world) {
+        _world = std::move(world);
+    }
+
+    static void set_population(std::shared_ptr<kami::Population> population) {
+        _population = std::move(population);
+    }
 };
 
 /**
  * The one-dimensional Boltzmann wealth model
  */
-class BoltzmannWealthModel1D : public kami::Model {
+class BoltzmannWealthModel1D : public kami::Model, std::enable_shared_from_this<BoltzmannWealthModel1D> {
+private:
+    unsigned int _step_count;
+
 public:
     /**
      * Create an instance of the one-dimensional Boltzmann wealth model.
@@ -89,12 +91,7 @@ public:
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
      */
-    explicit BoltzmannWealthModel1D(unsigned int number_agents = 10, unsigned int length_x = 10);
-
-    /**
-     * Destroy the instance
-     */
-    ~BoltzmannWealthModel1D();
+    explicit BoltzmannWealthModel1D(unsigned int number_agents = 10, unsigned int length_x = 10, unsigned int new_seed = 42);
 
     /**
      * Execute a single time-step for the model.
@@ -107,19 +104,6 @@ public:
      * @param[in] n the number of steps to execute.
      */
     void run(unsigned int n) override;
-
-    /**
-     * Get the MoneyAgent instance associated with the given `AgentID`
-     *
-     * @returns an pointer to the `MoneyAgent` that was requested.
-     */
-    [[nodiscard]] MoneyAgent1D *get_agent_by_id(kami::AgentID agent_id) const override;
-
-private:
-    std::map<kami::AgentID, MoneyAgent1D *> _agent_list;
-    kami::RandomScheduler *_sched;
-    kami::MultiGrid1D *_world;
-    unsigned int _step_count;
 };
 
 #endif  // BOLTZMANN1D_H

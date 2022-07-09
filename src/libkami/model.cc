@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2020 The Johns Hopkins University Applied Physics
+ * Copyright (c) 2022 The Johns Hopkins University Applied Physics
  * Laboratory LLC
  *
  * Permission is hereby granted, free of charge, to any person
@@ -24,29 +24,35 @@
  */
 
 #include <memory>
-#include <vector>
+#include <utility>
 
-#include <kami/agent.h>
-#include <kami/sequential.h>
-#include <kami/staged.h>
+#include <kami/model.h>
+#include <kami/scheduler.h>
 
 namespace kami {
 
-    void StagedScheduler::step() {
-        auto agent_list = Scheduler::get_model()->get_population()->get_agent_list();
-        this->SequentialScheduler::step(agent_list);
-        this->advance(agent_list);
+    [[maybe_unused]] [[maybe_unused]] std::shared_ptr<Domain> Model::get_domain() {
+        return(_domain);
     }
 
-    [[maybe_unused]] void StagedScheduler::advance() {
-        this->advance(Scheduler::get_model()->get_population()->get_agent_list());
+    [[maybe_unused]] void Model::set_domain(std::shared_ptr<Domain> domain) {
+        _domain = std::move(domain);
     }
 
-    void StagedScheduler::advance(const std::shared_ptr<std::vector<AgentID>>& agent_list) {
-        for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
-            auto agent = std::dynamic_pointer_cast<StagedAgent>(this->Scheduler::get_model()->get_population()->get_agent_by_id(*agent_id));
-            if(agent != nullptr) agent->advance();
-        }
+    [[maybe_unused]] std::shared_ptr<Population> Model::get_population() {
+        return(_pop);
+    }
+
+    [[maybe_unused]] void Model::set_population(std::shared_ptr<Population> population) {
+        _pop = std::move(population);
+    }
+
+    [[maybe_unused]] [[maybe_unused]] std::shared_ptr<Scheduler> Model::get_scheduler() {
+        return(_sched);
+    }
+
+    [[maybe_unused]] void Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
+        _sched = std::move(scheduler);
     }
 
 }  // namespace kami

@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2020 The Johns Hopkins University Applied Physics
+ * Copyright (c) 2022 The Johns Hopkins University Applied Physics
  * Laboratory LLC
  *
  * Permission is hereby granted, free of charge, to any person
@@ -24,37 +24,28 @@
  */
 
 #pragma once
-#ifndef KAMI_SCHEDULER_H
-#define KAMI_SCHEDULER_H
+#ifndef KAMI_POPULATION_H
+#define KAMI_POPULATION_H
 
-#include <kami/model.h>
+#include <map>
+
+#include <kami/agent.h>
+#include <kami/kami.h>
 
 namespace kami {
-    class Model;
-
-/**
- * Create a Kami scheduler.
- *
- * Schedulers are responsible for executing each time step in the model.  A
- * scheduler will have a collection of agents assigned to it and will execute
- * the step function for each agent based on the type of scheduling implemented.
- */
-    class LIBKAMI_EXPORT Scheduler {
+    /**
+     * An abstract for generic models
+     */
+    class LIBKAMI_EXPORT Population {
     protected:
-        /**
-         * Counter to increment on each step
-         */
-        int _step_counter = 0;
-
-        /**
-         * A pointer to the `Model` this scheduler schedules
-         */
+        std::map<kami::AgentID, std::shared_ptr<Agent>> _agent_map;
         std::shared_ptr<Model> _model = nullptr;
 
     public:
-        Scheduler() = default;
 
-        explicit Scheduler(std::shared_ptr<Model> model);
+        Population();
+
+        explicit Population(std::shared_ptr<Model> model);
 
         /**
          * @brief Get the `Model` associated with this scheduler
@@ -70,28 +61,33 @@ namespace kami {
         [[maybe_unused]] void set_model(std::shared_ptr<Model> model);
 
         /**
-         * @brief Execute a single time step.
+         * Get a reference to an `Agent` by `AgentID`
          *
-         * @details This method will step through the list of Agents in the
-         * `Population` and then execute the `Agent::step()`
-         * method for every Agent assigned to this scheduler in the order
-         * assigned.
+         * @param[in] agent_id the `AgentID` to search for.
+         *
+         * @return a reference to the desired `Agent` or `nullptr` if not found.
          */
-        virtual void step() = 0;
+        [[nodiscard]] std::shared_ptr<Agent> get_agent_by_id(AgentID agent_id) const;
 
         /**
-         * @brief Execute a single time step.
+         * Add an Agent to the Population.
          *
-         * @details This method will step through the list of Agents
-         * provided and then execute the `Agent::step()`
-         * method for every Agent assigned to this scheduler in the order
-         * assigned.
-         *
-         * @param agent_list list of agents to execute the step
+         * @param agent The Agent to add.
          */
-        virtual void step(std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
-    };
+        void add_agent(const std::shared_ptr<Agent> &agent);
 
+        /**
+         * Remove an Agent from the Population.
+         *
+         * @param agent_id The AgentID of the agent to remove.
+         */
+        [[maybe_unused]] void delete_agent(AgentID agent_id);
+
+        /*
+         * Returns the agent list.
+         */
+        std::shared_ptr<std::vector<AgentID>> get_agent_list();
+    };
 }  // namespace kami
 
-#endif  // KAMI_SCHEDULER_H
+#endif  // KAMI_POPULATION_H

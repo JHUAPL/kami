@@ -97,7 +97,7 @@ namespace kami {
         explicit Grid1D(unsigned int maximum_x, bool wrap_x = false);
 
         /**
-         * Deconstructor
+         * Destructor
          */
         virtual ~Grid1D();
 

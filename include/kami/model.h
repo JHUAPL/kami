@@ -27,8 +27,10 @@
 #ifndef KAMI_MODEL_H
 #define KAMI_MODEL_H
 
-#include <kami/agent.h>
+#include <kami/domain.h>
 #include <kami/kami.h>
+#include <kami/population.h>
+#include <kami/scheduler.h>
 
 namespace kami {
 
@@ -36,16 +38,12 @@ namespace kami {
  * An abstract for generic models
  */
     class LIBKAMI_EXPORT Model {
-    public:
-        /**
-         * Get a reference to an `Agent` by `AgentID`
-         *
-         * @param[in] agent_id the `AgentID` to search for.
-         *
-         * @return a reference to the desired `Agent` or `nullptr` if not found.
-         */
-        [[nodiscard]] virtual Agent *get_agent_by_id(AgentID agent_id) const = 0;
+    protected:
+        std::shared_ptr<Domain> _domain = nullptr;
+        std::shared_ptr<Population> _pop = nullptr;
+        std::shared_ptr<Scheduler> _sched = nullptr;
 
+    public:
         /**
          * Execute a fixed number of time-steps for the model.
          *
@@ -62,6 +60,45 @@ namespace kami {
          * model should perform as part of its time step should be in this function.
          */
         virtual void step() = 0;
+
+        /**
+         * @brief Get the `Domain` associated with this model
+         */
+        [[maybe_unused]] std::shared_ptr<Domain> get_domain();
+
+        /**
+         * @brief Add a `Domain` to this scheduler
+         *
+         * @details This method will associate a model with the
+         * scheduler.
+         */
+        [[maybe_unused]] void set_domain(std::shared_ptr<Domain> domain);
+
+        /**
+         * @brief Get the `Population` associated with this model
+         */
+        std::shared_ptr<Population> get_population();
+
+        /**
+         * @brief Add a `Model` to this scheduler
+         *
+         * @details This method will associate a model with the
+         * scheduler.
+         */
+        [[maybe_unused]] void set_population(std::shared_ptr<Population> population);
+
+        /**
+         * @brief Get the `Scheduler` associated with this model
+         */
+        [[maybe_unused]] std::shared_ptr<Scheduler> get_scheduler();
+
+        /**
+         * @brief Add a `Model` to this scheduler
+         *
+         * @details This method will associate a model with the
+         * scheduler.
+         */
+        [[maybe_unused]] void set_scheduler(std::shared_ptr<Scheduler> scheduler);
     };
 
 }  // namespace kami

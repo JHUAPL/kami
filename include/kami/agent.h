@@ -28,10 +28,11 @@
 #define KAMI_AGENT_H
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include <kami/kami.h>
-
+#include <kami/model.h>
 
 namespace kami {
 
@@ -45,6 +46,19 @@ namespace kami {
  * @see Agent
  */
     class LIBKAMI_EXPORT AgentID {
+    private:
+        inline static long long _id_next = 1;
+
+        /**
+         * The unique identifier is a `long long`.
+         *
+         * The unique identifier is an unsigned integer that increments
+         * monotonically with each new `AgentID` instantiated.  This is
+         * substantially faster than other potential identifiers, such
+         * as MD5 hashes or UUID objects.
+         */
+        long long _id;
+
     public:
         /**
          * Constructs a new unique identifier.
@@ -101,19 +115,6 @@ namespace kami {
          * @return the output stream for reuse
          */
         friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
-
-    private:
-        inline static long long _id_next = 1;
-
-        /**
-         * The unique identifier is a `long long`.
-         *
-         * The unique identifier is an unsigned integer that increments
-         * monotonically with each new `AgentID` instantiated.  This is
-         * substantially faster than other potential identifiers, such
-         * as MD5 hashes or UUID objects.
-         */
-        long long _id;
     };
 
 /**
@@ -126,6 +127,12 @@ namespace kami {
  * @see `StagedAgent`
  */
     class LIBKAMI_EXPORT Agent {
+    private:
+        const AgentID _agent_id;
+
+    protected:
+        std::shared_ptr<Model> _model;
+
     public:
         /**
          * Get the `Agent`'s `AgentID`.
@@ -174,8 +181,18 @@ namespace kami {
          */
         friend bool operator!=(const Agent &lhs, const Agent &rhs);
 
-    private:
-        const AgentID _agent_id;
+        /**
+         * @brief Get the `Model` associated with this agent
+         */
+        [[maybe_unused]] std::shared_ptr<Model> get_model();
+
+        /**
+         * @brief Add a `Model` to this agent
+         *
+         * @details This method will associate a model with the
+         * agent.
+         */
+        [[maybe_unused]] void set_model(std::shared_ptr<Model> model);
     };
 
 /**

@@ -12,9 +12,12 @@ create_library(NAME         libkami
                    domain.cc
                    grid1d.cc
                    grid2d.cc
+                   model.cc
                    multigrid1d.cc
                    multigrid2d.cc
+                   population.cc
                    random.cc
+                   scheduler.cc
                    sequential.cc
                    sologrid1d.cc
                    sologrid2d.cc

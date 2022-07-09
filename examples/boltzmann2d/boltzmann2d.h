@@ -29,16 +29,25 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
 
 #include <kami/agent.h>
 #include <kami/kami.h>
 #include <kami/multigrid2d.h>
+#include <kami/population.h>
 #include <kami/random.h>
 
 /**
  * A sample agent for a two-dimensional Boltzmann wealth model
  */
 class MoneyAgent2D : public kami::Agent {
+private:
+    inline static std::shared_ptr<kami::MultiGrid2D> _world = nullptr;
+    inline static std::shared_ptr<kami::Population> _population = nullptr;
+
+    int _step_counter;
+    int _agent_wealth;
+
 public:
     /**
      * Create the agent
@@ -51,16 +60,6 @@ public:
     void step() override;
 
     /**
-     * Give the agent a reference copy of the domain it is expected to work in
-     */
-    static void set_world(kami::MultiGrid2D *world);
-
-    /**
-     * Give the agent a reference copy of the model it is expected to work in
-     */
-    static void set_model(class BoltzmannWealthModel2D *model);
-
-    /**
      * Move the agent to a random location on the world
      */
     void move_agent();
@@ -70,17 +69,22 @@ public:
      */
     void give_money();
 
-private:
-    static kami::MultiGrid2D *_world;
-    static BoltzmannWealthModel2D *_model;
-    int _step_counter;
-    int _agent_wealth;
+    static void set_world(std::shared_ptr<kami::MultiGrid2D> world) {
+        _world = std::move(world);
+    }
+
+    static void set_population(std::shared_ptr<kami::Population> population) {
+        _population = std::move(population);
+    }
 };
 
 /**
  * The two-dimensional Boltzmann wealth model
  */
-class BoltzmannWealthModel2D : public kami::Model {
+class BoltzmannWealthModel2D : public kami::Model, std::enable_shared_from_this<BoltzmannWealthModel2D> {
+private:
+    unsigned int _step_count;
+
 public:
     /**
      * Create an instance of the two-dimensional Boltzmann wealth model.
@@ -96,11 +100,6 @@ public:
     explicit BoltzmannWealthModel2D(unsigned int number_agents = 10, unsigned int length_x = 10, unsigned int length_y = 10, unsigned int new_seed = 42);
 
     /**
-     * Destroy the instance
-     */
-    ~BoltzmannWealthModel2D();
-
-    /**
      * Execute a single time-step for the model.
      */
     void step() override;
@@ -111,19 +110,6 @@ public:
      * @param[in] n the number of steps to execute.
      */
     void run(unsigned int n) override;
-
-    /**
-     * Get the MoneyAgent2D instance associated with the given `AgentID`
-     *
-     * @returns an pointer to the `MoneyAgent2D` that was requested.
-     */
-    [[nodiscard]] MoneyAgent2D *get_agent_by_id(kami::AgentID agent_id) const override;
-
-private:
-    std::map<kami::AgentID, MoneyAgent2D *> _agent_list;
-    kami::RandomScheduler *_sched;
-    kami::MultiGrid2D *_world;
-    unsigned int _step_count;
 };
 
 #endif  // BOLTZMANN2D_H

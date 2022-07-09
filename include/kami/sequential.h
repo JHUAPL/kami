@@ -27,11 +27,10 @@
 #ifndef KAMI_SEQUENTIAL_H
 #define KAMI_SEQUENTIAL_H
 
-#include <algorithm>
 #include <vector>
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
+#include <kami/kami.h>
 #include <kami/model.h>
 #include <kami/scheduler.h>
 
@@ -57,23 +56,7 @@ namespace kami {
          * list of all Agents in the Model and the Model can be queried for
          * a reference to any particular Agent at `step()` time.
          */
-        explicit SequentialScheduler(Model *model);
-
-        /**
-         * @brief Add an agent to the scheduler.
-         *
-         * @details The scheduler maintains a list of all AgentIDs currently
-         * assigned.  This function adds a new Agent to the list.
-         */
-        void add_agent(AgentID agent_id) override;
-
-        /**
-         * @brief Remove an agent from the scheduler.
-         *
-         * @details The scheduler maintains a list of all AgentIDs currently
-         * assigned.  This function removes an Agent from the list.
-         */
-        void delete_agent(AgentID agent_id) override;
+        SequentialScheduler() = default;
 
         /**
          * @brief Execute a single time step.
@@ -85,22 +68,17 @@ namespace kami {
          */
         void step() override;
 
-    protected:
         /**
-         * A vector containing the `AgentID`s of all agents assigned to this
-         * scheduler
+         * @brief Execute a single time step.
+         *
+         * @details This method will step through the list of Agents
+         * provided and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param agent_list list of agents to execute the step
          */
-        std::vector<AgentID> _agent_list;
-
-        /**
-         * A pointer to the `Model` this scheduler belongs to
-         */
-        Model *_model;
-
-        /**
-         * Counter to increment on each step
-         */
-        int _step_counter;
+        void step(std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

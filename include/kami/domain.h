@@ -38,7 +38,10 @@ namespace kami {
  *
  * Implementations of virtual environments are expected to subclass `Domain`.
  */
-    class LIBKAMI_EXPORT Domain {};
+    class LIBKAMI_EXPORT Domain {
+    public:
+        [[maybe_unused]] virtual bool get_bool() = 0;
+    };
 
 /**
  * Provides a coordinate system for each `Domain`.
