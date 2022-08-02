@@ -147,7 +147,7 @@ namespace kami {
          * This function should step the agent instance.  Any activities that the
          * agent should perform as part of its time step should be in this function.
          */
-        virtual void step() = 0;
+        virtual void step(std::shared_ptr<Model> model) = 0;
 
         /**
          * Compare if two `Agent`s are the same `Agent`.
@@ -180,19 +180,6 @@ namespace kami {
          * the restrictions on the comparison.
          */
         friend bool operator!=(const Agent &lhs, const Agent &rhs);
-
-        /**
-         * @brief Get the `Model` associated with this agent
-         */
-        [[maybe_unused]] std::shared_ptr<Model> get_model();
-
-        /**
-         * @brief Add a `Model` to this agent
-         *
-         * @details This method will associate a model with the
-         * agent.
-         */
-        [[maybe_unused]] void set_model(std::shared_ptr<Model> model);
     };
 
 /**
@@ -216,7 +203,7 @@ namespace kami {
          * the agent that must happen for the `StagedAgent` to complete its step must
          * happen here.
          */
-        virtual void advance() = 0;
+        virtual void advance(std::shared_ptr<Model> model) = 0;
     };
 
 }  // namespace kami

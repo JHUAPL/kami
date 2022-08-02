@@ -37,7 +37,7 @@ namespace kami {
 
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
             auto agent = Scheduler::get_model()->get_population()->get_agent_by_id(*agent_id);
-            if(agent != nullptr) agent->step();
+            if(agent != nullptr) agent->step(_model);
         }
     }
 

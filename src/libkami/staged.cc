@@ -45,7 +45,7 @@ namespace kami {
     void StagedScheduler::advance(const std::shared_ptr<std::vector<AgentID>>& agent_list) {
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
             auto agent = std::dynamic_pointer_cast<StagedAgent>(this->Scheduler::get_model()->get_population()->get_agent_by_id(*agent_id));
-            if(agent != nullptr) agent->advance();
+            if(agent != nullptr) agent->advance(_model);
         }
     }
 

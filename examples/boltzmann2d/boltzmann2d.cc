@@ -62,7 +62,7 @@ struct fmt::formatter<kami::GridCoord2D> : fmt::formatter<std::string> {
     }
 };
 
-void MoneyAgent2D::step() {
+void MoneyAgent2D::step(std::shared_ptr<kami::Model> model) {
     this->_step_counter++;
 
     console->trace("Agent {} is moving", this->get_agent_id());

@@ -40,7 +40,6 @@ namespace kami {
     }
 
     void Population::add_agent(const std::shared_ptr<Agent> &agent) {
-        agent->set_model(_model);
         _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent->get_agent_id(), agent));
     }
 

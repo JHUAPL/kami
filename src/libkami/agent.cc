@@ -54,12 +54,4 @@ namespace kami {
 
     bool operator!=(const Agent &lhs, const Agent &rhs) { return !(lhs == rhs); }
 
-    [[maybe_unused]] std::shared_ptr<Model> Agent::get_model() {
-        return(_model);
-    }
-
-    [[maybe_unused]] void Agent::set_model(std::shared_ptr<Model> model) {
-        _model = std::move(model);
-    }
-
 }  // namespace kami

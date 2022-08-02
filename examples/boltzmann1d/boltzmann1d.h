@@ -55,7 +55,7 @@ public:
     /**
      * Execute a single time-step for the agent
      */
-    void step() override;
+    void step(std::shared_ptr<kami::Model> model) override;
 
     /**
      * Move the agent to a random location on the world
