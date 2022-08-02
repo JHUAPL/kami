@@ -56,7 +56,7 @@ namespace kami {
          * method for every StagedAgent assigned to this scheduler in the order
          * assigned.
          */
-        [[maybe_unused]] void advance();
+        void advance(std::shared_ptr<Model> model);
 
         /**
          * @brief Advance a single time step.
@@ -68,18 +68,9 @@ namespace kami {
          *
          * @param agent_list list of agents to execute the step
          */
-        void advance(const std::shared_ptr<std::vector<AgentID>>& agent_list);
+        void advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
 
     public:
-        /**
-         * Constructor.
-         * The Model parameter is used by the scheduler to get access to an Agent.
-         * The Model is presumed to maintain a master list of all Agents in the
-         * Model and the Model can be queried for  a reference to any particular
-         * Agent at `step()` time.
-         */
-        explicit StagedScheduler() = default;
-
         /**
          * Execute a single time step.
          *
@@ -88,7 +79,7 @@ namespace kami {
          * in the same order.  Finally, it will execute the  `Agent::advance()`
          * method for each Agent in the same order.
          */
-        void step() override;
+        void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

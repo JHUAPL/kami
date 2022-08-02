@@ -48,6 +48,9 @@ namespace kami {
  * @note First create a Model for the scheduler to live in.
  */
     class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
+    private:
+        std::shared_ptr<std::ranlux24> _rng = nullptr;
+
     public:
         /**
          * @brief Constructor.
@@ -70,7 +73,7 @@ namespace kami {
          *
          * @param agent_list list of agents to execute the step
          */
-        void step(std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
 
         /**
          * Set the random number generator used to randomize the order of agent
@@ -85,10 +88,7 @@ namespace kami {
          * Get a reference to the random number generator used to randomize
          * the order of agent stepping.
          */
-        [[maybe_unused]] [[maybe_unused]] std::shared_ptr<std::ranlux24> get_rng();
-
-    private:
-        std::shared_ptr<std::ranlux24> _rng = nullptr;
+        std::shared_ptr<std::ranlux24> get_rng();
     };
 
 }  // namespace kami

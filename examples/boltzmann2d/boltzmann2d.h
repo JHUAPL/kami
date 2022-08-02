@@ -81,7 +81,7 @@ public:
 /**
  * The two-dimensional Boltzmann wealth model
  */
-class BoltzmannWealthModel2D : public kami::Model, std::enable_shared_from_this<BoltzmannWealthModel2D> {
+class BoltzmannWealthModel2D : public kami::Model {
 private:
     unsigned int _step_count;
 

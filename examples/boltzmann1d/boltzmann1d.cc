@@ -132,8 +132,8 @@ void BoltzmannWealthModel1D::run(unsigned int steps) {
 }
 
 void BoltzmannWealthModel1D::step() {
-    console->trace("Executing model step {}", _step_count++);
-    _sched->step();
+    console->trace("Executing model step {}", ++_step_count);
+    _sched->step(shared_from_this());
 }
 
 int main(int argc, char **argv) {
@@ -155,7 +155,6 @@ int main(int argc, char **argv) {
     console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agent_count, x_size, max_steps);
 
     auto model = std::make_shared<BoltzmannWealthModel1D>(agent_count, x_size, initial_seed);
-    model->get_scheduler()->set_model(model);
 
     spdlog::stopwatch sw;
     for(int i = 0; i < max_steps; i++) model->step();

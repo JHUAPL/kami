@@ -46,29 +46,7 @@ namespace kami {
          */
         int _step_counter = 0;
 
-        /**
-         * A pointer to the `Model` this scheduler schedules
-         */
-        std::shared_ptr<Model> _model = nullptr;
-
     public:
-        Scheduler() = default;
-
-        explicit Scheduler(std::shared_ptr<Model> model);
-
-        /**
-         * @brief Get the `Model` associated with this scheduler
-         */
-        std::shared_ptr<Model> get_model();
-
-        /**
-         * @brief Add a `Model` to this scheduler
-         *
-         * @details This method will associate a model with the
-         * scheduler.
-         */
-        [[maybe_unused]] void set_model(std::shared_ptr<Model> model);
-
         /**
          * @brief Execute a single time step.
          *
@@ -77,7 +55,7 @@ namespace kami {
          * method for every Agent assigned to this scheduler in the order
          * assigned.
          */
-        virtual void step() = 0;
+        virtual void step(std::shared_ptr<Model> model) = 0;
 
         /**
          * @brief Execute a single time step.
@@ -89,7 +67,7 @@ namespace kami {
          *
          * @param agent_list list of agents to execute the step
          */
-        virtual void step(std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
+        virtual void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
     };
 
 }  // namespace kami

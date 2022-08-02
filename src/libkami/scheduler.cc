@@ -30,17 +30,5 @@
 #include <kami/scheduler.h>
 
 namespace kami {
-
-    Scheduler::Scheduler(std::shared_ptr<Model> model) {
-        this->set_model(std::move(model));
-    }
-
-    [[maybe_unused]] std::shared_ptr<Model> Scheduler::get_model() {
-        return(_model);
-    }
-
-    [[maybe_unused]] void Scheduler::set_model(std::shared_ptr<Model> model) {
-        _model = std::move(model);
-    }
-
+    
 }  // namespace kami

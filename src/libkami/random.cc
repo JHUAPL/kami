@@ -38,9 +38,9 @@ namespace kami {
         this->set_rng(std::move(rng));
     }
 
-    void RandomScheduler::step(std::shared_ptr<std::vector<AgentID>> agent_list) {
+    void RandomScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
         shuffle(agent_list->begin(),agent_list->end(), *_rng);
-        this->SequentialScheduler::step(agent_list);
+        this->SequentialScheduler::step(model, agent_list);
     }
 
     void RandomScheduler::set_rng(std::shared_ptr<std::ranlux24> rng) {

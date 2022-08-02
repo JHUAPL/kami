@@ -27,6 +27,8 @@
 #ifndef KAMI_MODEL_H
 #define KAMI_MODEL_H
 
+#include <memory>
+
 #include <kami/domain.h>
 #include <kami/kami.h>
 #include <kami/population.h>
@@ -37,7 +39,7 @@ namespace kami {
 /**
  * An abstract for generic models
  */
-    class LIBKAMI_EXPORT Model {
+    class LIBKAMI_EXPORT Model : public std::enable_shared_from_this<Model> {
     protected:
         std::shared_ptr<Domain> _domain = nullptr;
         std::shared_ptr<Population> _pop = nullptr;

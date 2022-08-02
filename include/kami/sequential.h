@@ -49,16 +49,6 @@ namespace kami {
     class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     public:
         /**
-         * @brief Constructor.
-         *
-         * @details The Model parameter is used by the scheduler to get
-         * access to an Agent.  The Model is presumed to maintain a master
-         * list of all Agents in the Model and the Model can be queried for
-         * a reference to any particular Agent at `step()` time.
-         */
-        SequentialScheduler() = default;
-
-        /**
          * @brief Execute a single time step.
          *
          * @details This method will step through the list of Agents in the
@@ -66,7 +56,7 @@ namespace kami {
          * method for every Agent assigned to this scheduler in the order
          * assigned.
          */
-        void step() override;
+        void step(std::shared_ptr<Model> model);
 
         /**
          * @brief Execute a single time step.
@@ -78,7 +68,7 @@ namespace kami {
          *
          * @param agent_list list of agents to execute the step
          */
-        void step(std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        virtual void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
     };
 
 }  // namespace kami
