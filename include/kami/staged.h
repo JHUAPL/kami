@@ -36,16 +36,14 @@
 
 namespace kami {
 
-/**
- * Will execute all agent steps in a sequential order.
- *
- * A sequential scheduler will iterate over the agents assigned to the scheduler
- * and call their `step()` function in a sequential order. That order is
- * preserved between calls to `step()` but may be modified by `add_agent()` or
- * `delete_agent()`.
- *
- * @note First create a Model for the scheduler to live in.
- */
+    /**
+     * @brief Will execute all agent steps in a sequential order.
+     *
+     * @detais A sequential scheduler will iterate over the agents assigned to the scheduler
+     * and call their `step()` function in a sequential order. That order is
+     * preserved between calls to `step()` but may be modified by `add_agent()` or
+     * `delete_agent()`.
+     */
     class LIBKAMI_EXPORT StagedScheduler : public SequentialScheduler {
     private:
         /**
