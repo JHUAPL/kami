@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+#include <algorithm>
 #include <utility>
 #include <vector>
 
@@ -43,7 +44,7 @@ namespace kami {
         _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent->get_agent_id(), agent));
     }
 
-    [[maybe_unused]] void Population::delete_agent(const AgentID agent_id) {
+    void Population::delete_agent(const AgentID agent_id) {
         auto agent_it = _agent_map.find(agent_id);
 
         if(agent_it != _agent_map.end()) _agent_map.erase(agent_it);
@@ -64,11 +65,11 @@ namespace kami {
         return std::move(agent_ids);
     }
 
-    [[maybe_unused]] std::shared_ptr<Model> Population::get_model() {
+    std::shared_ptr<Model> Population::get_model() {
         return(_model);
     }
 
-    [[maybe_unused]] void Population::set_model(std::shared_ptr<Model> model) {
+    void Population::set_model(std::shared_ptr<Model> model) {
         _model = std::move(model);
     }
 

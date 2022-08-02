@@ -28,6 +28,7 @@
 #define KAMI_POPULATION_H
 
 #include <map>
+#include <vector>
 
 #include <kami/agent.h>
 #include <kami/kami.h>
