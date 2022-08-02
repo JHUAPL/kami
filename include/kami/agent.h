@@ -130,9 +130,6 @@ namespace kami {
     private:
         const AgentID _agent_id;
 
-    protected:
-        std::shared_ptr<Model> _model;
-
     public:
         /**
          * @brief Get the `Agent`'s `AgentID`.
