@@ -119,7 +119,7 @@ namespace kami {
          *
          * @returns false if the agent is not removed, otherwise, true.
          */
-        [[maybe_unused]] [[maybe_unused]] bool delete_agent(AgentID agent_id);
+        bool delete_agent(AgentID agent_id);
 
         /**
          * Remove agent from the grid at the specified location
@@ -184,7 +184,7 @@ namespace kami {
          *
          * @return true if the grid wraps, and false otherwise
          */
-        [[maybe_unused]] [[maybe_unused]] [[nodiscard]] bool get_wrap_x() const;
+        [[nodiscard]] bool get_wrap_x() const;
 
         /**
          * Return the neighborhood of the specified Agent
@@ -215,7 +215,7 @@ namespace kami {
          *
          * @return the length of the grid in the `x` dimension
          */
-        [[maybe_unused]] [[nodiscard]] unsigned int get_maximum_x() const;
+        [[nodiscard]] unsigned int get_maximum_x() const;
 
     protected:
         /**

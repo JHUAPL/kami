@@ -31,27 +31,27 @@
 
 namespace kami {
 
-    [[maybe_unused]] [[maybe_unused]] std::shared_ptr<Domain> Model::get_domain() {
+    std::shared_ptr<Domain> Model::get_domain() {
         return(_domain);
     }
 
-    [[maybe_unused]] void Model::set_domain(std::shared_ptr<Domain> domain) {
+    void Model::set_domain(std::shared_ptr<Domain> domain) {
         _domain = std::move(domain);
     }
 
-    [[maybe_unused]] std::shared_ptr<Population> Model::get_population() {
+    std::shared_ptr<Population> Model::get_population() {
         return(_pop);
     }
 
-    [[maybe_unused]] void Model::set_population(std::shared_ptr<Population> population) {
+    void Model::set_population(std::shared_ptr<Population> population) {
         _pop = std::move(population);
     }
 
-    [[maybe_unused]] [[maybe_unused]] std::shared_ptr<Scheduler> Model::get_scheduler() {
+    std::shared_ptr<Scheduler> Model::get_scheduler() {
         return(_sched);
     }
 
-    [[maybe_unused]] void Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
+    void Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
         _sched = std::move(scheduler);
     }
 

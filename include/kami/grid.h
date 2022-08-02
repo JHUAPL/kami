@@ -49,7 +49,7 @@ namespace kami {
          * @details Moore neighborhood types include diagonally-adjacent cells as
          * neighbors.
          */
-        Moore [[maybe_unused]],
+        Moore,
 
         /**
          * @brief Von Neumann neighborhood
@@ -57,7 +57,7 @@ namespace kami {
          * @details Von Neumann neighborhood types do not include
          * diagonally-adjacent cells as neighbors.
          */
-        VonNeumann [[maybe_unused]]
+        VonNeumann
     };
 
     /**
@@ -71,7 +71,7 @@ namespace kami {
          * connecting two points.  This is commonly called a "beeline" or
          * "as the crow flies."
          */
-        Euclidean [[maybe_unused]],
+        Euclidean,
 
         /**
          * @brief Manhattan distance.
@@ -81,7 +81,7 @@ namespace kami {
          * "taxicab distance," "rectilinear distance," or many other [formal
          * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
          */
-        Manhattan [[maybe_unused]]
+        Manhattan
     };
 
     /**

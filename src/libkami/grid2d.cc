@@ -80,7 +80,7 @@ namespace kami {
         delete[] _agent_grid;
     }
 
-    [[maybe_unused]] bool Grid2D::delete_agent(AgentID agent_id) {
+    bool Grid2D::delete_agent(AgentID agent_id) {
         auto coord = get_location_by_agent(agent_id);
 
         return delete_agent(agent_id, coord);
@@ -121,8 +121,8 @@ namespace kami {
         return false;
     }
 
-    [[maybe_unused]] bool Grid2D::get_wrap_x() const { return _wrap_x; }
-    [[maybe_unused]] bool Grid2D::get_wrap_y() const { return _wrap_y; }
+    bool Grid2D::get_wrap_x() const { return _wrap_x; }
+    bool Grid2D::get_wrap_y() const { return _wrap_y; }
 
     std::vector<GridCoord2D> Grid2D::get_neighborhood(
             AgentID agent_id, GridNeighborhoodType neighborhood_type,
@@ -196,8 +196,8 @@ namespace kami {
         return nullptr;
     }
 
-    [[maybe_unused]] unsigned int Grid2D::get_maximum_x() const { return _maximum_x; }
-    [[maybe_unused]] unsigned int Grid2D::get_maximum_y() const { return _maximum_y; }
+    unsigned int Grid2D::get_maximum_x() const { return _maximum_x; }
+    unsigned int Grid2D::get_maximum_y() const { return _maximum_y; }
 
     GridCoord2D Grid2D::coord_wrap(const GridCoord2D& coord) const {
         auto x = coord.get_x_location();

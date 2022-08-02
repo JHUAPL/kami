@@ -53,7 +53,7 @@ namespace kami {
          *
          * @param[in] n the number of time steps to execute.
          */
-        [[maybe_unused]] virtual void run(unsigned int n) = 0;
+        virtual void run(unsigned int n) = 0;
 
         /**
          * Execute a single time-step for the model.
@@ -66,7 +66,7 @@ namespace kami {
         /**
          * @brief Get the `Domain` associated with this model
          */
-        [[maybe_unused]] std::shared_ptr<Domain> get_domain();
+        std::shared_ptr<Domain> get_domain();
 
         /**
          * @brief Add a `Domain` to this scheduler
@@ -74,7 +74,7 @@ namespace kami {
          * @details This method will associate a model with the
          * scheduler.
          */
-        [[maybe_unused]] void set_domain(std::shared_ptr<Domain> domain);
+        void set_domain(std::shared_ptr<Domain> domain);
 
         /**
          * @brief Get the `Population` associated with this model
@@ -87,12 +87,12 @@ namespace kami {
          * @details This method will associate a model with the
          * scheduler.
          */
-        [[maybe_unused]] void set_population(std::shared_ptr<Population> population);
+        void set_population(std::shared_ptr<Population> population);
 
         /**
          * @brief Get the `Scheduler` associated with this model
          */
-        [[maybe_unused]] std::shared_ptr<Scheduler> get_scheduler();
+        std::shared_ptr<Scheduler> get_scheduler();
 
         /**
          * @brief Add a `Model` to this scheduler
@@ -100,7 +100,7 @@ namespace kami {
          * @details This method will associate a model with the
          * scheduler.
          */
-        [[maybe_unused]] void set_scheduler(std::shared_ptr<Scheduler> scheduler);
+        void set_scheduler(std::shared_ptr<Scheduler> scheduler);
     };
 
 }  // namespace kami

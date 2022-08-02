@@ -47,6 +47,6 @@ namespace kami {
         this->_rng = std::move(rng);
     }
 
-    [[maybe_unused]] std::shared_ptr<std::ranlux24> RandomScheduler::get_rng() { return (this->_rng); }
+    std::shared_ptr<std::ranlux24> RandomScheduler::get_rng() { return (this->_rng); }
 
 }  // namespace kami

@@ -46,7 +46,7 @@ namespace kami {
  *
  * @note First create a Model for the scheduler to live in.
  */
-    class LIBKAMI_EXPORT [[maybe_unused]] StagedScheduler : public SequentialScheduler {
+    class LIBKAMI_EXPORT StagedScheduler : public SequentialScheduler {
     private:
         /**
          * @brief Advance a single time step.

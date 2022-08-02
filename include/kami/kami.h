@@ -41,7 +41,7 @@ namespace kami {
     class Population;
     class Scheduler;
 
-    [[maybe_unused]] inline semver::version get_version() { return version; }
+    inline semver::version get_version() { return version; }
 
 }  // namespace kami
 

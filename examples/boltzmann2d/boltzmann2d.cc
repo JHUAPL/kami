@@ -48,14 +48,14 @@ std::shared_ptr<std::ranlux24> rng = nullptr;
 
 template <>
 struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
-    [[maybe_unused]] static auto format(kami::AgentID agent_id, format_context &ctx) {
+    static auto format(kami::AgentID agent_id, format_context &ctx) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template <>
 struct fmt::formatter<kami::GridCoord2D> : fmt::formatter<std::string> {
-    [[maybe_unused]] static auto format(const kami::GridCoord2D& coord, format_context &ctx) {
+    static auto format(const kami::GridCoord2D& coord, format_context &ctx) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };

@@ -63,7 +63,7 @@ namespace kami {
          *
          * @param agent_id The AgentID of the agent to remove.
          */
-        [[maybe_unused]] void delete_agent(AgentID agent_id);
+        void delete_agent(AgentID agent_id);
 
         /*
          * Returns the agent list.

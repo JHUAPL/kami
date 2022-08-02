@@ -64,7 +64,7 @@ namespace kami {
         delete[] _agent_grid;
     }
 
-    [[maybe_unused]] bool Grid1D::delete_agent(AgentID agent_id) {
+    bool Grid1D::delete_agent(AgentID agent_id) {
         GridCoord1D coord = get_location_by_agent(agent_id);
 
         return delete_agent(agent_id, coord);
@@ -137,9 +137,9 @@ namespace kami {
         return nullptr;
     }
 
-    [[maybe_unused]] bool Grid1D::get_wrap_x() const { return _wrap_x; }
+    bool Grid1D::get_wrap_x() const { return _wrap_x; }
 
-    [[maybe_unused]] unsigned int Grid1D::get_maximum_x() const { return _maximum_x; }
+    unsigned int Grid1D::get_maximum_x() const { return _maximum_x; }
 
     GridCoord1D Grid1D::get_location_by_agent(AgentID agent_id) const {
         return _agent_index->at(agent_id);
