@@ -60,7 +60,7 @@ namespace kami {
          * @param rng [in] A uniform random number generator of type
          * `std::mt19937`, used as the source of randomness.
          */
-        explicit RandomScheduler(std::shared_ptr<std::mt19937> rng);
+        explicit RandomScheduler(std::shared_ptr<std::ranlux24> rng);
 
         /**
          * @brief Execute a single time step.
@@ -79,16 +79,16 @@ namespace kami {
          * @param rng [in] A uniform random number generator of type `std::mt19937`,
          * used as the source of randomness.
          */
-        void set_rng(std::shared_ptr<std::mt19937> rng);
+        void set_rng(std::shared_ptr<std::ranlux24> rng);
 
         /**
          * Get a reference to the random number generator used to randomize
          * the order of agent stepping.
          */
-        [[maybe_unused]] [[maybe_unused]] std::shared_ptr<std::mt19937> get_rng();
+        [[maybe_unused]] [[maybe_unused]] std::shared_ptr<std::ranlux24> get_rng();
 
     private:
-        std::shared_ptr<std::mt19937> _rng = nullptr;
+        std::shared_ptr<std::ranlux24> _rng = nullptr;
     };
 
 }  // namespace kami

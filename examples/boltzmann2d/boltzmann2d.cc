@@ -46,7 +46,7 @@
 #include <kami/random.h>
 
 std::shared_ptr<spdlog::logger> console = nullptr;
-std::shared_ptr<std::mt19937> rng = nullptr;
+std::shared_ptr<std::ranlux24> rng = nullptr;
 
 template <>
 struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
@@ -99,7 +99,7 @@ void MoneyAgent2D::give_money() {
 }
 
 BoltzmannWealthModel2D::BoltzmannWealthModel2D(unsigned int number_agents, unsigned int length_x, unsigned int length_y, unsigned int new_seed) {
-    rng = std::make_shared<std::mt19937>();
+    rng = std::make_shared<std::ranlux24>();
     rng->seed(new_seed);
 
     auto domain = std::make_shared<kami::MultiGrid2D>(length_x, length_y, true, true);
