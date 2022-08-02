@@ -34,14 +34,14 @@
 
 namespace kami {
 
-/**
- * @brief Neighborhood types for orthogonal grid domains of cells.
- *
- * @details Orthogonal grid domains are those that provide cells equidistant
- * along a standard Cartesian grid.  `GridNeighborhoodType` allows for the
- * distinction between those neighborhoods that include those cells touching on
- * the corners or diagonally and those neighborhoods that do not.
- */
+    /**
+     * @brief Neighborhood types for orthogonal grid domains of cells.
+     *
+     * @details Orthogonal grid domains are those that provide cells equidistant
+     * along a standard Cartesian grid.  `GridNeighborhoodType` allows for the
+     * distinction between those neighborhoods that include those cells touching on
+     * the corners or diagonally and those neighborhoods that do not.
+     */
     enum class GridNeighborhoodType {
         /**
          * @brief Moore neighborhood
@@ -60,9 +60,9 @@ namespace kami {
         VonNeumann [[maybe_unused]]
     };
 
-/**
- * @brief Distance types for orthogonal grid domains
- */
+    /**
+     * @brief Distance types for orthogonal grid domains
+     */
     enum class GridDistanceType {
         /**
          * @brief Euclidean distance.
@@ -84,22 +84,20 @@ namespace kami {
         Manhattan [[maybe_unused]]
     };
 
-/**
- * @brief An abstract domain based on a gridded environment.
- *
- * @details All gridded domains are expected to consist of cells in a
- * rectilinear grid where the cells are equal size and laid out in an ordered
- * fashion.
- */
-    class LIBKAMI_EXPORT GridDomain : public Domain {
-        bool get_bool() override { return true; }
-    };
+    /**
+     * @brief An abstract domain based on a gridded environment.
+     *
+     * @details All gridded domains are expected to consist of cells in a
+     * rectilinear grid where the cells are equal size and laid out in an ordered
+     * fashion.
+     */
+    class LIBKAMI_EXPORT GridDomain : public Domain {};
 
-/**
- * @brief An abstract for gridded coordinates.
- *
- * @details All gridded coordinates are expected to subclass `GridCoord`.
- */
+    /**
+     * @brief An abstract for gridded coordinates.
+     *
+     * @details All gridded coordinates are expected to subclass `GridCoord`.
+     */
     class LIBKAMI_EXPORT GridCoord : public Coord {};
 
 }  // namespace kami
