@@ -34,8 +34,9 @@
 #include <kami/kami.h>
 
 namespace kami {
+
     /**
-     * An abstract for generic models
+     * @brief An abstract for generic models
      */
     class LIBKAMI_EXPORT Population {
     protected:
@@ -43,7 +44,7 @@ namespace kami {
 
     public:
         /**
-         * Get a reference to an `Agent` by `AgentID`
+         * @brief Get a reference to an `Agent` by `AgentID`
          *
          * @param[in] agent_id the `AgentID` to search for.
          *
@@ -52,21 +53,21 @@ namespace kami {
         [[nodiscard]] std::shared_ptr<Agent> get_agent_by_id(AgentID agent_id) const;
 
         /**
-         * Add an Agent to the Population.
+         * @brief Add an Agent to the Population.
          *
          * @param agent The Agent to add.
          */
         void add_agent(const std::shared_ptr<Agent> &agent);
 
         /**
-         * Remove an Agent from the Population.
+         * @brief Remove an Agent from the Population.
          *
          * @param agent_id The AgentID of the agent to remove.
          */
         void delete_agent(AgentID agent_id);
 
-        /*
-         * Returns the agent list.
+        /**
+         * @brief Returns the agent list.
          */
         std::shared_ptr<std::vector<AgentID>> get_agent_list();
     };

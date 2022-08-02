@@ -37,16 +37,14 @@
 
 namespace kami {
 
-/**
- * Will execute all agent steps in a random order.
- *
- * A random scheduler will iterate over the agents assigned
- * to the scheduler and call their `step()` function in a random order.
- * That order should be different for each subsequent call to `step()`,
- * but is not guaranteed not to repeat.
- *
- * @note First create a Model for the scheduler to live in.
- */
+    /**
+     * @brief Will execute all agent steps in a random order.
+     *
+     * @details A random scheduler will iterate over the agents assigned
+     * to the scheduler and call their `step()` function in a random order.
+     * That order should be different for each subsequent call to `step()`,
+     * but is not guaranteed not to repeat.
+     */
     class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
     private:
         std::shared_ptr<std::ranlux24> _rng = nullptr;
@@ -71,12 +69,15 @@ namespace kami {
          * @details This method will randomize the list of Agents provided
          * then execute the `Agent::step()` method for every Agent listed.
          *
+         * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          */
         void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
 
         /**
-         * Set the random number generator used to randomize the order of agent
+         * @brief Set the RNG
+         *
+         * @details Set the random number generator used to randomize the order of agent
          * stepping.
          *
          * @param rng [in] A uniform random number generator of type `std::mt19937`,
@@ -85,7 +86,9 @@ namespace kami {
         void set_rng(std::shared_ptr<std::ranlux24> rng);
 
         /**
-         * Get a reference to the random number generator used to randomize
+         * @brief Get the RNG
+         *
+         * @details Get a reference to the random number generator used to randomize
          * the order of agent stepping.
          */
         std::shared_ptr<std::ranlux24> get_rng();

@@ -36,16 +36,14 @@
 
 namespace kami {
 
-/**
- * @brief Will execute all agent steps in a sequential order.
- *
- * @details A sequential scheduler will iterate over the agents assigned
- * to the scheduler and call their `step()` function in a sequential order.
- * That order is preserved between calls to `step()` but may be modified by
- * `addAgent()` or `deleteAgent()`.
- *
- * \pre       First create a Model for the scheduler to live in.
- */
+    /**
+     * @brief Will execute all agent steps in a sequential order.
+     *
+     * @details A sequential scheduler will iterate over the agents assigned
+     * to the scheduler and call their `step()` function in a sequential order.
+     * That order is preserved between calls to `step()` but may be modified by
+     * `addAgent()` or `deleteAgent()`.
+     */
     class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     public:
         /**
@@ -55,6 +53,8 @@ namespace kami {
          * scheduler's internal queue and then execute the `Agent::step()`
          * method for every Agent assigned to this scheduler in the order
          * assigned.
+         *
+         * @param model a reference copy of the model
          */
         void step(std::shared_ptr<Model> model);
 
@@ -66,6 +66,7 @@ namespace kami {
          * method for every Agent assigned to this scheduler in the order
          * assigned.
          *
+         * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          */
         virtual void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);

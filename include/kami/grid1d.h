@@ -37,40 +37,40 @@
 
 namespace kami {
 
-/**
- * One-dimensional coordinates
- */
+    /**
+     * @brief One-dimensional coordinates
+     */
     class LIBKAMI_EXPORT GridCoord1D : public GridCoord {
     public:
         /**
-         * Constructor for one-dimensional coordinates
+         * @brief Constructor for one-dimensional coordinates
          */
         explicit GridCoord1D(int x_coord) : _x_coord(x_coord){};
 
         /**
-         * Return the `x` coordinate
+         * @brief Return the `x` coordinate
          */
         [[nodiscard]] int get_x_location() const;
 
         /**
-         * Convert the coordinate to a human-readable string.
+         * @brief Convert the coordinate to a human-readable string.
          *
          * @return a human-readable form of the `Coord` as `std::string`.
          */
         [[nodiscard]] std::string to_string() const override;
 
         /**
-         * Test if two coordinates are equal
+         * @brief Test if two coordinates are equal
          */
         friend bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs);
 
         /**
-         * Test if two coordinates are not equal
+         * @brief Test if two coordinates are not equal
          */
         friend bool operator!=(const GridCoord1D &lhs, const GridCoord1D &rhs);
 
         /**
-         * Output a given coordinate to the specified stream
+         * @brief Output a given coordinate to the specified stream
          */
         friend std::ostream &operator<<(std::ostream &lhs, const GridCoord1D &rhs);
 
@@ -78,18 +78,18 @@ namespace kami {
         int _x_coord;
     };
 
-/**
- * A one-dimensional grid where each cell may contain agents
- *
- * The grid is linear and may wrap around in its only dimension.
- *
- * @see `MultiGrid1D`
- * @see `SoloGrid1D`
- */
+    /**
+     * @brief A one-dimensional grid where each cell may contain agents
+     *
+     * @details The grid is linear and may wrap around in its only dimension.
+     *
+     * @see `MultiGrid1D`
+     * @see `SoloGrid1D`
+     */
     class LIBKAMI_EXPORT Grid1D : public GridDomain {
     public:
         /**
-         * Constructor
+         * @brief Constructor
          *
          * @param[in] maximum_x the length of the grid.
          * @param[in] wrap_x should the grid wrap around on itself.
@@ -97,12 +97,12 @@ namespace kami {
         explicit Grid1D(unsigned int maximum_x, bool wrap_x = false);
 
         /**
-         * Destructor
+         * @brief Destructor
          */
         virtual ~Grid1D();
 
         /**
-         * Place agent on the grid at the specified location.
+         * @brief Place agent on the grid at the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to add.
          * @param[in] coord the coordinates of the agent.
@@ -113,7 +113,7 @@ namespace kami {
         virtual bool add_agent(AgentID agent_id, GridCoord1D coord) = 0;
 
         /**
-         * Remove agent from the grid.
+         * @brief Remove agent from the grid.
          *
          * @param[in] agent_id the `AgentID` of the agent to remove.
          *
@@ -122,7 +122,7 @@ namespace kami {
         bool delete_agent(AgentID agent_id);
 
         /**
-         * Remove agent from the grid at the specified location
+         * @brief Remove agent from the grid at the specified location
          *
          * @param[in] agent_id the `AgentID` of the agent to remove.
          * @param[in] coord the coordinates of the agent.
@@ -132,7 +132,7 @@ namespace kami {
         bool delete_agent(AgentID agent_id, const GridCoord1D &coord);
 
         /**
-         * Move an agent to the specified location.
+         * @brief Move an agent to the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to move.
          * @param[in] coord the coordinates of the agent.
@@ -140,7 +140,7 @@ namespace kami {
         bool move_agent(AgentID agent_id, GridCoord1D coord);
 
         /**
-         * Inquire if the specified location is empty.
+         * @brief Inquire if the specified location is empty.
          *
          * @param[in] coord the coordinates of the query.
          *
@@ -150,7 +150,7 @@ namespace kami {
         [[nodiscard]] bool is_location_empty(const GridCoord1D& coord) const;
 
         /**
-         * Inquire if the specified location is valid within the grid.
+         * @brief Inquire if the specified location is valid within the grid.
          *
          * @param[in] coord the coordinates of the query.
          *
@@ -159,7 +159,7 @@ namespace kami {
         [[nodiscard]] bool is_location_valid(const GridCoord1D& coord) const;
 
         /**
-         * Get the location of the specified agent.
+         * @brief Get the location of the specified agent.
          *
          * @param[in] agent_id the `AgentID` of the agent in question.
          *
@@ -168,7 +168,7 @@ namespace kami {
         [[nodiscard]] GridCoord1D get_location_by_agent(AgentID agent_id) const;
 
         /**
-         * Get the contents of the specified location.
+         * @brief Get the contents of the specified location.
          *
          * @param[in] coord the coordinates of the query.
          *
@@ -180,14 +180,14 @@ namespace kami {
         [[nodiscard]] std::vector<AgentID> *get_location_contents(const GridCoord1D& coord) const;
 
         /**
-         * Inquire to whether the grid wraps in the `x` dimension.
+         * @brief Inquire to whether the grid wraps in the `x` dimension.
          *
          * @return true if the grid wraps, and false otherwise
          */
         [[nodiscard]] bool get_wrap_x() const;
 
         /**
-         * Return the neighborhood of the specified Agent
+         * @brief Return the neighborhood of the specified Agent
          *
          * @param[in] agent_id the `AgentID` of the agent in question
          * @param[in] include_center should the center-point, occupied by the agent,
@@ -199,7 +199,7 @@ namespace kami {
         [[nodiscard]] std::vector<GridCoord1D> get_neighborhood(AgentID agent_id, bool include_center) const;
 
         /**
-         * Return the neighborhood of the specified location
+         * @brief Return the neighborhood of the specified location
          *
          * @param[in] coord the coordinates of the specified location.
          * @param[in] include_center should the center-point, occupied by the agent,
@@ -211,7 +211,7 @@ namespace kami {
         [[nodiscard]] std::vector<GridCoord1D> get_neighborhood(const GridCoord1D& coord, bool include_center) const;
 
         /**
-         * Get the size of the grid in the `x` dimension.
+         * @brief Get the size of the grid in the `x` dimension.
          *
          * @return the length of the grid in the `x` dimension
          */
@@ -219,18 +219,18 @@ namespace kami {
 
     protected:
         /**
-         * A vector containing the `AgentID`s of all agents assigned to this
+         * @brief A vector containing the `AgentID`s of all agents assigned to this
          * grid.
          */
         std::vector<AgentID> *_agent_grid;
 
         /**
-         * A map containing the grid location of each agent.
+         * @brief A map containing the grid location of each agent.
          */
         std::map<AgentID, GridCoord1D> *_agent_index;
 
         /**
-         * Automatically adjust a coordinate location for wrapping.
+         * @brief Automatically adjust a coordinate location for wrapping.
          *
          * @param[in] coord the coordinates of the specified location.
          *

@@ -34,6 +34,7 @@
 
 namespace kami {
 
+    // Forward declarations to clean up a lot of include-file madness
     class Agent;
     class AgentID;
     class Domain;

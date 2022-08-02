@@ -36,9 +36,9 @@
 
 namespace kami {
 
-/**
- * An abstract for generic models
- */
+    /**
+     * @brief An abstract for generic models
+     */
     class LIBKAMI_EXPORT Model : public std::enable_shared_from_this<Model> {
     protected:
         std::shared_ptr<Domain> _domain = nullptr;
@@ -47,18 +47,18 @@ namespace kami {
 
     public:
         /**
-         * Execute a fixed number of time-steps for the model.
+         * @brief Execute a fixed number of time-steps for the model.
          *
-         * This function should execute a fixed number of time-steps for the model.
+         * @details This function should execute a fixed number of time-steps for the model.
          *
          * @param[in] n the number of time steps to execute.
          */
         virtual void run(unsigned int n) = 0;
 
         /**
-         * Execute a single time-step for the model.
+         * @brief Execute a single time-step for the model.
          *
-         * This function should step the model instance.  Any activities that the
+         * @details This function should step the model instance.  Any activities that the
          * model should perform as part of its time step should be in this function.
          */
         virtual void step() = 0;

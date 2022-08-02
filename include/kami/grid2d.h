@@ -37,46 +37,46 @@
 
 namespace kami {
 
-/**
- * Two-dimensional coordinates
- */
+    /**
+     * @brief Two-dimensional coordinates
+     */
     class LIBKAMI_EXPORT GridCoord2D : public GridCoord {
     public:
         /**
-         * Constructor for two-dimensional coordinates
+         * @brief Constructor for two-dimensional coordinates
          */
         GridCoord2D(int x_coord, int y_coord)
                 : _x_coord(x_coord), _y_coord(y_coord){};
 
         /**
-         * Get the coordinate in the first dimension or `x`.
+         * @brief Get the coordinate in the first dimension or `x`.
          */
         [[nodiscard]] int get_x_location() const;
 
         /**
-         * Get the coordinate in the second dimension or `y`.
+         * @brief Get the coordinate in the second dimension or `y`.
          */
         [[nodiscard]] int get_y_location() const;
 
         /**
-         * Convert the coordinate to a human-readable string.
+         * @brief Convert the coordinate to a human-readable string.
          *
          * @return a human-readable form of the `Coord` as `std::string`.
          */
         [[nodiscard]] std::string to_string() const override;
 
         /**
-         * Test if two coordinates are equal
+         * @brief Test if two coordinates are equal
          */
         friend bool operator==(const GridCoord2D &, const GridCoord2D &);
 
         /**
-         * Test if two coordinates are not equal
+         * @brief Test if two coordinates are not equal
          */
         friend bool operator!=(const GridCoord2D &, const GridCoord2D &);
 
         /**
-         * Output a given coordinate to the specified stream
+         * @brief Output a given coordinate to the specified stream
          */
         friend std::ostream &operator<<(std::ostream &, const GridCoord2D &);
 
@@ -84,18 +84,18 @@ namespace kami {
         int _x_coord, _y_coord;
     };
 
-/**
- * A two-dimensional grid where each cell may contain agents
- *
- * The grid is linear and may wrap around in its only dimension.
- *
- * @see `MultiGrid2D`
- * @see `SoloGrid2D`
- */
+    /**
+     * @brief A two-dimensional grid where each cell may contain agents
+     *
+     * @details The grid is linear and may wrap around in its only dimension.
+     *
+     * @see `MultiGrid2D`
+     * @see `SoloGrid2D`
+     */
     class LIBKAMI_EXPORT Grid2D : public GridDomain {
     public:
         /**
-         * Constructor
+         * @brief Constructor
          *
          * @param[in] maximum_x the length of the grid in the first dimension
          * @param[in] maximum_y the length of the grid in the second dimension
@@ -108,12 +108,12 @@ namespace kami {
                bool wrap_y = false);
 
         /**
-         * Destructor
+         * @brief Destructor
          */
         virtual ~Grid2D();
 
         /**
-         * Place agent on the grid at the specified location.
+         * @brief Place agent on the grid at the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to add.
          * @param[in] coord the coordinates of the agent.
@@ -124,7 +124,7 @@ namespace kami {
         virtual bool add_agent(AgentID agent_id, GridCoord2D coord) = 0;
 
         /**
-         * Remove agent from the grid.
+         * @brief Remove agent from the grid.
          *
          * @param[in] agent_id the `AgentID` of the agent to remove.
          *
@@ -133,7 +133,7 @@ namespace kami {
         bool delete_agent(AgentID agent_id);
 
         /**
-         * Remove agent from the grid at the specified location
+         * @brief Remove agent from the grid at the specified location
          *
          * @param[in] agent_id the `AgentID` of the agent to remove.
          * @param[in] coord the coordinates of the agent.
@@ -143,7 +143,7 @@ namespace kami {
         bool delete_agent(AgentID agent_id, const GridCoord2D &coord);
 
         /**
-         * Move an agent to the specified location.
+         * @brief Move an agent to the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to move.
          * @param[in] coord the coordinates of the agent.
@@ -151,7 +151,7 @@ namespace kami {
         bool move_agent(AgentID agent_id, GridCoord2D coord);
 
         /**
-         * Inquire if the specified location is empty.
+         * @brief Inquire if the specified location is empty.
          *
          * @param[in] coord the coordinates of the query.
          *
@@ -161,7 +161,7 @@ namespace kami {
         [[nodiscard]] bool is_location_empty(const GridCoord2D& coord) const;
 
         /**
-         * Inquire if the specified location is valid within the grid.
+         * @brief Inquire if the specified location is valid within the grid.
          *
          * @param[in] coord the coordinates of the query.
          *
@@ -170,7 +170,7 @@ namespace kami {
         [[nodiscard]] bool is_location_valid(const GridCoord2D& coord) const;
 
         /**
-         * Get the location of the specified agent.
+         * @brief Get the location of the specified agent.
          *
          * @param[in] agent_id the `AgentID` of the agent in question.
          *
@@ -179,7 +179,7 @@ namespace kami {
         [[nodiscard]] GridCoord2D get_location_by_agent(AgentID agent_id) const;
 
         /**
-         * Get the contents of the specified location.
+         * @brief Get the contents of the specified location.
          *
          * @param[in] coord the coordinates of the query.
          *
@@ -191,21 +191,21 @@ namespace kami {
         [[nodiscard]] std::vector<AgentID> *get_location_contents(const GridCoord2D& coord) const;
 
         /**
-         * Inquire to whether the grid wraps in the `x` dimension.
+         * @brief Inquire to whether the grid wraps in the `x` dimension.
          *
          * @return true if the grid wraps, and false otherwise
          */
           [[nodiscard]] bool get_wrap_x() const;
 
         /**
-         * Inquire to whether the grid wraps in the `y` dimension.
+         * @brief Inquire to whether the grid wraps in the `y` dimension.
          *
          * @return true if the grid wraps, and false otherwise
          */
         [[nodiscard]] bool get_wrap_y() const;
 
         /**
-         * Return the neighborhood of the specified Agent
+         * @brief Return the neighborhood of the specified Agent
          *
          * @param[in] agent_id the `AgentID` of the agent in question.
          * @param[in] neighborhood_type the neighborhood type.
@@ -220,7 +220,7 @@ namespace kami {
         [[nodiscard]] std::vector<GridCoord2D> get_neighborhood(AgentID agent_id, GridNeighborhoodType neighborhood_type, bool include_center) const;
 
         /**
-         * Return the neighborhood of the specified location
+         * @brief Return the neighborhood of the specified location
          *
          * @param[in] coord the coordinates of the specified location.
          * @param[in] neighborhood_type the neighborhood type.
@@ -235,14 +235,14 @@ namespace kami {
         [[nodiscard]] std::vector<GridCoord2D> get_neighborhood(const GridCoord2D& coord, GridNeighborhoodType neighborhood_type, bool include_center) const;
 
         /**
-         * Get the size of the grid in the `x` dimension.
+         * @brief Get the size of the grid in the `x` dimension.
          *
          * @return the length of the grid in the `x` dimension
          */
         [[nodiscard]] unsigned int get_maximum_x() const;
 
         /**
-         * Get the size of the grid in the `y` dimension.
+         * @brief Get the size of the grid in the `y` dimension.
          *
          * @return the length of the grid in the `xy dimension
          */
@@ -250,18 +250,18 @@ namespace kami {
 
     protected:
         /**
-         * A vector containing the `AgentID`s of all agents assigned to this
+         * @brief  A vector containing the `AgentID`s of all agents assigned to this
          * grid.
          */
         std::vector<AgentID> **_agent_grid;
 
         /**
-         * A map containing the grid location of each agent.
+         * @brief A map containing the grid location of each agent.
          */
         std::map<AgentID, GridCoord2D> *_agent_index;
 
         /**
-         * Automatically adjust a coordinate location for wrapping.
+         * @brief Automatically adjust a coordinate location for wrapping.
          *
          * @param[in] coord the coordinates of the specified location.
          *

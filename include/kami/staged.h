@@ -55,6 +55,8 @@ namespace kami {
          * scheduler's internal queue and then execute the `StagedAgent::step()`
          * method for every StagedAgent assigned to this scheduler in the order
          * assigned.
+         *
+         * @param model a reference copy of the model
          */
         void advance(std::shared_ptr<Model> model);
 
@@ -66,18 +68,22 @@ namespace kami {
          * method for every StagedAgent assigned to this scheduler in the order
          * assigned.
          *
+         * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          */
         void advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
 
     public:
         /**
-         * Execute a single time step.
+         * @brief Execute a single time step
          *
-         * This method will step through the list of Agents in the scheduler's
+         * @details This method will step through the list of Agents in the scheduler's
          * internal queue and execute the `Agent::step()` method for  each `Agent`
          * in the same order.  Finally, it will execute the  `Agent::advance()`
          * method for each Agent in the same order.
+         *
+         * @param model a reference copy of the model
+         * @param agent_list list of agents to execute the step
          */
         void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };

@@ -34,15 +34,18 @@
 
 namespace kami {
 
-/**
- * @brief A one-dimensional grid where each cell may contain only one Agent
- *
- * @details The grid is linear and may wrap around in its only dimension.
- */
+    /**
+     * @brief A one-dimensional grid where each cell may contain one agenta
+     *
+     * @details The grid is linear and may wrap around in its only dimension.
+     *
+     * @see `Grid1D`
+     * @see `MultiGrid1D`
+     */
     class LIBKAMI_EXPORT SoloGrid1D : public Grid1D {
     public:
         /**
-         * Constructor
+         * @brief Constructor
          *
          * @param[in] maximum_x the length of the grid.
          * @param[in] wrap_x should the grid wrap around on itself.
@@ -51,7 +54,7 @@ namespace kami {
                 : Grid1D(maximum_x, wrap_x) {}
 
         /**
-         * Place agent on the grid at the specified location.
+         * @brief Place agent on the grid at the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to add.
          * @param[in] coord the coordinates of the agent.

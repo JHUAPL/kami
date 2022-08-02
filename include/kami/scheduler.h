@@ -30,8 +30,6 @@
 #include <kami/model.h>
 
 namespace kami {
-    class Model;
-
 /**
  * Create a Kami scheduler.
  *
@@ -51,9 +49,11 @@ namespace kami {
          * @brief Execute a single time step.
          *
          * @details This method will step through the list of Agents in the
-         * `Population` and then execute the `Agent::step()`
+         * `Population` associated with `model` and then execute the `Agent::step()`
          * method for every Agent assigned to this scheduler in the order
          * assigned.
+         *
+         * @param model a reference copy of the model
          */
         virtual void step(std::shared_ptr<Model> model) = 0;
 
@@ -65,6 +65,7 @@ namespace kami {
          * method for every Agent assigned to this scheduler in the order
          * assigned.
          *
+         * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          */
         virtual void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
