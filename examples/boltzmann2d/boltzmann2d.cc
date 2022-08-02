@@ -157,7 +157,6 @@ int main(int argc, char **argv) {
 
     auto model = std::make_shared<BoltzmannWealthModel2D>(agent_count, x_size, y_size, initial_seed);
     model->get_scheduler()->set_model(model);
-    model->get_population()->set_model(model);
 
     spdlog::stopwatch sw;
     for(int i = 0; i < max_steps; i++) model->step();

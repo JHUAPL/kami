@@ -40,27 +40,8 @@ namespace kami {
     class LIBKAMI_EXPORT Population {
     protected:
         std::map<kami::AgentID, std::shared_ptr<Agent>> _agent_map;
-        std::shared_ptr<Model> _model = nullptr;
 
     public:
-
-        Population();
-
-        explicit Population(std::shared_ptr<Model> model);
-
-        /**
-         * @brief Get the `Model` associated with this scheduler
-         */
-        std::shared_ptr<Model> get_model();
-
-        /**
-         * @brief Add a `Model` to this scheduler
-         *
-         * @details This method will associate a model with the
-         * scheduler.
-         */
-        [[maybe_unused]] void set_model(std::shared_ptr<Model> model);
-
         /**
          * Get a reference to an `Agent` by `AgentID`
          *

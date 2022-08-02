@@ -28,16 +28,9 @@
 #include <vector>
 
 #include <kami/agent.h>
-#include <kami/model.h>
 #include <kami/population.h>
 
 namespace kami {
-
-    Population::Population() = default;
-
-    Population::Population(std::shared_ptr<Model> model) {
-        this->set_model(std::move(model));
-    }
 
     void Population::add_agent(const std::shared_ptr<Agent> &agent) {
         _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent->get_agent_id(), agent));
@@ -62,14 +55,6 @@ namespace kami {
 
         transform(_agent_map.begin(), _agent_map.end(), agent_ids->begin(), key_selector);
         return std::move(agent_ids);
-    }
-
-    std::shared_ptr<Model> Population::get_model() {
-        return(_model);
-    }
-
-    void Population::set_model(std::shared_ptr<Model> model) {
-        _model = std::move(model);
     }
 
 }  // namespace kami
