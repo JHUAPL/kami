@@ -25,8 +25,6 @@
 
 #include "boltzmann2d.h"
 
-#include <stdio.h>
-
 #include <map>
 #include <memory>
 #include <random>
