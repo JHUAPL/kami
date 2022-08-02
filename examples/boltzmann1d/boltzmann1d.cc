@@ -61,12 +61,14 @@ struct fmt::formatter<kami::GridCoord1D> : fmt::formatter<std::string> {
     }
 };
 
-void MoneyAgent1D::step(std::shared_ptr<kami::Model> model) {
+kami::AgentID MoneyAgent1D::step(std::shared_ptr<kami::Model> model) {
     this->_step_counter++;
 
     console->trace("Agent {} is moving", this->get_agent_id());
     this->move_agent();
     if (_agent_wealth > 0) this->give_money();
+
+    return this->get_agent_id();
 }
 
 void MoneyAgent1D::move_agent() {
@@ -81,14 +83,14 @@ void MoneyAgent1D::move_agent() {
     console->trace("Exiting move_agent");
 }
 
-void MoneyAgent1D::give_money() {
+kami::AgentID MoneyAgent1D::give_money() {
     auto agent_id = get_agent_id();
     auto location = _world->get_location_by_agent(agent_id);
     auto cell_mates = _world->get_location_contents(location);
 
     if (cell_mates->size() > 1) {
         std::uniform_int_distribution<int> dist(0, (int)cell_mates->size() - 1);
-        kami::AgentID other_agent_id = cell_mates->at(dist(*rng));
+        auto other_agent_id = cell_mates->at(dist(*rng));
         auto other_agent = std::dynamic_pointer_cast<MoneyAgent1D>(_population->get_agent_by_id(other_agent_id));
 
         console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);

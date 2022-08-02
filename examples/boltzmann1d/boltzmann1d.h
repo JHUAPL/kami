@@ -55,7 +55,7 @@ public:
     /**
      * Execute a single time-step for the agent
      */
-    void step(std::shared_ptr<kami::Model> model) override;
+    kami::AgentID step(std::shared_ptr<kami::Model> model) override;
 
     /**
      * Move the agent to a random location on the world
@@ -65,7 +65,7 @@ public:
     /**
      * Give money to a random agent
      */
-    void give_money();
+    kami::AgentID give_money();
 
     static void set_world(std::shared_ptr<kami::MultiGrid1D> world) {
         _world = std::move(world);

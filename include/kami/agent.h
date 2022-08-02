@@ -146,7 +146,7 @@ namespace kami {
          *
          * @param model a reference copy of the model
          */
-        virtual void step(std::shared_ptr<Model> model) = 0;
+        virtual AgentID step(std::shared_ptr<Model> model) = 0;
 
         /**
          * @brief Compare if two `Agent`s are the same `Agent`.
@@ -205,7 +205,7 @@ namespace kami {
          * @param model a reference copy of the model
          *
          */
-        virtual void advance(std::shared_ptr<Model> model) = 0;
+        virtual AgentID advance(std::shared_ptr<Model> model) = 0;
     };
 
 }  // namespace kami
