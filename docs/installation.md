@@ -2,10 +2,11 @@
 
 ## Requirements
 
-The core of Kami, `libkami`, has no requirements beyond a modern C++ compiler. However, both the examples provided and
-the unit tests provided rely on three additional C++ packages:
+The core of Kami, `libkami`, has no requirements beyond a modern C++ compiler and `neargye-semver/0.3.0`. However, both the examples provided and
+the unit tests provided rely on three additional C++ packages.  The full list is:
 
 * cli11/1.9.1
+* neargye-semver/0.3.0"
 * spdlog/1.8.5
 * fmt/7.1.3
 

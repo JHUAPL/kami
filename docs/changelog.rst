@@ -1,6 +1,8 @@
 Changelog
 =========
 
+- :support:`0` Numerous documentation cleanups
+- :bug:`0` Numerous code cleanups to remove void returns and eliminate stored Model references
 - :feature:`0` Restructured the entire interface
 - :bug:`0` Numerous build process cleanups
 - :feature:`0` Added support semver versioning via neargye-semver
