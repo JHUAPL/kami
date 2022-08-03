@@ -48,28 +48,34 @@ namespace kami {
          *
          * @param[in] agent_id the `AgentID` to search for.
          *
-         * @return a reference to the desired `Agent` or `nullptr` if not found.
+         * @return a reference to the desired `Agent` or nothing is not found
          */
-        [[nodiscard]] std::shared_ptr<Agent> get_agent_by_id(AgentID agent_id) const;
+        [[nodiscard]] std::optional<std::shared_ptr<Agent>> get_agent_by_id(AgentID agent_id) const;
 
         /**
          * @brief Add an Agent to the Population.
          *
          * @param agent The Agent to add.
+         *
+         * @returns the ID of the agent added
          */
-        void add_agent(const std::shared_ptr<Agent> &agent);
+        AgentID add_agent(const std::shared_ptr<Agent>& agent);
 
         /**
          * @brief Remove an Agent from the Population.
          *
          * @param agent_id The AgentID of the agent to remove.
+         *
+         * @returns a shared pointer to the Agent deleted
          */
-        void delete_agent(AgentID agent_id);
+        std::optional<std::shared_ptr<Agent>> delete_agent(AgentID agent_id);
 
         /**
          * @brief Returns the agent list.
+         *
+         * @returns a `std::vector` of all the `AgentID`'s in the `Population`
          */
-        std::shared_ptr<std::vector<AgentID>> get_agent_list();
+        [[nodiscard]] std::shared_ptr<std::vector<AgentID>> get_agent_list() const;
     };
 }  // namespace kami
 

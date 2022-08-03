@@ -24,6 +24,7 @@
  */
 
 #include <algorithm>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -32,24 +33,31 @@
 
 namespace kami {
 
-    void Population::add_agent(const std::shared_ptr<Agent> &agent) {
-        _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent->get_agent_id(), agent));
+    AgentID Population::add_agent(const std::shared_ptr<Agent>& agent) {
+        auto agent_id = agent->get_agent_id();
+        _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent_id, agent));
+        return(agent->get_agent_id());
     }
 
-    void Population::delete_agent(const AgentID agent_id) {
+    std::optional<std::shared_ptr<Agent>> Population::delete_agent(const AgentID agent_id) {
         auto agent_it = _agent_map.find(agent_id);
 
-        if(agent_it != _agent_map.end()) _agent_map.erase(agent_it);
+        if(agent_it == _agent_map.end())
+            return std::nullopt;
+
+        auto agent = agent_it->second;
+        _agent_map.erase(agent_it);
+        return std::make_optional(agent);
     }
 
-    std::shared_ptr<Agent> Population::get_agent_by_id(const AgentID agent_id) const {
+    std::optional<std::shared_ptr<Agent>> Population::get_agent_by_id(const AgentID agent_id) const {
         auto agent_it = _agent_map.find(agent_id);
 
         if(agent_it != _agent_map.end()) return(agent_it->second);
-        return nullptr;
+        return std::nullopt;
     }
 
-    std::shared_ptr<std::vector<AgentID>> Population::get_agent_list() {
+    std::shared_ptr<std::vector<AgentID>> Population::get_agent_list() const {
         auto key_selector = [](auto pair){ return pair.first; };
         auto agent_ids = std::make_shared<std::vector<AgentID>>(_agent_map.size());
 

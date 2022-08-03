@@ -91,7 +91,7 @@ kami::AgentID MoneyAgent1D::give_money() {
     if (cell_mates->size() > 1) {
         std::uniform_int_distribution<int> dist(0, (int)cell_mates->size() - 1);
         auto other_agent_id = cell_mates->at(dist(*rng));
-        auto other_agent = std::dynamic_pointer_cast<MoneyAgent1D>(_population->get_agent_by_id(other_agent_id));
+        auto other_agent = std::dynamic_pointer_cast<MoneyAgent1D>(_population->get_agent_by_id(other_agent_id).value());
 
         console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
         other_agent->_agent_wealth += 1;

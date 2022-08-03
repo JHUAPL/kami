@@ -45,9 +45,10 @@ namespace kami {
         auto return_agent_list = std::make_shared<std::vector<AgentID>>();
 
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
-            auto agent = std::dynamic_pointer_cast<StagedAgent>(model->get_population()->get_agent_by_id(*agent_id));
-            if(agent != nullptr) {
-                agent->step(model);
+            auto agent_opt = model->get_population()->get_agent_by_id(*agent_id);
+            if(agent_opt) {
+                auto agent = std::dynamic_pointer_cast<StagedAgent>(agent_opt.value());
+                agent->advance(model);
                 return_agent_list->push_back(*agent_id);
             }
         }
