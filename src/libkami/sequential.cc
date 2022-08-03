@@ -49,14 +49,14 @@ namespace kami {
             return std::nullopt;
 
         Scheduler::_step_counter++;
-        for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
-            auto agent_opt = population.value()->get_agent_by_id(*agent_id);
+        for(auto & agent_id : *agent_list) {
+            auto agent_opt = population.value()->get_agent_by_id(agent_id);
 
             if(agent_opt) {
                 auto agent = agent_opt.value();
 
                 agent->step(model);
-                return_agent_list->push_back(*agent_id);
+                return_agent_list->push_back(agent_id);
             }
         }
 

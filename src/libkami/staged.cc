@@ -54,14 +54,14 @@ namespace kami {
         if(!population)
             return std::nullopt;
 
-        for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
-            auto agent_opt = population.value()->get_agent_by_id(*agent_id);
+        for(auto & agent_id : *agent_list) {
+            auto agent_opt = population.value()->get_agent_by_id(agent_id);
 
             if(agent_opt) {
                 auto agent = std::dynamic_pointer_cast<StagedAgent>(agent_opt.value());
 
                 agent->advance(model);
-                return_agent_list->push_back(*agent_id);
+                return_agent_list->push_back(agent_id);
             }
         }
 
