@@ -31,7 +31,9 @@
 
 namespace kami {
 
-    std::shared_ptr<Domain> Model::get_domain() {
+    std::optional<std::shared_ptr<Domain>> Model::get_domain() {
+        if(_domain == nullptr)
+            return std::nullopt;
         return(_domain);
     }
 
@@ -39,7 +41,9 @@ namespace kami {
         _domain = std::move(domain);
     }
 
-    std::shared_ptr<Population> Model::get_population() {
+    std::optional<std::shared_ptr<Population>> Model::get_population() {
+        if(_pop == nullptr)
+            return std::nullopt;
         return(_pop);
     }
 
@@ -47,7 +51,9 @@ namespace kami {
         _pop = std::move(population);
     }
 
-    std::shared_ptr<Scheduler> Model::get_scheduler() {
+    std::optional<std::shared_ptr<Scheduler>> Model::get_scheduler() {
+        if(_sched == nullptr)
+            return std::nullopt;
         return(_sched);
     }
 

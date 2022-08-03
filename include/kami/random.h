@@ -28,6 +28,7 @@
 #define KAMI_RANDOM_H
 
 #include <memory>
+#include <optional>
 #include <random>
 #include <vector>
 
@@ -74,7 +75,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully stepped
          */
-        std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
 
         /**
          * @brief Set the RNG

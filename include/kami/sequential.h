@@ -27,6 +27,8 @@
 #ifndef KAMI_SEQUENTIAL_H
 #define KAMI_SEQUENTIAL_H
 
+#include <memory>
+#include <optional>
 #include <vector>
 
 #include <kami/agent.h>
@@ -58,7 +60,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully stepped
          */
-        std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model) override;
+        std::optional<std::shared_ptr<std::vector<AgentID>>>  step(std::shared_ptr<Model> model) override;
 
         /**
          * @brief Execute a single time step.
@@ -73,7 +75,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully stepped
          */
-        std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

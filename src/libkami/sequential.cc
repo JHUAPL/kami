@@ -23,23 +23,38 @@
  * SOFTWARE.
  */
 
+#include <memory>
+#include <optional>
+#include <vector>
+
 #include <kami/agent.h>
 #include <kami/sequential.h>
 
 namespace kami {
 
-    std::shared_ptr<std::vector<AgentID>> SequentialScheduler::step(std::shared_ptr<Model> model) {
-        return std::move(this->step(model, model->get_population()->get_agent_list()));
+    std::optional<std::shared_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model) {
+        auto population = model->get_population();
+
+        if(!population)
+            return std::nullopt;
+
+        return std::move(this->step(model, population.value()->get_agent_list()));
     }
 
-    std::shared_ptr<std::vector<AgentID>> SequentialScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::optional<std::shared_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
         auto return_agent_list = std::make_shared<std::vector<AgentID>>();
-        Scheduler::_step_counter++;
+        auto population = model->get_population();
 
+        if(!population)
+            return std::nullopt;
+
+        Scheduler::_step_counter++;
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
-            auto agent_opt = model->get_population()->get_agent_by_id(*agent_id);
+            auto agent_opt = population.value()->get_agent_by_id(*agent_id);
+
             if(agent_opt) {
                 auto agent = agent_opt.value();
+
                 agent->step(model);
                 return_agent_list->push_back(*agent_id);
             }

@@ -27,6 +27,10 @@
 #ifndef KAMI_SCHEDULER_H
 #define KAMI_SCHEDULER_H
 
+#include <memory>
+#include <optional>
+#include <vector>
+
 #include <kami/model.h>
 
 namespace kami {
@@ -57,7 +61,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully stepped
          */
-        virtual std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model) = 0;
+        virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) = 0;
 
         /**
          * @brief Execute a single time step.
@@ -72,7 +76,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully stepped
          */
-        virtual std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
+        virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
     };
 
 }  // namespace kami

@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <memory>
+#include <optional>
 #include <random>
 #include <vector>
 
@@ -38,7 +39,7 @@ namespace kami {
         this->set_rng(std::move(rng));
     }
 
-    std::shared_ptr<std::vector<AgentID>> RandomScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::optional<std::shared_ptr<std::vector<AgentID>>> RandomScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
         shuffle(agent_list->begin(),agent_list->end(), *_rng);
         return std::move(this->SequentialScheduler::step(model, agent_list));
     }

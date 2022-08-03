@@ -28,6 +28,7 @@
 #define KAMI_MODEL_H
 
 #include <memory>
+#include <optional>
 
 #include <kami/domain.h>
 #include <kami/kami.h>
@@ -66,7 +67,7 @@ namespace kami {
         /**
          * @brief Get the `Domain` associated with this model
          */
-        std::shared_ptr<Domain> get_domain();
+        std::optional<std::shared_ptr<Domain>> get_domain();
 
         /**
          * @brief Add a `Domain` to this scheduler
@@ -79,7 +80,7 @@ namespace kami {
         /**
          * @brief Get the `Population` associated with this model
          */
-        std::shared_ptr<Population> get_population();
+        std::optional<std::shared_ptr<Population>> get_population();
 
         /**
          * @brief Add a `Model` to this scheduler
@@ -92,7 +93,7 @@ namespace kami {
         /**
          * @brief Get the `Scheduler` associated with this model
          */
-        std::shared_ptr<Scheduler> get_scheduler();
+        std::optional<std::shared_ptr<Scheduler>> get_scheduler();
 
         /**
          * @brief Add a `Model` to this scheduler

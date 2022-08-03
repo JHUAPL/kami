@@ -27,7 +27,8 @@
 #ifndef KAMI_STAGED_H
 #define KAMI_STAGED_H
 
-#include <algorithm>
+#include <memory>
+#include <optional>
 #include <vector>
 
 #include <kami/agent.h>
@@ -58,7 +59,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully advanced
          */
-        std::shared_ptr<std::vector<AgentID>> advance(std::shared_ptr<Model> model);
+        std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model);
 
         /**
          * @brief Advance a single time step.
@@ -73,7 +74,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully advanced
          */
-        std::shared_ptr<std::vector<AgentID>> advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
+        std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
 
     public:
         /**
@@ -89,7 +90,7 @@ namespace kami {
          *
          * @params returns vector of agents successfully stepped
          */
-        std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

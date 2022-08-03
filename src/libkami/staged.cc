@@ -24,6 +24,7 @@
  */
 
 #include <memory>
+#include <optional>
 #include <vector>
 
 #include <kami/agent.h>
@@ -32,22 +33,33 @@
 
 namespace kami {
 
-    std::shared_ptr<std::vector<AgentID>> StagedScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
         this->SequentialScheduler::step(model, agent_list);
         return std::move(this->advance(model, agent_list));
     }
 
-    std::shared_ptr<std::vector<AgentID>> StagedScheduler::advance(std::shared_ptr<Model> model) {
-        return std::move(this->advance(model, model->get_population()->get_agent_list()));
+    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model) {
+        auto population = model->get_population();
+
+        if(!population)
+            return std::nullopt;
+
+        return std::move(this->advance(model, population.value()->get_agent_list()));
     }
 
-    std::shared_ptr<std::vector<AgentID>> StagedScheduler::advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
         auto return_agent_list = std::make_shared<std::vector<AgentID>>();
+        auto population = model->get_population();
+
+        if(!population)
+            return std::nullopt;
 
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
-            auto agent_opt = model->get_population()->get_agent_by_id(*agent_id);
+            auto agent_opt = population.value()->get_agent_by_id(*agent_id);
+
             if(agent_opt) {
                 auto agent = std::dynamic_pointer_cast<StagedAgent>(agent_opt.value());
+
                 agent->advance(model);
                 return_agent_list->push_back(*agent_id);
             }

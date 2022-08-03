@@ -17,7 +17,6 @@ create_library(NAME         libkami
                    multigrid2d.cc
                    population.cc
                    random.cc
-                   scheduler.cc
                    sequential.cc
                    sologrid1d.cc
                    sologrid2d.cc
