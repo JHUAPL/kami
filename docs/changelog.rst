@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :feature:`0` Added a barebones "starter" model to build from
 - :support:`0` Numerous documentation cleanups
 - :bug:`0` Numerous code cleanups to remove void returns and eliminate stored Model references
 - :feature:`0` Restructured the entire interface
