@@ -97,6 +97,8 @@ kami::AgentID MoneyAgent1D::give_money() {
         other_agent->_agent_wealth += 1;
         _agent_wealth -= 1;
     }
+
+    return agent_id;
 }
 
 BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents, unsigned int length_x, unsigned int new_seed) {

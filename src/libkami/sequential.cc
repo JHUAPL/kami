@@ -28,17 +28,23 @@
 
 namespace kami {
 
-    void SequentialScheduler::step(std::shared_ptr<Model> model) {
-        this->step(model, model->get_population()->get_agent_list());
+    std::shared_ptr<std::vector<AgentID>> SequentialScheduler::step(std::shared_ptr<Model> model) {
+        return std::move(this->step(model, model->get_population()->get_agent_list()));
     }
 
-    void SequentialScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::shared_ptr<std::vector<AgentID>> SequentialScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+        auto return_agent_list = std::make_shared<std::vector<AgentID>>();
         Scheduler::_step_counter++;
 
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
             auto agent = model->get_population()->get_agent_by_id(*agent_id);
-            if(agent != nullptr) agent->step(model);
+            if(agent != nullptr) {
+                agent->step(model);
+                return_agent_list->push_back(*agent_id);
+            }
         }
+
+        return std::move(return_agent_list);
     }
 
 }  // namespace kami

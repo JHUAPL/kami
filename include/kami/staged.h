@@ -55,8 +55,10 @@ namespace kami {
          * assigned.
          *
          * @param model a reference copy of the model
+         *
+         * @params returns vector of agents successfully advanced
          */
-        void advance(std::shared_ptr<Model> model);
+        std::shared_ptr<std::vector<AgentID>> advance(std::shared_ptr<Model> model);
 
         /**
          * @brief Advance a single time step.
@@ -68,8 +70,10 @@ namespace kami {
          *
          * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
+         *
+         * @params returns vector of agents successfully advanced
          */
-        void advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
+        std::shared_ptr<std::vector<AgentID>> advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
 
     public:
         /**
@@ -82,8 +86,10 @@ namespace kami {
          *
          * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
+         *
+         * @params returns vector of agents successfully stepped
          */
-        void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

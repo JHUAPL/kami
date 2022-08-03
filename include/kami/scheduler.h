@@ -54,8 +54,10 @@ namespace kami {
          * assigned.
          *
          * @param model a reference copy of the model
+         *
+         * @params returns vector of agents successfully stepped
          */
-        virtual void step(std::shared_ptr<Model> model) = 0;
+        virtual std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model) = 0;
 
         /**
          * @brief Execute a single time step.
@@ -67,8 +69,10 @@ namespace kami {
          *
          * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
+         *
+         * @params returns vector of agents successfully stepped
          */
-        virtual void step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
+        virtual std::shared_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
     };
 
 }  // namespace kami

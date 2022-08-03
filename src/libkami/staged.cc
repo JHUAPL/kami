@@ -32,20 +32,27 @@
 
 namespace kami {
 
-    void StagedScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::shared_ptr<std::vector<AgentID>> StagedScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
         this->SequentialScheduler::step(model, agent_list);
-        this->advance(model, agent_list);
+        return std::move(this->advance(model, agent_list));
     }
 
-    void StagedScheduler::advance(std::shared_ptr<Model> model) {
-        this->advance(model, model->get_population()->get_agent_list());
+    std::shared_ptr<std::vector<AgentID>> StagedScheduler::advance(std::shared_ptr<Model> model) {
+        return std::move(this->advance(model, model->get_population()->get_agent_list()));
     }
 
-    void StagedScheduler::advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+    std::shared_ptr<std::vector<AgentID>> StagedScheduler::advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+        auto return_agent_list = std::make_shared<std::vector<AgentID>>();
+
         for(auto agent_id = agent_list->begin(); agent_id < agent_list->end(); agent_id++) {
             auto agent = std::dynamic_pointer_cast<StagedAgent>(model->get_population()->get_agent_by_id(*agent_id));
-            if(agent != nullptr) agent->advance(model);
+            if(agent != nullptr) {
+                agent->step(model);
+                return_agent_list->push_back(*agent_id);
+            }
         }
+
+        return std::move(return_agent_list);
     }
 
 }  // namespace kami
