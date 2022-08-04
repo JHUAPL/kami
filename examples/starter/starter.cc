@@ -53,6 +53,14 @@ struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
     }
 };
 
+StarterAgent::StarterAgent() {
+    console->debug("StarterAgent with ID {} constructed", this->get_agent_id());
+}
+
+StarterAgent::~StarterAgent() {
+    console->debug("StarterAgent with ID {} deconstructed", this->get_agent_id());
+}
+
 kami::AgentID StarterAgent::step(std::shared_ptr<kami::Model> model) {
     this->_step_counter++;
     return this->get_agent_id();

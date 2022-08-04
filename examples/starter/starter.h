@@ -32,20 +32,32 @@
 
 #include <kami/agent.h>
 #include <kami/kami.h>
-#include <kami/multigrid1d.h>
 #include <kami/random.h>
 
 /**
  * A starter agent for a starter model
  */
 class StarterAgent : public kami::Agent {
+private:
     int _step_counter = 0;
 
 public:
+
+    /**
+     * Constructor
+     */
+    StarterAgent();
+
+    /**
+     * Deconstructor
+     */
+    ~StarterAgent();
+
     /**
      * Execute a single time-step for the agent
      */
     kami::AgentID step(std::shared_ptr<kami::Model> model) override;
+
 };
 
 /**
