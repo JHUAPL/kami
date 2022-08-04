@@ -60,7 +60,7 @@ namespace kami {
      *
      * @return the version as a `semver` object
      */
-    constexpr semver::version version{KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH};
+    constexpr auto version = semver::version{KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH};
 
 }  // namespace kami
 
