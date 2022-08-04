@@ -40,15 +40,18 @@ conan create . kami/develop
 ## Direct Dependencies
 
 * [CLI11](https://github.com/CLIUtils/CLI11)
+* [Google Test](https://github.com/google/googletest)
+* [neargye-semver](https://github.com/Neargye/semver)
 * [spdlog](https://github.com/gabime/spdlog)
 
-CLI11 and spdlog are both used extensively in the examples and unit
-tests.  Neither is used directly by the Kami library.
+CLI11 and spdlog are both used extensively in the examples.
+Neither is used directly by the Kami library.
 
 ## Contribution guidelines
 
 * Use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/)
-
+* Use [Google Test](https://github.com/google/googletest)
+ 
 ## For more information
 
 * James P. Howard, II <<james.howard@jhu.edu>>

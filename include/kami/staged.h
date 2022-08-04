@@ -40,7 +40,7 @@ namespace kami {
     /**
      * @brief Will execute all agent steps in a sequential order.
      *
-     * @detais A sequential scheduler will iterate over the agents assigned to the scheduler
+     * @details A sequential scheduler will iterate over the agents assigned to the scheduler
      * and call their `step()` function in a sequential order. That order is
      * preserved between calls to `step()` but may be modified by `add_agent()` or
      * `delete_agent()`.
@@ -57,7 +57,7 @@ namespace kami {
          *
          * @param model a reference copy of the model
          *
-         * @params returns vector of agents successfully advanced
+         * @returns returns vector of agents successfully advanced
          */
         std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model);
 
@@ -72,7 +72,7 @@ namespace kami {
          * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          *
-         * @params returns vector of agents successfully advanced
+         * @returns returns vector of agents successfully advanced
          */
         std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
 
@@ -88,7 +88,7 @@ namespace kami {
          * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          *
-         * @params returns vector of agents successfully stepped
+         * @returns returns vector of agents successfully stepped
          */
         std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };

@@ -40,6 +40,14 @@ namespace kami {
      */
     class LIBKAMI_EXPORT Population {
     protected:
+        /**
+         * @brief A mapping of `AgentID` to `Agent` pointers
+         *
+         * @details This is the mapping of all `AgentID`s to
+         * pointers to the corresponding `Agent` in this population.
+         * This is left exposed as protected should any subclass
+         * wish to manipulate this mapping directly.
+         */
         std::map<kami::AgentID, std::shared_ptr<Agent>> _agent_map;
 
     public:

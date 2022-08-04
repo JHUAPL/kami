@@ -42,6 +42,11 @@ namespace kami {
     class Population;
     class Scheduler;
 
+    /**
+     * @brief Get the current version of Kami
+     *
+     * @return a `semver::version` object containing version information
+     */
     inline semver::version get_version() { return version; }
 
 }  // namespace kami

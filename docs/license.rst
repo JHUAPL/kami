@@ -1,7 +1,7 @@
 License
 =======
 
-Copyright (c) 2020 The Johns Hopkins University Applied Physics
+Copyright (c) 2020-2022 The Johns Hopkins University Applied Physics
 Laboratory LLC
 
 Permission is hereby granted, free of charge, to any person

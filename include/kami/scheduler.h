@@ -59,7 +59,7 @@ namespace kami {
          *
          * @param model a reference copy of the model
          *
-         * @params returns vector of agents successfully stepped
+         * @returns returns vector of agents successfully stepped
          */
         virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) = 0;
 
@@ -74,7 +74,7 @@ namespace kami {
          * @param model a reference copy of the model
          * @param agent_list list of agents to execute the step
          *
-         * @params returns vector of agents successfully stepped
+         * @returns returns vector of agents successfully stepped
          */
         virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
     };
