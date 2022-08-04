@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_SCHEDULER_H
+//! @cond SuppressGuard
 #define KAMI_SCHEDULER_H
+//! @endcond
 
 #include <memory>
 #include <optional>

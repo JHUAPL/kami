@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_KAMI_H
+//! @cond SuppressGuard
 #define KAMI_KAMI_H
+//! @endcond
 
 #include <semver.hpp>
 

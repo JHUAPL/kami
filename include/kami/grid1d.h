@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_GRID1D_H
+//! @cond SuppressGuard
 #define KAMI_GRID1D_H
+//! @endcond
 
 #include <iostream>
 #include <map>

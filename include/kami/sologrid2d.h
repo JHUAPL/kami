@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_SOLOGRID2D_H
+//! @cond SuppressGuard
 #define KAMI_SOLOGRID2D_H
+//! @endcond
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>

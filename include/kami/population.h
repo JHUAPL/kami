@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_POPULATION_H
+//! @cond SuppressGuard
 #define KAMI_POPULATION_H
+//! @endcond
 
 #include <map>
 #include <vector>

@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_STAGED_H
+//! @cond SuppressGuard
 #define KAMI_STAGED_H
+//! @endcond
 
 #include <memory>
 #include <optional>

@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_MODEL_H
+//! @cond SuppressGuard
 #define KAMI_MODEL_H
+//! @endcond
 
 #include <memory>
 #include <optional>

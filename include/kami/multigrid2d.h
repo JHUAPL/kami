@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_MULTIGRID2D_H
+//! @cond SuppressGuard
 #define KAMI_MULTIGRID2D_H
+//! @endcond
 
 #include <kami/agent.h>
 #include <kami/domain.h>

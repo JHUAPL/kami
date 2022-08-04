@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_SEQUENTIAL_H
+//! @cond SuppressGuard
 #define KAMI_SEQUENTIAL_H
+//! @endcond
 
 #include <memory>
 #include <optional>

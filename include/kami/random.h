@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_RANDOM_H
+//! @cond SuppressGuard
 #define KAMI_RANDOM_H
+//! @endcond
 
 #include <memory>
 #include <optional>

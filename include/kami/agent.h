@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_AGENT_H
+//! @cond SuppressGuard
 #define KAMI_AGENT_H
+//! @endcond
 
 #include <iostream>
 #include <memory>
@@ -36,15 +38,15 @@
 
 namespace kami {
 
-/**
- * @brief A unique identifier for each `Agent`.
- *
- * @details The unique identifier permits ordering to allow `AgentID`s to be used as keys
- * for `std::map`. The unique identifier is unique for the session, however,
- * `AgentID`s are not guaranteed to be unique from session-to-session.
- *
- * @see Agent
- */
+    /**
+     * @brief A unique identifier for each `Agent`.
+     *
+     * @details The unique identifier permits ordering to allow `AgentID`s to be used as keys
+     * for `std::map`. The unique identifier is unique for the session, however,
+     * `AgentID`s are not guaranteed to be unique from session-to-session.
+     *
+     * @see Agent
+     */
     class LIBKAMI_EXPORT AgentID {
     private:
         inline static long long _id_next = 1;
@@ -63,7 +65,7 @@ namespace kami {
         /**
          * @brief Constructs a new unique identifier.
          */
-        AgentID() : _id(_id_next++){};
+        AgentID() : _id(_id_next++) {};
 
         /**
          * @brief Convert the identifier to a human-readable string.
@@ -117,15 +119,15 @@ namespace kami {
         friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
     };
 
-/**
- * @brief A superclass for all agents.
- *
- * @details All agents should subclass the `Agent` class. At a minimum, subclasses must
- * implement the `step()` function, to execute a single time step for each
- * agent.
- *
- * @see `StagedAgent`
- */
+    /**
+     * @brief A superclass for all agents.
+     *
+     * @details All agents should subclass the `Agent` class. At a minimum, subclasses must
+     * implement the `step()` function, to execute a single time step for each
+     * agent.
+     *
+     * @see `StagedAgent`
+     */
     class LIBKAMI_EXPORT Agent {
     private:
         const AgentID _agent_id;

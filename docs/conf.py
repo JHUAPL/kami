@@ -1,10 +1,11 @@
-import subprocess, os
+import os
+import subprocess
 
 from documenteer.sphinxconfig.utils import form_ltd_edition_name
 
-def configureDoxyfile(input_dir, output_dir):
 
-    with open('Doxyfile.in', 'r') as file :
+def configureDoxyfile(input_dir, output_dir):
+    with open('Doxyfile.in', 'r') as file:
         filedata = file.read()
 
     filedata = filedata.replace('@DOXYGEN_INPUT_DIR@', input_dir)
@@ -26,7 +27,7 @@ if read_the_docs_build:
 # -- Project information -----------------------------------------------------
 
 project = 'Kami'
-copyright = '2020-2021 The Johns Hopkins University Applied Physics Laboratory LLC'
+copyright = '2020-2022 The Johns Hopkins University Applied Physics Laboratory LLC'
 author = 'James P. Howard, II <james.howard@jhu.edu>'
 
 # -- General configuration ---------------------------------------------------
@@ -177,7 +178,7 @@ html_theme_options = {
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'kami', u'Kami: Agent-Based Modeling in Modern C++',
-     [author], 3)
+     [author], '3kami')
 ]
 
 # If true, show URL addresses after external links.

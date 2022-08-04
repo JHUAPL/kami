@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_DOMAIN_H
+//! @cond SuppressGuard
 #define KAMI_DOMAIN_H
+//! @endcond
 
 #include <string>
 
