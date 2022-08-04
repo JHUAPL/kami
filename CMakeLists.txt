@@ -193,3 +193,5 @@ install(
 )
 
 add_subdirectory(docs)
+
+set(ignoreMe "${CMAKE_C_COMPILER}")
