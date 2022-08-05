@@ -55,12 +55,14 @@
 
 namespace kami {
 
-    /**
-     * @brief A reference copy of the current version of Kami
-     *
-     * @return the version as a `semver` object
-     */
-    constexpr auto version = semver::version{KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH};
+    namespace {
+        /**
+         * @brief A reference copy of the current version of Kami
+         *
+         * @return the version as a `semver` object
+         */
+        constexpr auto version = semver::version{KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH};
+    }
 
 }  // namespace kami
 
