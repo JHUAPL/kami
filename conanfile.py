@@ -48,3 +48,4 @@ class KamiConan(ConanFile):
         self.requires("spdlog/1.8.5")
         self.requires("cli11/1.9.1")
         self.requires("neargye-semver/0.3.0")
+        self.requires("gtest/cci.20210126")
