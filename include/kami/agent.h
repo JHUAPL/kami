@@ -183,18 +183,18 @@ namespace kami {
         friend bool operator!=(const Agent &lhs, const Agent &rhs);
     };
 
-/**
- * @brief A superclass for all staged agents.
- *
- * @details Staged agents use a two-phase step to allow agents to take actions without
- * updating the state of the model before all agents have been allowed to
- * update.  All work necessary to advance the `StagedAgent` state should take
- * place in the `step()` function.  However, the `StagedAgent` should not actually
- * update the state, and instead save the results for later use.  Finally,
- * during the `advance()` stage, the StagedAgent state should update.
- *
- * `StagedAgents` must implement both the `step()` and `advance()` functions.
- */
+    /**
+     * @brief A superclass for all staged agents.
+     *
+     * @details Staged agents use a two-phase step to allow agents to take actions without
+     * updating the state of the model before all agents have been allowed to
+     * update.  All work necessary to advance the `StagedAgent` state should take
+     * place in the `step()` function.  However, the `StagedAgent` should not actually
+     * update the state, and instead save the results for later use.  Finally,
+     * during the `advance()` stage, the StagedAgent state should update.
+     *
+     * `StagedAgents` must implement both the `step()` and `advance()` functions.
+     */
     class LIBKAMI_EXPORT StagedAgent : public Agent {
     public:
         /**
