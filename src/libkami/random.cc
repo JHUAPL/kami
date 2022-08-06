@@ -36,7 +36,7 @@
 namespace kami {
 
     RandomScheduler::RandomScheduler(std::shared_ptr<std::ranlux24> rng) {
-        this->set_rng(std::move(rng));
+        this->_rng = std::move(rng);
     }
 
     std::optional<std::shared_ptr<std::vector<AgentID>>> RandomScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
@@ -44,8 +44,9 @@ namespace kami {
         return std::move(this->SequentialScheduler::step(model, agent_list));
     }
 
-    void RandomScheduler::set_rng(std::shared_ptr<std::ranlux24> rng) {
+    std::shared_ptr<RandomScheduler> RandomScheduler::set_rng(std::shared_ptr<std::ranlux24> rng) {
         this->_rng = std::move(rng);
+        return shared_from_this();
     }
 
     std::shared_ptr<std::ranlux24> RandomScheduler::get_rng() { return (this->_rng); }

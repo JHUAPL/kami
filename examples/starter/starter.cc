@@ -88,20 +88,22 @@ StarterModel::StarterModel(unsigned int number_agents, unsigned int new_seed) {
     }
 }
 
-void StarterModel::run(unsigned int steps) {
+std::shared_ptr<kami::Model> StarterModel::run(unsigned int steps) {
     for (auto i = 0; i < steps; i++) step();
+    return shared_from_this();
 }
 
-void StarterModel::step() {
+std::shared_ptr<kami::Model> StarterModel::step() {
     console->trace("Executing model step {}", ++_step_count);
     _sched->step(shared_from_this());
+    return shared_from_this();
 }
 
 int main(int argc, char **argv) {
     std::string ident = "starter";
     std::string log_level_option = "info";
     CLI::App app{ident};
-    unsigned int agent_count = 100, max_steps = 100, initial_seed = 42;
+    unsigned int agent_count = 100, max_steps = 100, initial_seed = 8675309;
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
     app.add_option("-l", log_level_option, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
@@ -117,6 +119,8 @@ int main(int argc, char **argv) {
     auto model = std::make_shared<StarterModel>(agent_count, initial_seed);
 
     spdlog::stopwatch sw;
-    for(int i = 0; i < max_steps; i++) model->step();
+    for (int i = 0; i < max_steps; i++)
+        model->step();
+
     console->info("Starter Model simulation complete, requiring {} seconds", sw);
 }

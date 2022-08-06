@@ -25,11 +25,14 @@
 
 #pragma once
 #ifndef BOLTZMANN2D_H
+//! @cond SuppressGuard
 #define BOLTZMANN2D_H
+//! @endcond
 
 #include <iostream>
 #include <map>
 #include <memory>
+#include <optional>
 
 #include <kami/agent.h>
 #include <kami/kami.h>
@@ -41,12 +44,6 @@
  * A sample agent for a two-dimensional Boltzmann wealth model
  */
 class MoneyAgent2D : public kami::Agent {
-private:
-    inline static std::shared_ptr<kami::MultiGrid2D> _world = nullptr;
-    inline static std::shared_ptr<kami::Population> _population = nullptr;
-
-    int _step_counter;
-    int _agent_wealth;
 
 public:
     /**
@@ -62,28 +59,23 @@ public:
     /**
      * Move the agent to a random location on the world
      */
-    void move_agent();
+    kami::GridCoord2D move_agent(std::shared_ptr<kami::Model> model);
 
     /**
      * Give money to a random agent
      */
-    void give_money();
+    std::optional<kami::AgentID> give_money(std::shared_ptr<kami::Model> model);
 
-    static void set_world(std::shared_ptr<kami::MultiGrid2D> world) {
-        _world = std::move(world);
-    }
+private:
+    int _step_counter;
+    int _agent_wealth;
 
-    static void set_population(std::shared_ptr<kami::Population> population) {
-        _population = std::move(population);
-    }
 };
 
 /**
  * The two-dimensional Boltzmann wealth model
  */
 class BoltzmannWealthModel2D : public kami::Model {
-private:
-    unsigned int _step_count;
 
 public:
     /**
@@ -102,14 +94,18 @@ public:
     /**
      * Execute a single time-step for the model.
      */
-    void step() override;
+    std::shared_ptr<kami::Model> step() override;
 
     /**
      * Execute a number of time-steps for the model.
      *
      * @param[in] n the number of steps to execute.
      */
-    void run(unsigned int n) override;
+    std::shared_ptr<kami::Model> run(unsigned int n) override;
+
+private:
+    unsigned int _step_count;
+
 };
 
 #endif  // BOLTZMANN2D_H

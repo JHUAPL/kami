@@ -48,7 +48,7 @@ namespace kami {
      * That order should be different for each subsequent call to `step()`,
      * but is not guaranteed not to repeat.
      */
-    class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler {
+    class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler, std::enable_shared_from_this<RandomScheduler> {
     private:
         std::shared_ptr<std::ranlux24> _rng = nullptr;
 
@@ -87,8 +87,10 @@ namespace kami {
          *
          * @param rng [in] A uniform random number generator of type `std::mt19937`,
          * used as the source of randomness.
+         *
+         * @returns a shared pointer to this instance of `RandomScheduler`
          */
-        void set_rng(std::shared_ptr<std::ranlux24> rng);
+        std::shared_ptr<RandomScheduler> set_rng(std::shared_ptr<std::ranlux24> rng);
 
         /**
          * @brief Get the RNG

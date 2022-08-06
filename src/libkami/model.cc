@@ -37,8 +37,9 @@ namespace kami {
         return(_domain);
     }
 
-    void Model::set_domain(std::shared_ptr<Domain> domain) {
+    std::shared_ptr<Domain> Model::set_domain(std::shared_ptr<Domain> domain) {
         _domain = std::move(domain);
+        return _domain;
     }
 
     std::optional<std::shared_ptr<Population>> Model::get_population() {
@@ -47,8 +48,9 @@ namespace kami {
         return(_pop);
     }
 
-    void Model::set_population(std::shared_ptr<Population> population) {
+    std::shared_ptr<Population> Model::set_population(std::shared_ptr<Population> population) {
         _pop = std::move(population);
+        return _pop;
     }
 
     std::optional<std::shared_ptr<Scheduler>> Model::get_scheduler() {
@@ -57,8 +59,9 @@ namespace kami {
         return(_sched);
     }
 
-    void Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
+    std::shared_ptr<Scheduler> Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
         _sched = std::move(scheduler);
+        return _sched;
     }
 
 }  // namespace kami

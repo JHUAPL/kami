@@ -43,10 +43,6 @@ namespace kami {
      * @brief An abstract for generic models
      */
     class LIBKAMI_EXPORT Model : public std::enable_shared_from_this<Model> {
-    protected:
-        std::shared_ptr<Domain> _domain = nullptr;
-        std::shared_ptr<Population> _pop = nullptr;
-        std::shared_ptr<Scheduler> _sched = nullptr;
 
     public:
         /**
@@ -55,19 +51,25 @@ namespace kami {
          * @details This function should execute a fixed number of time-steps for the model.
          *
          * @param[in] n the number of time steps to execute.
+         *
+         * @returns a shared pointer to this instance of `Model`
          */
-        virtual void run(unsigned int n) = 0;
+        virtual std::shared_ptr<Model> run(unsigned int n) = 0;
 
         /**
          * @brief Execute a single time-step for the model.
          *
          * @details This function should step the model instance.  Any activities that the
          * model should perform as part of its time step should be in this function.
+         *
+         * @returns a shared pointer to this instance of `Model`
          */
-        virtual void step() = 0;
+        virtual std::shared_ptr<Model> step() = 0;
 
         /**
          * @brief Get the `Domain` associated with this model
+         *
+         * @returns a shared pointer to the `Domain`
          */
         std::optional<std::shared_ptr<Domain>> get_domain();
 
@@ -76,11 +78,15 @@ namespace kami {
          *
          * @details This method will associate a model with the
          * scheduler.
+         *
+         * @returns a shared pointer to the `Domain`
          */
-        void set_domain(std::shared_ptr<Domain> domain);
+        std::shared_ptr<Domain> set_domain(std::shared_ptr<Domain> domain);
 
         /**
          * @brief Get the `Population` associated with this model
+         *
+         * @returns a shared pointer to the `Population`
          */
         std::optional<std::shared_ptr<Population>> get_population();
 
@@ -89,11 +95,15 @@ namespace kami {
          *
          * @details This method will associate a model with the
          * scheduler.
+         *
+         * @returns a shared pointer to the `Population`
          */
-        void set_population(std::shared_ptr<Population> population);
+        std::shared_ptr<Population> set_population(std::shared_ptr<Population> population);
 
         /**
          * @brief Get the `Scheduler` associated with this model
+         *
+         * @returns a shared pointer to the `Scheduler`
          */
         std::optional<std::shared_ptr<Scheduler>> get_scheduler();
 
@@ -102,8 +112,16 @@ namespace kami {
          *
          * @details This method will associate a model with the
          * scheduler.
+         *
+         * @returns a shared pointer to the `Scheduler`
          */
-        void set_scheduler(std::shared_ptr<Scheduler> scheduler);
+        std::shared_ptr<Scheduler> set_scheduler(std::shared_ptr<Scheduler> scheduler);
+
+    protected:
+        std::shared_ptr<Domain> _domain = nullptr;
+        std::shared_ptr<Population> _pop = nullptr;
+        std::shared_ptr<Scheduler> _sched = nullptr;
+
     };
 
 }  // namespace kami

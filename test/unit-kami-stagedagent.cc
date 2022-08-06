@@ -43,9 +43,13 @@ public:
 
 class TestModel : public kami::Model {
 public:
-    void step() override {}
+    std::shared_ptr<kami::Model> step() override {
+        return shared_from_this();
+    }
 
-    void run(unsigned int) override {}
+    std::shared_ptr<kami::Model> run(unsigned int) override {
+        return shared_from_this();
+    }
 };
 
 TEST(Agent, DefaultConstructor) {

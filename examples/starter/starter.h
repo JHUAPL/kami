@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef STARTER_H
+//! @cond SuppressGuard
 #define STARTER_H
+//! @endcond
 
 #include <iostream>
 #include <map>
@@ -80,14 +82,14 @@ public:
     /**
      * Execute a single time-step for the model.
      */
-    void step() override;
+    std::shared_ptr<kami::Model> step() override;
 
     /**
      * Execute a number of time-steps for the model.
      *
      * @param[in] n the number of steps to execute.
      */
-    void run(unsigned int n) override;
+    std::shared_ptr<kami::Model> run(unsigned int n) override;
 };
 
 #endif  // STARTER_H
