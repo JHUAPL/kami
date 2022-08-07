@@ -58,7 +58,7 @@ namespace kami {
             auto agent_opt = population.value()->get_agent_by_id(agent_id);
 
             if(agent_opt) {
-                auto agent = std::dynamic_pointer_cast<StagedAgent>(agent_opt.value());
+                auto agent = std::static_pointer_cast<StagedAgent>(agent_opt.value());
 
                 agent->advance(model);
                 return_agent_list->push_back(agent_id);
