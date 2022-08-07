@@ -118,8 +118,19 @@ namespace kami {
         std::shared_ptr<Scheduler> set_scheduler(std::shared_ptr<Scheduler> scheduler);
 
     protected:
+        /**
+        * @brief Reference copy of the `Domain`
+        */
         std::shared_ptr<Domain> _domain = nullptr;
+
+        /**
+        * @brief Reference copy of the `Population`
+        */
         std::shared_ptr<Population> _pop = nullptr;
+
+        /**
+        * @brief Reference copy of the `Scheduler`
+        */
         std::shared_ptr<Scheduler> _sched = nullptr;
 
     };
