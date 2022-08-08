@@ -25,9 +25,32 @@
 
 #pragma once
 #ifndef KAMI_KAMI_H
+//! @cond SuppressGuard
 #define KAMI_KAMI_H
+//! @endcond
+
+#include <semver.hpp>
 
 #include <kami/KAMI_EXPORT.h>
 #include <kami/config.h>
+
+namespace kami {
+
+    // Forward declarations to clean up a lot of include-file madness
+    class Agent;
+    class AgentID;
+    class Domain;
+    class Model;
+    class Population;
+    class Scheduler;
+
+    /**
+     * @brief Get the current version of Kami
+     *
+     * @return a `semver::version` object containing version information
+     */
+    inline semver::version get_version() { return version; }
+
+}  // namespace kami
 
 #endif  // KAMI_KAMI_H

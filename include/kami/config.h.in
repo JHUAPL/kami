@@ -29,36 +29,42 @@
  * In the source code, include "exampleConfig.h" (no .in suffix).
  * This header file will be generated, and filled with the
  * right definition values. Change the namings as you wish,
- * but make sure they match up with whats in CMakeLists.txt.
+ * but make sure they match up with what's in CMakeLists.txt.
  */
 
 #pragma once
 #ifndef KAMI_CONFIG_H
 #define KAMI_CONFIG_H
 
+#include <semver.hpp>
+
 /**
  * The major version of the Kami library.
  */
-#define KAMI_VERSION_MAJOR @KAMI_VERSION_MAJOR @
+#define KAMI_VERSION_MAJOR @KAMI_VERSION_MAJOR@
 
 /**
  * The minor version of the Kami library.
  */
-#define KAMI_VERSION_MINOR @KAMI_VERSION_MINOR @
+#define KAMI_VERSION_MINOR @KAMI_VERSION_MINOR@
 
 /**
  * The patch level of the Kami library.
  */
-#define KAMI_VERSION_PATCH @KAMI_VERSION_PATCH @
+#define KAMI_VERSION_PATCH @KAMI_VERSION_PATCH@
 
-/**
- * The version of the Kami library as a `char*` constant.
- */
-#define KAMI_VERSION_STRING "@KAMI_VERSION_STRING@"
+namespace kami {
 
-/**
- * The Kami library identifier as a `char *` constant.
- */
-#define KAMI_VERSION_ID "Kami/@KAMI_VERSION_STRING@"
+    namespace {
+        /**
+         * @brief A reference copy of the current version of Kami
+         *
+         * @return the version as a `semver` object
+         */
+        constexpr auto version = semver::version{KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH};
+    }
+
+}  // namespace kami
+
 
 #endif  // KAMI_CONFIG_H

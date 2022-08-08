@@ -23,44 +23,46 @@
  * SOFTWARE.
  */
 
-#include <memory>
+#include <algorithm>
 #include <optional>
+#include <utility>
 #include <vector>
 
 #include <kami/agent.h>
-#include <kami/sequential.h>
+#include <kami/population.h>
 
 namespace kami {
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model) {
-        auto population = model->get_population();
-
-        if(!population)
-            return std::nullopt;
-
-        return std::move(this->step(model, population.value()->get_agent_list()));
+    AgentID Population::add_agent(const std::shared_ptr<Agent>& agent) {
+        auto agent_id = agent->get_agent_id();
+        _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent_id, agent));
+        return(agent->get_agent_id());
     }
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
-        auto return_agent_list = std::make_shared<std::vector<AgentID>>();
-        auto population = model->get_population();
+    std::optional<std::shared_ptr<Agent>> Population::delete_agent(const AgentID agent_id) {
+        auto agent_it = _agent_map.find(agent_id);
 
-        if(!population)
+        if(agent_it == _agent_map.end())
             return std::nullopt;
 
-        Scheduler::_step_counter++;
-        for(auto & agent_id : *agent_list) {
-            auto agent_opt = population.value()->get_agent_by_id(agent_id);
+        auto agent = agent_it->second;
+        _agent_map.erase(agent_it);
+        return std::make_optional(agent);
+    }
 
-            if(agent_opt) {
-                auto agent = agent_opt.value();
+    std::optional<std::shared_ptr<Agent>> Population::get_agent_by_id(const AgentID agent_id) const {
+        auto agent_it = _agent_map.find(agent_id);
 
-                agent->step(model);
-                return_agent_list->push_back(agent_id);
-            }
-        }
+        if(agent_it != _agent_map.end()) return(agent_it->second);
+        return std::nullopt;
+    }
 
-        return std::move(return_agent_list);
+    std::shared_ptr<std::vector<AgentID>> Population::get_agent_list() const {
+        auto key_selector = [](auto pair){ return pair.first; };
+        auto agent_ids = std::make_shared<std::vector<AgentID>>(_agent_map.size());
+
+        transform(_agent_map.begin(), _agent_map.end(), agent_ids->begin(), key_selector);
+        return std::move(agent_ids);
     }
 
 }  // namespace kami

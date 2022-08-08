@@ -23,138 +23,157 @@
  * SOFTWARE.
  */
 
+#include "boltzmann2d.h"
+
+#include <exception>
 #include <map>
 #include <memory>
+#include <optional>
 #include <random>
-
-#include <kami/agent.h>
-#include <kami/kami.h>
-#include <kami/multigrid2d.h>
-
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
-#include <spdlog/stopwatch.h>
+#include <stdexcept>
 
 #include <CLI/App.hpp>
 #include <CLI/Config.hpp>
 #include <CLI/Formatter.hpp>
 
-#include "boltzmann2d.h"
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/spdlog.h>
+#include <spdlog/stopwatch.h>
 
-using namespace kami;
-using namespace std;
+#include <kami/agent.h>
+#include <kami/kami.h>
+#include <kami/multigrid2d.h>
+#include <kami/population.h>
+#include <kami/random.h>
 
-MultiGrid2D *MoneyAgent2D::_world = nullptr;
-BoltzmannWealthModel2D *MoneyAgent2D::_model = nullptr;
-shared_ptr<spdlog::logger> console = nullptr;
-shared_ptr<mt19937> rng = nullptr;
+std::shared_ptr<spdlog::logger> console = nullptr;
+std::shared_ptr<std::ranlux24> rng = nullptr;
 
 template <>
-struct fmt::formatter<AgentID> : fmt::formatter<string> {
-    [[maybe_unused]] static auto format(AgentID agent_id, format_context &ctx) {
+struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
+    static auto format(kami::AgentID agent_id, format_context &ctx) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
-template <>
-struct fmt::formatter<GridCoord2D> : fmt::formatter<string> {
-    [[maybe_unused]] static auto format(const GridCoord2D& coord, format_context &ctx) {
+template<>
+struct fmt::formatter<kami::GridCoord2D> : fmt::formatter<std::string> {
+    static auto format(const kami::GridCoord2D &coord, format_context &ctx) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
 
-void MoneyAgent2D::step() {
-    _step_counter++;
+MoneyAgent2D::~MoneyAgent2D() {
+    console->trace("Deconstructing Agent {} with final wealth {}", get_agent_id(), _agent_wealth);
+}
+
+kami::AgentID MoneyAgent2D::step(std::shared_ptr<kami::Model> model) {
+    this->_step_counter++;
 
     console->trace("Agent {} is moving", this->get_agent_id());
-    move_agent();
-    console->trace("Agent {} is giving money", this->get_agent_id());
-    if (_agent_wealth > 0) give_money();
+    this->move_agent(model);
+    if (_agent_wealth > 0)
+        this->give_money(model);
+
+    return this->get_agent_id();
 }
 
-void MoneyAgent2D::set_world(MultiGrid2D *world) { _world = world; }
-
-void MoneyAgent2D::set_model(BoltzmannWealthModel2D *model) { _model = model; }
-
-void MoneyAgent2D::move_agent() {
+kami::GridCoord2D MoneyAgent2D::move_agent(std::shared_ptr<kami::Model> model) {
     console->trace("Entering move_agent");
     auto agent_id = get_agent_id();
-    auto move_list = _world->get_neighborhood(agent_id, GridNeighborhoodType::Moore, false);
-    std::uniform_int_distribution<int> dist(0, (int) move_list.size() - 1);
-    auto new_location = move_list[dist(*rng)];
+
+    auto domain = model->get_domain();
+    if (!domain)
+        throw (std::domain_error("model is missing domain"));
+    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
+
+    auto move_list = world->get_neighborhood(agent_id, false, kami::GridNeighborhoodType::Moore);
+    std::uniform_int_distribution<int> dist(0, (int) move_list->size() - 1);
+    auto new_location = move_list->at(dist(*rng));
 
     console->trace("Moving Agent {} to location {}", agent_id, new_location);
-    _world->move_agent(agent_id, new_location);
+    world->move_agent(agent_id, new_location);
     console->trace("Exiting move_agent");
+
+    return new_location;
 }
 
-void MoneyAgent2D::give_money() {
-    AgentID agent_id = get_agent_id();
-    GridCoord2D location = _world->get_location_by_agent(agent_id);
-    vector<AgentID> *cell_mates = _world->get_location_contents(location);
+std::optional<kami::AgentID> MoneyAgent2D::give_money(std::shared_ptr<kami::Model> model) {
+    console->trace("Entering give_money");
+    auto agent_id = get_agent_id();
 
-    if (cell_mates->size() > 1) {
-        std::uniform_int_distribution<int> dist(0, (int)cell_mates->size() - 1);
-        AgentID other_agent_id = cell_mates->at(dist(*rng));
-        auto other_agent = _model->get_agent_by_id(other_agent_id);
+    auto domain = model->get_domain();
+    if (!domain)
+        throw (std::domain_error("model is missing domain"));
+    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
 
-        console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
-        other_agent->_agent_wealth += 1;
-        _agent_wealth -= 1;
-    }
+    auto agents = model->get_population();
+    if (!agents)
+        throw (std::domain_error("model is missing population"));
+    auto population = std::static_pointer_cast<kami::Population>(agents.value());
+
+    auto location = world->get_location_by_agent(agent_id);
+    auto cell_mates = world->get_location_contents(location.value());
+
+    if (cell_mates->size() < 2)
+        return std::nullopt;
+
+    std::uniform_int_distribution<int> dist(0, (int) cell_mates->size() - 1);
+    kami::AgentID other_agent_id = cell_mates->at(dist(*rng));
+    auto other_agent = std::static_pointer_cast<MoneyAgent2D>(population->get_agent_by_id(other_agent_id).value());
+
+    console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
+    other_agent->_agent_wealth += 1;
+    _agent_wealth -= 1;
+
+    console->trace("Exiting move_agent");
+    return other_agent_id;
 }
 
 BoltzmannWealthModel2D::BoltzmannWealthModel2D(unsigned int number_agents, unsigned int length_x, unsigned int length_y, unsigned int new_seed) {
-    rng = make_shared<mt19937>();
+    rng = std::make_shared<std::ranlux24>();
     rng->seed(new_seed);
 
-    _world = new MultiGrid2D(length_x, length_y, true, true);
-    _sched = new RandomScheduler(this, rng);
+    auto domain = std::make_shared<kami::MultiGrid2D>(length_x, length_y, true, true);
+    auto scheduler = std::make_shared<kami::RandomScheduler>(rng);
+    auto population = std::make_shared<kami::Population>();
+
+    this->set_domain(domain);
+    this->set_scheduler(scheduler);
+    this->set_population(population);
 
     console->debug("Scheduler initiated with seed {}", new_seed);
 
     _step_count = 0;
-    MoneyAgent2D::set_world(_world);
-    MoneyAgent2D::set_model(this);
 
-    std::uniform_int_distribution<int> dist_x(0, (int)length_x - 1);
-    std::uniform_int_distribution<int> dist_y(0, (int)length_y - 1);
+    std::uniform_int_distribution<int> dist_x(0, (int) length_x - 1);
+    std::uniform_int_distribution<int> dist_y(0, (int) length_y - 1);
 
     for (unsigned int i = 0; i < number_agents; i++) {
-        auto *new_agent = new MoneyAgent2D();
+        auto new_agent = std::make_shared<MoneyAgent2D>();
 
-        _agent_list.insert(pair<AgentID, MoneyAgent2D *>(new_agent->get_agent_id(), new_agent));
-        _sched->add_agent(new_agent->get_agent_id());
-        _world->add_agent(new_agent->get_agent_id(), GridCoord2D(dist_x(*rng), dist_x(*rng)));
+        console->trace("Initializing agent with AgentID {}", new_agent->get_agent_id());
+        population->add_agent(new_agent);
+        domain->add_agent(new_agent->get_agent_id(), kami::GridCoord2D(dist_x(*rng), dist_x(*rng)));
     }
 }
 
-BoltzmannWealthModel2D::~BoltzmannWealthModel2D() {
-    for (auto & agent_pair : _agent_list)
-        delete agent_pair.second;
-
-    delete _sched;
-    delete _world;
+std::shared_ptr<kami::Model> BoltzmannWealthModel2D::run(unsigned int steps) {
+    for (auto i = 0; i < steps; i++)
+        step();
+    return shared_from_this();
 }
 
-void BoltzmannWealthModel2D::step() {
-    _step_count++;
-    _sched->step();
-}
-
-void BoltzmannWealthModel2D::run(unsigned int steps) {
-    for (auto i = 0; i < steps; i++) step();
-}
-
-MoneyAgent2D *BoltzmannWealthModel2D::get_agent_by_id(AgentID agent_id) const {
-    MoneyAgent2D *agent = _agent_list.at(agent_id);
-    return agent;
+std::shared_ptr<kami::Model> BoltzmannWealthModel2D::step() {
+    console->trace("Executing model step {}", _step_count++);
+    _sched->step(shared_from_this());
+    return shared_from_this();
 }
 
 int main(int argc, char **argv) {
     std::string ident = "boltzmann2d";
+    std::string log_level_option = "info";
     CLI::App app{ident};
-    string log_level_option = "info";
     unsigned int x_size = 16, y_size = 16, agent_count = x_size * y_size, max_steps = 100, initial_seed = 42;
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
@@ -167,15 +186,15 @@ int main(int argc, char **argv) {
 
     console = spdlog::stdout_color_st(ident);
     console->set_level(spdlog::level::from_str(log_level_option));
-    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, log_level_option);
-    console->info("Starting Boltzmann Wealth Model with {} agents on a {}x{}-unit grid for {} steps", agent_count, x_size, y_size, max_steps);
-
-    BoltzmannWealthModel2D model(agent_count, x_size, y_size, initial_seed);
+    console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), log_level_option);
+    console->info("Starting Boltzmann Wealth Model with {} agents on a {}x{}-unit grid for {} steps", agent_count,
+                  x_size, y_size, max_steps);
 
     spdlog::stopwatch sw;
-    for (int i = 0; i < max_steps; i++) {
-        console->trace("Initiating model step {}", i);
-        model.step();
-    }
+
+    auto model = std::make_shared<BoltzmannWealthModel2D>(agent_count, x_size, y_size, initial_seed);
+    for (int i = 0; i < max_steps; i++)
+        model->step();
+
     console->info("Boltzmann Wealth Model simulation complete, requiring {} seconds", sw);
 }

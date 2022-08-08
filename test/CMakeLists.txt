@@ -2,34 +2,29 @@
 # This CMakeLists.txt contains the build descriptions for unit tests
 ################################################################################
 
-cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
-find_package(spdlog)
+create_test(
+        NAME unit-kami-agent
+        SOURCES unit-kami-agent.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-agent
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
 
-create_test( NAME
-                unit-kami-agentid
-             SOURCES
-                unit-kami-agentid.cc
-             PUBLIC_LINKED_TARGETS
-                kami::libkami
-                fmt
-                spdlog::spdlog
-                ${COVERAGE_LIBS}
-             COMMAND
-                unit-kami-agentid
-             PUBLIC_COMPILE_FEATURES
-                ${COVERAGE_FLAGS})
+create_test(
+        NAME unit-kami-agentid
+        SOURCES unit-kami-agentid.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-agentid
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
 
-create_test( NAME
-                unit-kami-agent
-             SOURCES
-                unit-kami-agent.cc
-             PUBLIC_LINKED_TARGETS
-                kami::libkami
-                fmt
-                spdlog::spdlog
-                ${COVERAGE_LIBS}
-             COMMAND
-                unit-kami-agent
-             PUBLIC_COMPILE_FEATURES
-                ${COVERAGE_FLAGS})
+create_test(
+        NAME unit-kami-stagedagent
+        SOURCES unit-kami-stagedagent.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-stagedagent
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)

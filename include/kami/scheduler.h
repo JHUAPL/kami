@@ -25,13 +25,17 @@
 
 #pragma once
 #ifndef KAMI_SCHEDULER_H
+//! @cond SuppressGuard
 #define KAMI_SCHEDULER_H
+//! @endcond
 
-#include <kami/KAMI_EXPORT.h>
-#include <kami/agent.h>
+#include <memory>
+#include <optional>
+#include <vector>
+
+#include <kami/model.h>
 
 namespace kami {
-
 /**
  * Create a Kami scheduler.
  *
@@ -40,27 +44,41 @@ namespace kami {
  * the step function for each agent based on the type of scheduling implemented.
  */
     class LIBKAMI_EXPORT Scheduler {
+    protected:
+        /**
+         * Counter to increment on each step
+         */
+        int _step_counter = 0;
+
     public:
         /**
-         * Add an Agent to the Scheduler.
+         * @brief Execute a single time step.
          *
-         * @param agent_id The AgentID of the agent to add.
+         * @details This method will step through the list of Agents in the
+         * `Population` associated with `model` and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the model
+         *
+         * @returns returns vector of agents successfully stepped
          */
-        virtual void add_agent(AgentID agent_id) = 0;
+        virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) = 0;
 
         /**
-         * Remove an Agent from the Scheduler.
+         * @brief Execute a single time step.
          *
-         * @param agent_id The AgentID of the agent to remove.
-         */
-        [[maybe_unused]] virtual void delete_agent(AgentID agent_id) = 0;
-
-        /**
-         * Step the Scheduler.
+         * @details This method will step through the list of Agents
+         * provided and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
          *
-         * A generic step function that executes a single time step.
+         * @param model a reference copy of the model
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
          */
-        virtual void step() = 0;
+        virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
     };
 
 }  // namespace kami

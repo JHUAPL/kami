@@ -23,29 +23,32 @@
  * SOFTWARE.
  */
 
+#include <algorithm>
+#include <memory>
+#include <optional>
 #include <random>
-#include <string>
-#include <utility>
+#include <vector>
 
 #include <kami/model.h>
 #include <kami/random.h>
+#include <kami/sequential.h>
 
 namespace kami {
 
-    RandomScheduler::RandomScheduler(Model *model, std::shared_ptr<std::mt19937> rng)
-            : SequentialScheduler(model) {
-        this->set_rng(std::move(rng));
-    }
-
-    void RandomScheduler::step() {
-        shuffle(_agent_list.begin(), _agent_list.end(), *_rng);
-        this->SequentialScheduler::step();
-    }
-
-    void RandomScheduler::set_rng(std::shared_ptr<std::mt19937> rng) {
+    RandomScheduler::RandomScheduler(std::shared_ptr<std::ranlux24> rng) {
         this->_rng = std::move(rng);
     }
 
-    [[maybe_unused]] std::shared_ptr<std::mt19937> RandomScheduler::get_rng() { return (_rng); }
+    std::optional<std::shared_ptr<std::vector<AgentID>>> RandomScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+        shuffle(agent_list->begin(),agent_list->end(), *_rng);
+        return std::move(this->SequentialScheduler::step(model, agent_list));
+    }
+
+    std::shared_ptr<RandomScheduler> RandomScheduler::set_rng(std::shared_ptr<std::ranlux24> rng) {
+        this->_rng = std::move(rng);
+        return shared_from_this();
+    }
+
+    std::shared_ptr<std::ranlux24> RandomScheduler::get_rng() { return (this->_rng); }
 
 }  // namespace kami

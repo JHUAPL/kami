@@ -23,40 +23,49 @@
  * SOFTWARE.
  */
 
-#include <string>
+#include <memory>
+#include <optional>
+#include <vector>
 
 #include <kami/agent.h>
-#include <kami/model.h>
+#include <kami/sequential.h>
 #include <kami/staged.h>
 
 namespace kami {
 
-    StagedScheduler::StagedScheduler(Model *model) {
-        _step_counter = 0;
-        _model = model;
+    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+        this->SequentialScheduler::step(model, agent_list);
+        return std::move(this->advance(model, agent_list));
     }
 
-    void StagedScheduler::add_agent(AgentID agent_id) {
-        _agent_list.push_back(agent_id);
+    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model) {
+        auto population = model->get_population();
+
+        if(!population)
+            return std::nullopt;
+
+        return std::move(this->advance(model, population.value()->get_agent_list()));
     }
 
-    void StagedScheduler::delete_agent(AgentID agent_id) {
-        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++)
-            if (*agent_list_iter == agent_id) _agent_list.erase(agent_list_iter);
-    }
+    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
+        auto return_agent_list = std::make_shared<std::vector<AgentID>>();
+        auto population = model->get_population();
 
-    void StagedScheduler::step() {
-        _step_counter++;
+        if(!population)
+            return std::nullopt;
 
-        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++) {
-            auto *agent = dynamic_cast<StagedAgent *>(_model->get_agent_by_id(*agent_list_iter));
-            if (agent != nullptr) agent->step();
+        for(auto & agent_id : *agent_list) {
+            auto agent_opt = population.value()->get_agent_by_id(agent_id);
+
+            if(agent_opt) {
+                auto agent = std::static_pointer_cast<StagedAgent>(agent_opt.value());
+
+                agent->advance(model);
+                return_agent_list->push_back(agent_id);
+            }
         }
 
-        for (auto agent_list_iter = _agent_list.begin(); agent_list_iter < _agent_list.end(); agent_list_iter++) {
-            auto *agent = dynamic_cast<StagedAgent *>(_model->get_agent_by_id(*agent_list_iter));
-            if (agent != nullptr) agent->advance();
-        }
+        return std::move(return_agent_list);
     }
 
 }  // namespace kami

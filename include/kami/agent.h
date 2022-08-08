@@ -25,41 +25,57 @@
 
 #pragma once
 #ifndef KAMI_AGENT_H
+//! @cond SuppressGuard
 #define KAMI_AGENT_H
+//! @endcond
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include <kami/kami.h>
-
+#include <kami/model.h>
 
 namespace kami {
 
-/**
- * A unique identifier for each `Agent`.
- *
- * The unique identifier permits ordering to allow `AgentID`s to be used as keys
- * for `std::map`. The unique identifier is unique for the session, however,
- * `AgentID`s are not guaranteed to be unique from session-to-session.
- *
- * @see Agent
- */
+    /**
+     * @brief A unique identifier for each `Agent`.
+     *
+     * @details The unique identifier permits ordering to allow `AgentID`s to be used as keys
+     * for `std::map`. The unique identifier is unique for the session, however,
+     * `AgentID`s are not guaranteed to be unique from session-to-session.
+     *
+     * @see Agent
+     */
     class LIBKAMI_EXPORT AgentID {
-    public:
-        /**
-         * Constructs a new unique identifier.
-         */
-        AgentID() : _id(_id_next++){};
+    private:
+        inline static long long _id_next = 1;
 
         /**
-         * Convert the identifier to a human-readable string.
+         * @brief The unique identifier is a `long long`.
+         *
+         * @details The unique identifier is an unsigned integer that increments
+         * monotonically with each new `AgentID` instantiated.  This is
+         * substantially faster than other potential identifiers, such
+         * as MD5 hashes or UUID objects.
+         */
+        long long _id;
+
+    public:
+        /**
+         * @brief Constructs a new unique identifier.
+         */
+        AgentID() : _id(_id_next++) {};
+
+        /**
+         * @brief Convert the identifier to a human-readable string.
          *
          * @return a human-readable form of the `AgentID` as `std::string`.
          */
         [[nodiscard]] std::string to_string() const { return std::to_string(_id); }
 
         /**
-         * Test if two `AgentID` instances are equal.
+         * @brief Test if two `AgentID` instances are equal.
          *
          * @param lhs is the left-hand side of the equality test.
          * @param rhs is the right-hand side of the equality test.
@@ -68,7 +84,7 @@ namespace kami {
         friend bool operator==(const AgentID &lhs, const AgentID &rhs);
 
         /**
-         * Test if two `AgentID` instances are not equal.
+         * @brief Test if two `AgentID` instances are not equal.
          *
          * @param lhs is the left-hand side of the equality test.
          * @param rhs is the right-hand side of the equality test.
@@ -77,9 +93,9 @@ namespace kami {
         friend bool operator!=(const AgentID &lhs, const AgentID &rhs);
 
         /**
-         * Test if one AgentID is less than another.
+         * @brief Test if one AgentID is less than another.
          *
-         * Due to the way AgentID instances are used internally,
+         * @details Due to the way AgentID instances are used internally,
          * the AgentID must be orderable.  The `<` operator provides a
          * basic ordering sufficient for `std::map`.
          *
@@ -91,9 +107,9 @@ namespace kami {
         friend bool operator<(const AgentID &lhs, const AgentID &rhs);
 
         /**
-         * Output an AgentID to the specified output stream
+         * @brief Output an AgentID to the specified output stream
          *
-         * The form of the output will be the same as that produced by the
+         * @details The form of the output will be the same as that produced by the
          * `to_string()` member function.
          *
          * @param lhs is the stream to output the `AgentID` to
@@ -101,49 +117,41 @@ namespace kami {
          * @return the output stream for reuse
          */
         friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
-
-    private:
-        inline static long long _id_next = 1;
-
-        /**
-         * The unique identifier is a `long long`.
-         *
-         * The unique identifier is an unsigned integer that increments
-         * monotonically with each new `AgentID` instantiated.  This is
-         * substantially faster than other potential identifiers, such
-         * as MD5 hashes or UUID objects.
-         */
-        long long _id;
     };
 
-/**
- * A superclass for all agents.
- *
- * All agents should subclass the `Agent` class. At a minimum, subclasses must
- * implement the `step()` function, to execute a single time step for each
- * agent.
- *
- * @see `StagedAgent`
- */
+    /**
+     * @brief A superclass for all agents.
+     *
+     * @details All agents should subclass the `Agent` class. At a minimum, subclasses must
+     * implement the `step()` function, to execute a single time step for each
+     * agent.
+     *
+     * @see `StagedAgent`
+     */
     class LIBKAMI_EXPORT Agent {
+    private:
+        const AgentID _agent_id;
+
     public:
         /**
-         * Get the `Agent`'s `AgentID`.
+         * @brief Get the `Agent`'s `AgentID`.
          *
          * @return the `AgentID`
          */
         [[nodiscard]] AgentID get_agent_id() const;
 
         /**
-         * Execute a time-step for the agent
+         * @brief Execute a time-step for the agent
          *
-         * This function should step the agent instance.  Any activities that the
+         * @details This function should step the agent instance.  Any activities that the
          * agent should perform as part of its time step should be in this function.
+         *
+         * @param model a reference copy of the model
          */
-        virtual void step() = 0;
+        virtual AgentID step(std::shared_ptr<Model> model) = 0;
 
         /**
-         * Compare if two `Agent`s are the same `Agent`.
+         * @brief Compare if two `Agent`s are the same `Agent`.
          *
          * @param lhs is the left-hand side of the equality test.
          * @param rhs is the right-hand side of the equality test.
@@ -159,7 +167,7 @@ namespace kami {
         friend bool operator==(const Agent &lhs, const Agent &rhs);
 
         /**
-         * Compare if two `Agent`s are not the same `Agent`.
+         * @brief Compare if two `Agent`s are not the same `Agent`.
          *
          * @param lhs is the left-hand side of the equality test.
          * @param rhs is the right-hand side of the equality test.
@@ -173,33 +181,33 @@ namespace kami {
          * the restrictions on the comparison.
          */
         friend bool operator!=(const Agent &lhs, const Agent &rhs);
-
-    private:
-        const AgentID _agent_id;
     };
 
-/**
- * A superclass for all staged agents.
- *
- * Staged agents use a two-phase step to allow agents to take actions without
- * updating the state of the model before all agents have been allowed to
- * update.  All work necessary to advance the `StagedAgent` state should take
- * place in the `step()` function.  However, the `StagedAgent` should not actually
- * update the state, and instead save the results for later use.  Finally,
- * during the `advance()` stage, the StagedAgent state should update.
- *
- * `StagedAgents` must implement both the `step()` and `advance()` functions.
- */
+    /**
+     * @brief A superclass for all staged agents.
+     *
+     * @details Staged agents use a two-phase step to allow agents to take actions without
+     * updating the state of the model before all agents have been allowed to
+     * update.  All work necessary to advance the `StagedAgent` state should take
+     * place in the `step()` function.  However, the `StagedAgent` should not actually
+     * update the state, and instead save the results for later use.  Finally,
+     * during the `advance()` stage, the StagedAgent state should update.
+     *
+     * `StagedAgents` must implement both the `step()` and `advance()` functions.
+     */
     class LIBKAMI_EXPORT StagedAgent : public Agent {
     public:
         /**
-         * Post-step advance the agent
+         * @brief Post-step advance the agent
          *
-         * This method should be called after `step()`.  Any updates or cleanups to
+         * @details This method should be called after `step()`.  Any updates or cleanups to
          * the agent that must happen for the `StagedAgent` to complete its step must
          * happen here.
+         *
+         * @param model a reference copy of the model
+         *
          */
-        virtual void advance() = 0;
+        virtual AgentID advance(std::shared_ptr<Model> model) = 0;
     };
 
 }  // namespace kami

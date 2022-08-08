@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2020 The Johns Hopkins University Applied Physics
+ * Copyright (c) 2022 The Johns Hopkins University Applied Physics
  * Laboratory LLC
  *
  * Permission is hereby granted, free of charge, to any person
@@ -23,33 +23,54 @@
  * SOFTWARE.
  */
 
-#include <string>
-
 #include <kami/agent.h>
-#include <kami/config.h>
 
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/spdlog.h>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
-#include <CLI/App.hpp>
-#include <CLI/Config.hpp>
-#include <CLI/Formatter.hpp>
+TEST(AgentID, DefaultConstructor) {
+    const kami::AgentID agent_id_foo;
+    const kami::AgentID agent_id_bar;
 
-using namespace kami;
-using namespace std;
+    EXPECT_EQ(agent_id_foo, agent_id_foo);
+    EXPECT_NE(agent_id_foo, agent_id_bar);
+}
+
+TEST(AgentID, to_string) {
+    const kami::AgentID agent_id_foo;
+    const kami::AgentID agent_id_bar;
+
+    EXPECT_THAT(agent_id_foo.to_string(), testing::MatchesRegex("[0-9]+"));
+    EXPECT_THAT(agent_id_bar.to_string(), testing::MatchesRegex("[0-9]+"));
+}
+
+TEST(AgentID, Equality) {
+    const kami::AgentID agent_id_foo;
+    const kami::AgentID agent_id_bar;
+
+    EXPECT_TRUE(agent_id_foo == agent_id_foo);
+    EXPECT_TRUE(agent_id_bar == agent_id_bar);
+    EXPECT_FALSE(agent_id_foo == agent_id_bar);
+}
+
+TEST(AgentID, Inequality) {
+    const kami::AgentID agent_id_foo;
+    const kami::AgentID agent_id_bar;
+
+    EXPECT_TRUE(agent_id_foo != agent_id_bar);
+    EXPECT_FALSE(agent_id_bar != agent_id_bar);
+}
+
+TEST(AgentID, Ordering) {
+    const kami::AgentID agent_id_foo;
+    const kami::AgentID agent_id_bar;
+
+    EXPECT_TRUE(agent_id_foo < agent_id_bar);
+    EXPECT_FALSE(agent_id_bar < agent_id_foo);
+}
 
 int main(int argc, char **argv) {
-    string ident = "unit-kami-agentid";
-    CLI::App app{ident};
-    auto console = spdlog::stdout_color_st(ident);
-    string logLevelOption = "info";
-
-    app.add_option("-l", logLevelOption, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
-    CLI11_PARSE(app, argc, argv);
-
-    console->set_level(spdlog::level::from_str(logLevelOption));
-    console->info("Compiled with Kami/{}, log level {}", KAMI_VERSION_STRING, logLevelOption);
-
-    AgentID testAgentID;
-    console->debug("Successfully created AgentID with ID {}", testAgentID.to_string());
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
+

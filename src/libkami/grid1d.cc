@@ -28,12 +28,17 @@
 #include <kami/grid1d.h>
 
 #include <map>
+#include <memory>
+#include <optional>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
 namespace kami {
 
-    int GridCoord1D::get_x_location() const { return _x_coord; }
+    int GridCoord1D::get_x_location() const {
+        return _x_coord;
+    }
 
     std::string GridCoord1D::to_string() const {
         return std::string("(" + std::to_string(_x_coord) + ")");
@@ -52,103 +57,120 @@ namespace kami {
     }
 
     Grid1D::Grid1D(unsigned int maximum_x, bool wrap_x) {
-        _agent_grid = new std::vector<AgentID>[maximum_x];
-        _agent_index = new std::map<AgentID, GridCoord1D>;
-
         _maximum_x = maximum_x;
         _wrap_x = wrap_x;
+
+        _agent_grid = std::make_unique<std::unordered_multimap<GridCoord1D, AgentID>>();
+        _agent_index = std::make_unique<std::map<AgentID, GridCoord1D>>();
     }
 
-    Grid1D::~Grid1D() {
-        delete _agent_index;
-        delete[] _agent_grid;
+    std::optional<AgentID> Grid1D::delete_agent(AgentID agent_id) {
+        auto coord = get_location_by_agent(agent_id);
+        if (!coord)
+            return std::nullopt;
+
+        return delete_agent(agent_id, coord.value());
     }
 
-    [[maybe_unused]] bool Grid1D::delete_agent(AgentID agent_id) {
-        GridCoord1D coord = get_location_by_agent(agent_id);
+    std::optional<AgentID> Grid1D::delete_agent(AgentID agent_id, const GridCoord1D &coord) {
+        auto agent_location = _agent_grid->find(coord);
+        if (agent_location == _agent_grid->end())
+            return std::nullopt;
 
-        return delete_agent(agent_id, coord);
+        for (auto test_agent_id = agent_location; test_agent_id != _agent_grid->end(); test_agent_id++)
+            if (test_agent_id->second == agent_id) {
+                _agent_grid->erase(test_agent_id);
+                _agent_index->erase(agent_id);
+                return agent_id;
+            }
+
+        return std::nullopt;
     }
 
-    bool Grid1D::is_location_valid(const GridCoord1D& coord) const {
+    bool Grid1D::is_location_valid(const GridCoord1D &coord) const {
         auto x = coord.get_x_location();
+
         return (x >= 0 && x < static_cast<int>(_maximum_x));
     }
 
     bool Grid1D::is_location_empty(const GridCoord1D &coord) const {
-        auto x = coord.get_x_location();
-
-        return _agent_grid[x].empty();
+        auto grid_location = _agent_grid->equal_range(coord);
+        return grid_location.first == grid_location.second;
     }
 
-    bool Grid1D::delete_agent(AgentID agent_id, const GridCoord1D &coord) {
-        auto agent_list = _agent_grid[static_cast<int>(coord.get_x_location())];
+    std::optional<AgentID> Grid1D::move_agent(const AgentID agent_id, const GridCoord1D &coord) {
+        auto coord_current = get_location_by_agent(agent_id);
 
-        for (auto test_agent_id = agent_list.begin();
-             test_agent_id < agent_list.end(); test_agent_id++) {
-            if (*test_agent_id == agent_id) {
-                agent_list.erase(test_agent_id);
-                _agent_index->erase(agent_id);
-                return true;
-            }
-        }
+        if (!coord_current)
+            return std::nullopt;
+        if (!delete_agent(agent_id, coord_current.value()))
+            return std::nullopt;
 
-        return false;
+        return add_agent(agent_id, coord);
     }
 
-    bool Grid1D::move_agent(AgentID agent_id, GridCoord1D coord) {
-        GridCoord1D coord_current = get_location_by_agent(agent_id);
+    std::unique_ptr<std::vector<GridCoord1D>>
+    Grid1D::get_neighborhood(const AgentID agent_id, const bool include_center) const {
+        auto coord = get_location_by_agent(agent_id);
 
-        if (delete_agent(agent_id, coord_current))
-            return add_agent(agent_id, std::move(coord));
-        return false;
+        return std::move(get_neighborhood(coord.value(), include_center));
     }
 
-    std::vector<GridCoord1D> Grid1D::get_neighborhood(AgentID agent_id, bool include_center) const {
-        GridCoord1D coord = get_location_by_agent(agent_id);
-
-        return get_neighborhood(coord, include_center);
-    }
-
-    std::vector<GridCoord1D> Grid1D::get_neighborhood(const GridCoord1D& coord, bool include_center) const {
-        std::vector<GridCoord1D> neighborhood;
+    std::unique_ptr<std::vector<GridCoord1D>>
+    Grid1D::get_neighborhood(const GridCoord1D &coord, const bool include_center) const {
+        auto neighborhood = std::make_unique<std::vector<GridCoord1D>>();
         auto x = coord.get_x_location();
 
         // We assume our starting position is valid
-        if (include_center) neighborhood.push_back(coord);
+        if (include_center)
+            neighborhood->push_back(coord);
 
         // E, W
         {
             auto new_location = coord_wrap(GridCoord1D(x + 1));
             if (is_location_valid(new_location))
-                neighborhood.push_back(coord_wrap(new_location));
+                neighborhood->push_back(coord_wrap(new_location));
         }
         {
             auto new_location = coord_wrap(GridCoord1D(x - 1));
             if (is_location_valid(new_location))
-                neighborhood.push_back(coord_wrap(new_location));
+                neighborhood->push_back(coord_wrap(new_location));
         }
 
-        return neighborhood;
+        return std::move(neighborhood);
     }
 
-    std::vector<AgentID> *Grid1D::get_location_contents(const GridCoord1D& coord) const {
-        if (is_location_valid(coord)) return &_agent_grid[coord.get_x_location()];
-        return nullptr;
+    std::unique_ptr<std::vector<AgentID>> Grid1D::get_location_contents(const GridCoord1D &coord) const {
+        auto agent_ids = std::make_unique<std::vector<AgentID>>();
+        if (!is_location_valid(coord))
+            return std::move(agent_ids);
+        if (is_location_empty(coord))
+            return std::move(agent_ids);
+
+        auto agent_range = _agent_grid->equal_range(coord);
+        if (agent_range.first == agent_range.second)
+            return std::move(agent_ids);
+
+        for (auto i = agent_range.first; i != agent_range.second; i++)
+            agent_ids->push_back(i->second);
+        return std::move(agent_ids);
     }
 
-    [[maybe_unused]] bool Grid1D::get_wrap_x() const { return _wrap_x; }
+    bool Grid1D::get_wrap_x() const { return _wrap_x; }
 
-    [[maybe_unused]] unsigned int Grid1D::get_maximum_x() const { return _maximum_x; }
+    unsigned int Grid1D::get_maximum_x() const { return _maximum_x; }
 
-    GridCoord1D Grid1D::get_location_by_agent(AgentID agent_id) const {
-        return _agent_index->at(agent_id);
+    std::optional<GridCoord1D> Grid1D::get_location_by_agent(const AgentID &agent_id) const {
+        auto coord = _agent_index->find(agent_id);
+        if (coord == _agent_index->end())
+            return std::nullopt;
+        return coord->second;
     }
 
-    GridCoord1D Grid1D::coord_wrap(const GridCoord1D& coord) const {
+    GridCoord1D Grid1D::coord_wrap(const GridCoord1D &coord) const {
         auto x = coord.get_x_location();
 
-        if(_wrap_x)
+        if (_wrap_x)
             x = (x + static_cast<int>(_maximum_x)) % static_cast<int>(_maximum_x);
         return GridCoord1D(x);
     }

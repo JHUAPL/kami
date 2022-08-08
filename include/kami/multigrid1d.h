@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_MULTIGRID1D_H
+//! @cond SuppressGuard
 #define KAMI_MULTIGRID1D_H
+//! @endcond
 
 #include <kami/agent.h>
 #include <kami/domain.h>
@@ -35,15 +37,18 @@
 
 namespace kami {
 
-/**
- * @brief A one-dimensional grid where each cell may contain multiple agents
- *
- * @details The grid is linear and may wrap around in its only dimension.
- */
+    /**
+     * @brief A one-dimensional grid where each cell may contain multiple agents
+     *
+     * @details The grid is linear and may wrap around in its only dimension.
+     *
+     * @see `Grid1D`
+     * @see `SoloGrid1D`
+     */
     class LIBKAMI_EXPORT MultiGrid1D : public Grid1D {
     public:
         /**
-         * Constructor
+         * @brief Constructor
          *
          * @param[in] maximum_x the length of the grid.
          * @param[in] wrap_x should the grid wrap around on itself.
@@ -52,7 +57,7 @@ namespace kami {
                 : Grid1D(maximum_x, wrap_x) {}
 
         /**
-         * Place agent on the grid at the specified location.
+         * @brief Place agent on the grid at the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to add.
          * @param[in] coord the coordinates of the agent.
@@ -60,7 +65,7 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true
          */
-        bool add_agent(AgentID agent_id, GridCoord1D coord) override;
+        std::optional<AgentID> add_agent(const AgentID agent_id, const GridCoord1D &coord) override;
     };
 
 }  // namespace kami

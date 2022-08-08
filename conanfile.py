@@ -3,10 +3,10 @@ from conans import ConanFile, CMake
 
 class KamiConan(ConanFile):
     name = "kami"
-    version = "0.4.2"
+    version = "0.5.0"
     license = "MIT"
     author = "James P. Howard, II <james.howard@jhu.edu>"
-    url = "http://github.com/jhuapl/kami"
+    url = "https://github.com/jhuapl/kami"
     description = "Agent-Based Modeling in Modern C++"
     topics = ("agent-based modeling", "simulation", "orms")
     settings = "os", "compiler", "build_type", "arch"
@@ -14,7 +14,7 @@ class KamiConan(ConanFile):
     exports_sources = "*"
 
     options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {"shared": True, "fPIC": True}
+    default_options = {"shared": False, "fPIC": False}
 
 
     def _configure_cmake(self):
@@ -47,3 +47,5 @@ class KamiConan(ConanFile):
         self.requires("fmt/7.1.3")
         self.requires("spdlog/1.8.5")
         self.requires("cli11/1.9.1")
+        self.requires("neargye-semver/0.3.0")
+        self.requires("gtest/cci.20210126")

@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2020 The Johns Hopkins University Applied Physics
+ * Copyright (c) 2022 The Johns Hopkins University Applied Physics
  * Laboratory LLC
  *
  * Permission is hereby granted, free of charge, to any person
@@ -23,20 +23,45 @@
  * SOFTWARE.
  */
 
-#include <kami/agent.h>
-#include <kami/domain.h>
-#include <kami/grid2d.h>
-#include <kami/multigrid2d.h>
+#include <memory>
+#include <utility>
+
+#include <kami/model.h>
+#include <kami/scheduler.h>
 
 namespace kami {
 
-    std::optional<AgentID> MultiGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
-        if (!is_location_valid(coord))
+    std::optional<std::shared_ptr<Domain>> Model::get_domain() {
+        if(_domain == nullptr)
             return std::nullopt;
+        return(_domain);
+    }
 
-        _agent_index->insert(std::pair<AgentID, GridCoord2D>(agent_id, coord));
-        _agent_grid->insert(std::pair<GridCoord2D, AgentID>(coord, agent_id));
-        return agent_id;
+    std::shared_ptr<Domain> Model::set_domain(std::shared_ptr<Domain> domain) {
+        _domain = std::move(domain);
+        return _domain;
+    }
+
+    std::optional<std::shared_ptr<Population>> Model::get_population() {
+        if(_pop == nullptr)
+            return std::nullopt;
+        return(_pop);
+    }
+
+    std::shared_ptr<Population> Model::set_population(std::shared_ptr<Population> population) {
+        _pop = std::move(population);
+        return _pop;
+    }
+
+    std::optional<std::shared_ptr<Scheduler>> Model::get_scheduler() {
+        if(_sched == nullptr)
+            return std::nullopt;
+        return(_sched);
+    }
+
+    std::shared_ptr<Scheduler> Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
+        _sched = std::move(scheduler);
+        return _sched;
     }
 
 }  // namespace kami

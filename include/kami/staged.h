@@ -25,73 +25,74 @@
 
 #pragma once
 #ifndef KAMI_STAGED_H
+//! @cond SuppressGuard
 #define KAMI_STAGED_H
+//! @endcond
+
+#include <memory>
+#include <optional>
+#include <vector>
 
 #include <kami/agent.h>
-#include <kami/model.h>
 #include <kami/scheduler.h>
-
-#include <algorithm>
-#include <vector>
+#include <kami/sequential.h>
 
 namespace kami {
 
-/**
- * Will execute all agent steps in a sequential order.
- *
- * A sequential scheduler will iterate over the agents assigned to the scheduler
- * and call their `step()` function in a sequential order. That order is
- * preserved between calls to `step()` but may be modified by `add_agent()` or
- * `delete_agent()`.
- *
- * @note First create a Model for the scheduler to live in.
- */
-    class LIBKAMI_EXPORT StagedScheduler : public Scheduler {
+    /**
+     * @brief Will execute all agent steps in a sequential order.
+     *
+     * @details A sequential scheduler will iterate over the agents assigned to the scheduler
+     * and call their `step()` function in a sequential order. That order is
+     * preserved between calls to `step()` but may be modified by `add_agent()` or
+     * `delete_agent()`.
+     */
+    class LIBKAMI_EXPORT StagedScheduler : public SequentialScheduler {
+    private:
+        /**
+         * @brief Advance a single time step.
+         *
+         * @details This method will step through the list of StagedAgent in the
+         * scheduler's internal queue and then execute the `StagedAgent::step()`
+         * method for every StagedAgent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the model
+         *
+         * @returns returns vector of agents successfully advanced
+         */
+        std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model);
+
+        /**
+         * @brief Advance a single time step.
+         *
+         * @details This method will step through the list of StagedAgent
+         * provided and then execute the `StagedAgent::advance()`
+         * method for every StagedAgent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the model
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully advanced
+         */
+        std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
+
     public:
         /**
-         * Constructor.
-         * The Model parameter is used by the scheduler to get access to an Agent.
-         * The Model is presumed to maintain a master list of all Agents in the
-         * Model and the Model can be queried for  a reference to any particular
-         * Agent at `step()` time.
-         */
-        explicit StagedScheduler(Model *);
-
-        /**
-         * A deconstructor.
-         */
-        ~StagedScheduler() = default;
-
-        /**
-         * Add an agent to the scheduler.
+         * @brief Execute a single time step
          *
-         * The scheduler maintains a list of all AgentIDs currently assigned.  This
-         * function adds a new Agent to the list.
-         */
-        void add_agent(AgentID agent_id) override;
-
-        /**
-         * Remove an agent from the scheduler.
-         *
-         * The scheduler maintains a list of all AgentIDs currently assigned.  This
-         * function removes an Agent from the list.
-         */
-        void delete_agent(AgentID agent_id) override;
-
-        /**
-         * Execute a single time step.
-         *
-         * This method will step through the list of Agents in the scheduler's
+         * @details This method will step through the list of Agents in the scheduler's
          * internal queue and execute the `Agent::step()` method for  each `Agent`
          * in the same order.  Finally, it will execute the  `Agent::advance()`
          * method for each Agent in the same order.
+         *
+         * @param model a reference copy of the model
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
          */
-        void step() override;
-
-    private:
-        std::vector<AgentID> _agent_list;
-        Model *_model;
-        int _step_counter;
+        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

@@ -30,8 +30,12 @@
 
 #include <gtest/gtest.h>
 
-class TestAgent : public kami::Agent {
+class TestStagedAgent : public kami::StagedAgent {
 public:
+    kami::AgentID advance(std::shared_ptr<kami::Model> model) override {
+        return get_agent_id();
+    }
+
     kami::AgentID step(std::shared_ptr<kami::Model> model) override {
         return get_agent_id();
     }
@@ -49,24 +53,33 @@ public:
 };
 
 TEST(Agent, DefaultConstructor) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+    const TestStagedAgent agent_foo;
+    const TestStagedAgent agent_bar;
 
     EXPECT_EQ(agent_foo, agent_foo);
     EXPECT_NE(agent_foo, agent_bar);
 }
 
 TEST(Agent, get_agent_id) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+    const TestStagedAgent agent_foo;
+    const TestStagedAgent agent_bar;
 
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.get_agent_id());
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.get_agent_id());
 }
 
+TEST(Agent, advance) {
+    TestStagedAgent agent_foo;
+    TestStagedAgent agent_bar;
+    auto model_world = std::make_shared<TestModel>();
+
+    EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.advance(model_world));
+    EXPECT_NE(agent_bar.get_agent_id(), agent_foo.advance(model_world));
+}
+
 TEST(Agent, step) {
-    TestAgent agent_foo;
-    TestAgent agent_bar;
+    TestStagedAgent agent_foo;
+    TestStagedAgent agent_bar;
     auto model_world = std::make_shared<TestModel>();
 
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
@@ -74,16 +87,16 @@ TEST(Agent, step) {
 }
 
 TEST(Agent, Equality) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+    const TestStagedAgent agent_foo;
+    const TestStagedAgent agent_bar;
 
     EXPECT_TRUE(agent_foo == agent_foo);
     EXPECT_TRUE(agent_bar == agent_bar);
 }
 
 TEST(Agent, Inequality) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+    const TestStagedAgent agent_foo;
+    const TestStagedAgent agent_bar;
 
     EXPECT_TRUE(agent_foo != agent_bar);
     EXPECT_FALSE(agent_bar != agent_bar);

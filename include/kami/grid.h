@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_GRID_H
+//! @cond SuppressGuard
 #define KAMI_GRID_H
+//! @endcond
 
 #include <string>
 
@@ -34,14 +36,14 @@
 
 namespace kami {
 
-/**
- * @brief Neighborhood types for orthogonal grid domains of cells.
- *
- * @details Orthogonal grid domains are those that provide cells equidistant
- * along a standard Cartesian grid.  `GridNeighborhoodType` allows for the
- * distinction between those neighborhoods that include those cells touching on
- * the corners or diagonally and those neighborhoods that do not.
- */
+    /**
+     * @brief Neighborhood types for orthogonal grid domains of cells.
+     *
+     * @details Orthogonal grid domains are those that provide cells equidistant
+     * along a standard Cartesian grid.  `GridNeighborhoodType` allows for the
+     * distinction between those neighborhoods that include those cells touching on
+     * the corners or diagonally and those neighborhoods that do not.
+     */
     enum class GridNeighborhoodType {
         /**
          * @brief Moore neighborhood
@@ -49,7 +51,7 @@ namespace kami {
          * @details Moore neighborhood types include diagonally-adjacent cells as
          * neighbors.
          */
-        Moore [[maybe_unused]],
+        Moore,
 
         /**
          * @brief Von Neumann neighborhood
@@ -57,12 +59,12 @@ namespace kami {
          * @details Von Neumann neighborhood types do not include
          * diagonally-adjacent cells as neighbors.
          */
-        VonNeumann [[maybe_unused]]
+        VonNeumann
     };
 
-/**
- * @brief Distance types for orthogonal grid domains
- */
+    /**
+     * @brief Distance types for orthogonal grid domains
+     */
     enum class GridDistanceType {
         /**
          * @brief Euclidean distance.
@@ -71,7 +73,7 @@ namespace kami {
          * connecting two points.  This is commonly called a "beeline" or
          * "as the crow flies."
          */
-        Euclidean [[maybe_unused]],
+        Euclidean,
 
         /**
          * @brief Manhattan distance.
@@ -81,23 +83,23 @@ namespace kami {
          * "taxicab distance," "rectilinear distance," or many other [formal
          * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
          */
-        Manhattan [[maybe_unused]]
+        Manhattan
     };
 
-/**
- * @brief An abstract domain based on a gridded environment.
- *
- * @details All gridded domains are expected to consist of cells in a
- * rectilinear grid where the cells are equal size and laid out in an ordered
- * fashion.
- */
+    /**
+     * @brief An abstract domain based on a gridded environment.
+     *
+     * @details All gridded domains are expected to consist of cells in a
+     * rectilinear grid where the cells are equal size and laid out in an ordered
+     * fashion.
+     */
     class LIBKAMI_EXPORT GridDomain : public Domain {};
 
-/**
- * @brief An abstract for gridded coordinates.
- *
- * @details All gridded coordinates are expected to subclass `GridCoord`.
- */
+    /**
+     * @brief An abstract for gridded coordinates.
+     *
+     * @details All gridded coordinates are expected to subclass `GridCoord`.
+     */
     class LIBKAMI_EXPORT GridCoord : public Coord {};
 
 }  // namespace kami

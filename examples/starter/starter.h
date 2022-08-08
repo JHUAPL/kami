@@ -1,5 +1,5 @@
 /*-
- * Copyright (c) 2020 The Johns Hopkins University Applied Physics
+ * Copyright (c) 2022 The Johns Hopkins University Applied Physics
  * Laboratory LLC
  *
  * Permission is hereby granted, free of charge, to any person
@@ -24,64 +24,50 @@
  */
 
 #pragma once
-#ifndef BOLTZMANN1D_H
+#ifndef STARTER_H
 //! @cond SuppressGuard
-#define BOLTZMANN1D_H
+#define STARTER_H
 //! @endcond
 
 #include <iostream>
 #include <map>
-#include <memory>
-#include <optional>
 
 #include <kami/agent.h>
 #include <kami/kami.h>
-#include <kami/multigrid1d.h>
-#include <kami/population.h>
 #include <kami/random.h>
 
-
 /**
- * A sample agent for a one-dimensional Boltzmann wealth model
+ * A starter agent for a starter model
  */
-class MoneyAgent1D : public kami::Agent {
+class StarterAgent : public kami::Agent {
+private:
+    int _step_counter = 0;
 
 public:
-    /**
-     * Create the agent
-     */
-    MoneyAgent1D() : _step_counter(0), _agent_wealth(1) {}
 
     /**
-     * Deconstruct the agent
+     * Constructor
      */
-    ~MoneyAgent1D();
+    StarterAgent();
+
+    /**
+     * Deconstructor
+     */
+    ~StarterAgent();
 
     /**
      * Execute a single time-step for the agent
      */
     kami::AgentID step(std::shared_ptr<kami::Model> model) override;
 
-    /**
-     * Move the agent to a random location on the world
-     */
-    kami::GridCoord1D move_agent(std::shared_ptr<kami::Model> model);
-
-    /**
-     * Give money to a random agent
-     */
-    std::optional<kami::AgentID> give_money(std::shared_ptr<kami::Model> model);
-
-private:
-    int _step_counter;
-    int _agent_wealth;
-
 };
 
 /**
  * The one-dimensional Boltzmann wealth model
  */
-class BoltzmannWealthModel1D : public kami::Model {
+class StarterModel : public kami::Model {
+private:
+    unsigned int _step_count;
 
 public:
     /**
@@ -91,7 +77,7 @@ public:
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
      */
-    explicit BoltzmannWealthModel1D(unsigned int number_agents = 10, unsigned int length_x = 10, unsigned int new_seed = 42);
+    explicit StarterModel(unsigned int number_agents = 10, unsigned int new_seed = 42);
 
     /**
      * Execute a single time-step for the model.
@@ -104,10 +90,6 @@ public:
      * @param[in] n the number of steps to execute.
      */
     std::shared_ptr<kami::Model> run(unsigned int n) override;
-
-private:
-    unsigned int _step_count;
-
 };
 
-#endif  // BOLTZMANN1D_H
+#endif  // STARTER_H

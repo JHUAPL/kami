@@ -25,56 +25,31 @@
 
 #pragma once
 #ifndef KAMI_SEQUENTIAL_H
+//! @cond SuppressGuard
 #define KAMI_SEQUENTIAL_H
+//! @endcond
 
-#include <algorithm>
+#include <memory>
+#include <optional>
 #include <vector>
 
-#include <kami/KAMI_EXPORT.h>
 #include <kami/agent.h>
+#include <kami/kami.h>
 #include <kami/model.h>
 #include <kami/scheduler.h>
 
 namespace kami {
 
-/**
- * @brief Will execute all agent steps in a sequential order.
- *
- * @details A sequential scheduler will iterate over the agents assigned
- * to the scheduler and call their `step()` function in a sequential order.
- * That order is preserved between calls to `step()` but may be modified by
- * `addAgent()` or `deleteAgent()`.
- *
- * \pre       First create a Model for the scheduler to live in.
- */
+    /**
+     * @brief Will execute all agent steps in a sequential order.
+     *
+     * @details A sequential scheduler will iterate over the agents assigned
+     * to the scheduler and call their `step()` function in a sequential order.
+     * That order is preserved between calls to `step()` but may be modified by
+     * `addAgent()` or `deleteAgent()`.
+     */
     class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
     public:
-        /**
-         * @brief Constructor.
-         *
-         * @details The Model parameter is used by the scheduler to get
-         * access to an Agent.  The Model is presumed to maintain a master
-         * list of all Agents in the Model and the Model can be queried for
-         * a reference to any particular Agent at `step()` time.
-         */
-        explicit SequentialScheduler(Model *model);
-
-        /**
-         * @brief Add an agent to the scheduler.
-         *
-         * @details The scheduler maintains a list of all AgentIDs currently
-         * assigned.  This function adds a new Agent to the list.
-         */
-        void add_agent(AgentID agent_id) override;
-
-        /**
-         * @brief Remove an agent from the scheduler.
-         *
-         * @details The scheduler maintains a list of all AgentIDs currently
-         * assigned.  This function removes an Agent from the list.
-         */
-        void delete_agent(AgentID agent_id) override;
-
         /**
          * @brief Execute a single time step.
          *
@@ -82,25 +57,27 @@ namespace kami {
          * scheduler's internal queue and then execute the `Agent::step()`
          * method for every Agent assigned to this scheduler in the order
          * assigned.
+         *
+         * @param model a reference copy of the model
+         *
+         * @returns returns vector of agents successfully stepped
          */
-        void step() override;
-
-    protected:
-        /**
-         * A vector containing the `AgentID`s of all agents assigned to this
-         * scheduler
-         */
-        std::vector<AgentID> _agent_list;
+        std::optional<std::shared_ptr<std::vector<AgentID>>>  step(std::shared_ptr<Model> model) override;
 
         /**
-         * A pointer to the `Model` this scheduler belongs to
+         * @brief Execute a single time step.
+         *
+         * @details This method will step through the list of Agents
+         * provided and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the model
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
          */
-        Model *_model;
-
-        /**
-         * Counter to increment on each step
-         */
-        int _step_counter;
+        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

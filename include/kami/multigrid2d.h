@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef KAMI_MULTIGRID2D_H
+//! @cond SuppressGuard
 #define KAMI_MULTIGRID2D_H
+//! @endcond
 
 #include <kami/agent.h>
 #include <kami/domain.h>
@@ -35,18 +37,18 @@
 
 namespace kami {
 
-/**
- * @brief A two-dimensional grid where each cell may contain multiple agents
- *
- * @details The grid is linear and may wrap around in its only dimension.
- *
- * @see `Grid2D`
- * @see `SoloGrid2D`
- */
+    /**
+     * @brief A two-dimensional grid where each cell may contain multiple agents
+     *
+     * @details The grid is linear and may wrap around in either dimension.
+     *
+     * @see `Grid2D`
+     * @see `SoloGrid2D`
+     */
     class LIBKAMI_EXPORT MultiGrid2D : public Grid2D {
     public:
         /**
-         * Constructor
+         * @brief Constructor
          *
          * @param[in] maximum_x the length of the grid in the first dimension
          * @param[in] maximum_y the length of the grid in the second dimension
@@ -59,7 +61,7 @@ namespace kami {
                 : Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {};
 
         /**
-         * Place agent on the grid at the specified location.
+         * @brief Place agent on the grid at the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to add.
          * @param[in] coord the coordinates of the agent.
@@ -67,7 +69,7 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true
          */
-        bool add_agent(AgentID agent_id, GridCoord2D coord) override;
+        std::optional<AgentID> add_agent(const AgentID agent_id, const GridCoord2D &coord) override;
     };
 
 }  // namespace kami
