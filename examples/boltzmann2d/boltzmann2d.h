@@ -52,6 +52,11 @@ public:
     MoneyAgent2D() : _step_counter(0), _agent_wealth(1) {}
 
     /**
+     * Deconstruct the agent
+     */
+    ~MoneyAgent2D();
+
+    /**
      * Execute a single time-step for the agent
      */
     kami::AgentID step(std::shared_ptr<kami::Model> model) override;

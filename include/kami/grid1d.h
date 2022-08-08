@@ -31,6 +31,8 @@
 
 #include <iostream>
 #include <map>
+#include <memory>
+#include <unordered_map>
 #include <vector>
 
 #include <kami/domain.h>
@@ -99,11 +101,6 @@ namespace kami {
         explicit Grid1D(unsigned int maximum_x, bool wrap_x = false);
 
         /**
-         * @brief Destructor
-         */
-        virtual ~Grid1D();
-
-        /**
          * @brief Place agent on the grid at the specified location.
          *
          * @param[in] agent_id the `AgentID` of the agent to add.
@@ -112,16 +109,16 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true.
          */
-        virtual bool add_agent(AgentID agent_id, GridCoord1D coord) = 0;
+        virtual std::optional<AgentID> add_agent(const AgentID agent_id, const GridCoord1D &coord) = 0;
 
         /**
          * @brief Remove agent from the grid.
          *
          * @param[in] agent_id the `AgentID` of the agent to remove.
          *
-         * @returns false if the agent is not removed, otherwise, true.
+         * @returns the `AgentID` of the `Agent` deleted
          */
-        bool delete_agent(AgentID agent_id);
+        std::optional<AgentID> delete_agent(const AgentID agent_id);
 
         /**
          * @brief Remove agent from the grid at the specified location
@@ -129,9 +126,9 @@ namespace kami {
          * @param[in] agent_id the `AgentID` of the agent to remove.
          * @param[in] coord the coordinates of the agent.
          *
-         * @returns false if the agent is not removed, otherwise, true.
+         * @returns the `AgentID` of the `Agent` deleted
          */
-        bool delete_agent(AgentID agent_id, const GridCoord1D &coord);
+        std::optional<AgentID> delete_agent(const AgentID agent_id, const GridCoord1D &coord);
 
         /**
          * @brief Move an agent to the specified location.
@@ -139,7 +136,7 @@ namespace kami {
          * @param[in] agent_id the `AgentID` of the agent to move.
          * @param[in] coord the coordinates of the agent.
          */
-        bool move_agent(AgentID agent_id, GridCoord1D coord);
+        std::optional<AgentID> move_agent(const AgentID agent_id, const GridCoord1D &coord);
 
         /**
          * @brief Inquire if the specified location is empty.
@@ -167,7 +164,7 @@ namespace kami {
          *
          * @return the location of the specified `Agent`
          */
-        [[nodiscard]] GridCoord1D get_location_by_agent(AgentID agent_id) const;
+        [[nodiscard]] std::optional<GridCoord1D> get_location_by_agent(const AgentID &agent_id) const;
 
         /**
          * @brief Get the contents of the specified location.
@@ -179,7 +176,7 @@ namespace kami {
          * to that object will update the state of the gird.  Further, the pointer
          * should not be deleted when no longer used.
          */
-        [[nodiscard]] std::vector<AgentID> *get_location_contents(const GridCoord1D& coord) const;
+        [[nodiscard]] std::unique_ptr<std::vector<AgentID>> get_location_contents(const GridCoord1D &coord) const;
 
         /**
          * @brief Inquire to whether the grid wraps in the `x` dimension.
@@ -198,7 +195,8 @@ namespace kami {
          * @return a vector of `GridCoord1D` that includes all of the coordinates
          * for all adjacent points.
          */
-        [[nodiscard]] std::vector<GridCoord1D> get_neighborhood(AgentID agent_id, bool include_center) const;
+        [[nodiscard]] std::unique_ptr<std::vector<GridCoord1D>>
+        get_neighborhood(const AgentID agent_id, const bool include_center) const;
 
         /**
          * @brief Return the neighborhood of the specified location
@@ -210,7 +208,8 @@ namespace kami {
          * @return a vector of `GridCoord1D` that includes all of the coordinates
          * for all adjacent points.
          */
-        [[nodiscard]] std::vector<GridCoord1D> get_neighborhood(const GridCoord1D& coord, bool include_center) const;
+        [[nodiscard]] std::unique_ptr<std::vector<GridCoord1D>>
+        get_neighborhood(const GridCoord1D &coord, const bool include_center) const;
 
         /**
          * @brief Get the size of the grid in the `x` dimension.
@@ -224,12 +223,12 @@ namespace kami {
          * @brief A vector containing the `AgentID`s of all agents assigned to this
          * grid.
          */
-        std::vector<AgentID> *_agent_grid;
+        std::unique_ptr<std::unordered_multimap<GridCoord1D, AgentID>> _agent_grid;
 
         /**
          * @brief A map containing the grid location of each agent.
          */
-        std::map<AgentID, GridCoord1D> *_agent_index;
+        std::unique_ptr<std::map<AgentID, GridCoord1D>> _agent_index;
 
         /**
          * @brief Automatically adjust a coordinate location for wrapping.
@@ -238,7 +237,7 @@ namespace kami {
          *
          * @return the adjusted coordinate wrapped if appropriate.
          */
-        [[nodiscard]] GridCoord1D coord_wrap(const GridCoord1D& coord) const;
+        [[nodiscard]] GridCoord1D coord_wrap(const GridCoord1D &coord) const;
 
     private:
         unsigned int _maximum_x;
@@ -246,5 +245,14 @@ namespace kami {
     };
 
 }  // namespace kami
+
+namespace std {
+    template<>
+    struct hash<kami::GridCoord1D> {
+        size_t operator()(const kami::GridCoord1D &key) const {
+            return (hash<int>()(key.get_x_location()));
+        }
+    };
+}  // namespace std
 
 #endif  // KAMI_GRID1D_H

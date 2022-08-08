@@ -25,7 +25,9 @@
 
 #pragma once
 #ifndef BOLTZMANN1D_H
+//! @cond SuppressGuard
 #define BOLTZMANN1D_H
+//! @endcond
 
 #include <iostream>
 #include <map>
@@ -49,6 +51,11 @@ public:
      * Create the agent
      */
     MoneyAgent1D() : _step_counter(0), _agent_wealth(1) {}
+
+    /**
+     * Deconstruct the agent
+     */
+    ~MoneyAgent1D();
 
     /**
      * Execute a single time-step for the agent

@@ -30,14 +30,13 @@
 
 namespace kami {
 
-    bool MultiGrid1D::add_agent(AgentID agent_id, GridCoord1D coord) {
-        if (is_location_valid(coord)) {
-            _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
-            _agent_grid[coord.get_x_location()].push_back(agent_id);
-            return (true);
-        }
+    std::optional<AgentID> MultiGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
+        if (!is_location_valid(coord))
+            return std::nullopt;
 
-        return (false);
+        _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
+        _agent_grid->insert(std::pair<GridCoord1D, AgentID>(coord, agent_id));
+        return agent_id;
     }
 
 }  // namespace kami
