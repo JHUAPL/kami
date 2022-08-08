@@ -7,8 +7,8 @@ Introduction
 ..  image:: https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml/badge.svg?branch=develop
     :target: https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml
     :alt: Build Status (develop)
-..  image:: https://readthedocs.org/projects/kami/badge/?version=latest
-    :target: https://kami.readthedocs.io/en/latest/?badge=latest
+..  image:: https://readthedocs.org/projects/kami/badge/?version=main
+    :target: https://kami.readthedocs.io/en/main/
     :alt: Documentation Status
 ..  image:: https://img.shields.io/github/release/JHUAPL/kami.svg
     :target: https://github.com/JHUAPL/kami/releases

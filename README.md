@@ -1,6 +1,6 @@
 [![Build (main)](https://github.com/JHUAPL/kami/actions/workflows/build-main.yml/badge.svg)](https://github.com/JHUAPL/kami/actions/workflows/build-main.yml)
 [![Build (develop)](https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml/badge.svg)](https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml)
-[![Documentation status](https://readthedocs.org/projects/kami/badge/?version=latest)](https://kami.readthedocs.io/en/latest/?badge=latest)
+[![Documentation status](https://readthedocs.org/projects/kami/badge/?version=main)](https://kami.readthedocs.io/en/main/)
 [![Release status](https://img.shields.io/github/release/JHUAPL/kami.svg)](https://github.com/JHUAPL/kami/releases)
 ![License](https://img.shields.io/github/license/JHUAPL/kami)
 
