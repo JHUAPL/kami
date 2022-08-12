@@ -1,7 +1,9 @@
 Changelog
 =========
 
-- :support:`0` Completed unit tests
+- :release:`0.5.1 <2022.08.11>`
+- :support:`0` Completed initial unit tests
+- :support:`0` Added background info to READ ME
 
 - :release:`0.5.0 <2022.08.08>`
 - :feature:`0` Added a barebones "starter" model to build from
