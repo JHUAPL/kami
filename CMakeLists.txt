@@ -1,44 +1,17 @@
-#
 # This is the Top level CMakelists file which creates the namespace and
 # organizes all sublibraries under it.
-#
-# The project name in this file is considered the "Namespace"
-# and any libraries under it will be given a target of
-#
-#  Namespace::library_name
-#
-#
-# This Lists file was modified from https://github.com/forexample/package-example
-#
-# This file creates project 'Foo' with two library targets 'bar' and 'cat'.
-# Target 'cat' depends on 'bar'. After installation this project can be found
-# by 'find_package(... CONFIG)' command:
-#
-#    find_package(foo CONFIG REQUIRED)
-#    target_link_libraries(... foo::bar)
-#
-# Note that requirements propagated automatically, for example:
-#   * Foo::baz linked automatically
-#   * <prefix>/include added to header search path
-#   * FOO_BAZ_DEBUG=1/FOO_BAR_DEBUG=1 added on Debug
-#   * FOO_BAZ_DEBUG=0/FOO_BAR_DEBUG=0 added on other configurations
+cmake_minimum_required(VERSION 3.13)
 
-####
-# Set minimum version of CMake. We need 3.13 at least.
-cmake_minimum_required(VERSION 3.13) # GENERATOR_IS_MULTI_CONFIG
+set(PROJECT_NAME "kami")
 
-set(KAMI_VERSION_MAJOR 0)
-set(KAMI_VERSION_MINOR 5)
-set(KAMI_VERSION_PATCH 0)
-set(KAMI_VERSION_STRING ${KAMI_VERSION_MAJOR}.${KAMI_VERSION_MINOR}.${KAMI_VERSION_PATCH})
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 5)
+set(VERSION_PATCH 0)
+set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
-################################################################################
-# Set variables for the project. The:
-#   * PROJECT_NAME
-#   * PROJECT_VERSION
-#   * PROJECT_NAMESPACE should be the same as the project.
-project(kami  VERSION       ${KAMI_VERSION_STRING}
-              LANGUAGES     CXX)
+project(${PROJECT_NAME}
+        VERSION ${VERSION_STRING}
+        LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,11 +21,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_BINARY_DIR}" CACHE STRING "M
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
-set(PROJECT_NAMESPACE        kami  )  # The project namespace. Library targets
-                                      # will be referred by
-                                      # foo::bar. This value should usually be
-                                      # the same as the project.
-################################################################################
+set(PROJECT_NAMESPACE ${PROJECT_NAME})
 
 find_package(spdlog)
 find_package(Threads)
@@ -95,7 +64,7 @@ ENDFOREACH()
 ################################################################################
 # Examples.
 #
-#  Each example will be built as a static or shared library and a
+#  Each example will be built as a static or shared binary and a
 #  target will be created for it.
 ################################################################################
 
@@ -125,7 +94,7 @@ include(GNUInstallDirs)
 #   * <prefix>/include/
 set(config_install_dir "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}")
 
-set(generated_dir                "${CMAKE_CURRENT_BINARY_DIR}/generated")
+set(generated_dir "${CMAKE_CURRENT_BINARY_DIR}/generated")
 
 # Configuration
 set(version_config "${generated_dir}/${PROJECT_NAME}ConfigVersion.cmake")
@@ -158,38 +127,30 @@ configure_package_config_file(
 #  * <prefix>/lib/libbaz.a
 #  * header location after install: <prefix>/include/foo/Bar.hpp
 #  * headers can be included by C++ code `#include <foo/Bar.hpp>`
-  install(
-   TARGETS
-       ${sub_modules} ${example_modules}
-       ${COVERAGE_INSTALL_TARGET}
-   EXPORT
-       "${TARGETS_EXPORT_NAME}"
-   LIBRARY  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-   ARCHIVE  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-   RUNTIME  DESTINATION "${CMAKE_INSTALL_BINDIR}"
-   INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
-  )
+install(
+        TARGETS ${sub_modules} ${example_modules} ${COVERAGE_INSTALL_TARGET}
+        EXPORT "${TARGETS_EXPORT_NAME}"
+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+)
 
 
 # Config
 #   * <prefix>/lib/cmake/Foo/FooConfig.cmake
 #   * <prefix>/lib/cmake/Foo/FooConfigVersion.cmake
 install(
-    FILES
-        "${project_config}" "${version_config}"
-    DESTINATION
-        "${config_install_dir}"
+        FILES "${project_config}" "${version_config}"
+        DESTINATION "${config_install_dir}"
 )
 
 # Config
 #   * <prefix>/lib/cmake/Foo/FooTargets.cmake
 install(
-    EXPORT
-        "${TARGETS_EXPORT_NAME}"
-    NAMESPACE
-        "${namespace}"
-    DESTINATION
-        "${config_install_dir}"
+        EXPORT "${TARGETS_EXPORT_NAME}"
+        NAMESPACE "${namespace}"
+        DESTINATION "${config_install_dir}"
 )
 
 add_subdirectory(docs)
