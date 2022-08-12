@@ -52,7 +52,7 @@ public:
     }
 };
 
-TEST(Agent, DefaultConstructor) {
+TEST(StagedAgent, DefaultConstructor) {
     const TestStagedAgent agent_foo;
     const TestStagedAgent agent_bar;
 
@@ -60,7 +60,7 @@ TEST(Agent, DefaultConstructor) {
     EXPECT_NE(agent_foo, agent_bar);
 }
 
-TEST(Agent, get_agent_id) {
+TEST(StagedAgent, get_agent_id) {
     const TestStagedAgent agent_foo;
     const TestStagedAgent agent_bar;
 
@@ -68,7 +68,7 @@ TEST(Agent, get_agent_id) {
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.get_agent_id());
 }
 
-TEST(Agent, advance) {
+TEST(StagedAgent, advance) {
     TestStagedAgent agent_foo;
     TestStagedAgent agent_bar;
     auto model_world = std::make_shared<TestModel>();
@@ -77,7 +77,7 @@ TEST(Agent, advance) {
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.advance(model_world));
 }
 
-TEST(Agent, step) {
+TEST(StagedAgent, step) {
     TestStagedAgent agent_foo;
     TestStagedAgent agent_bar;
     auto model_world = std::make_shared<TestModel>();
@@ -86,7 +86,7 @@ TEST(Agent, step) {
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));
 }
 
-TEST(Agent, Equality) {
+TEST(StagedAgent, Equality) {
     const TestStagedAgent agent_foo;
     const TestStagedAgent agent_bar;
 
@@ -94,7 +94,7 @@ TEST(Agent, Equality) {
     EXPECT_TRUE(agent_bar == agent_bar);
 }
 
-TEST(Agent, Inequality) {
+TEST(StagedAgent, Inequality) {
     const TestStagedAgent agent_foo;
     const TestStagedAgent agent_bar;
 

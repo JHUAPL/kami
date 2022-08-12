@@ -22,6 +22,22 @@ create_test(
 )
 
 create_test(
+        NAME unit-kami-model
+        SOURCES unit-kami-model.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-model
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
+        NAME unit-kami-multigrid1d
+        SOURCES unit-kami-multigrid1d.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-multigrid1d
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
         NAME unit-kami-stagedagent
         SOURCES unit-kami-stagedagent.cc
         PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads

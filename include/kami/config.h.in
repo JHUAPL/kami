@@ -41,25 +41,23 @@
 /**
  * The major version of the Kami library.
  */
-#define KAMI_VERSION_MAJOR @KAMI_VERSION_MAJOR@
+#define KAMI_VERSION_MAJOR @VERSION_MAJOR@
 
 /**
  * The minor version of the Kami library.
  */
-#define KAMI_VERSION_MINOR @KAMI_VERSION_MINOR@
+#define KAMI_VERSION_MINOR @VERSION_MINOR@
 
 /**
  * The patch level of the Kami library.
  */
-#define KAMI_VERSION_PATCH @KAMI_VERSION_PATCH@
+#define KAMI_VERSION_PATCH @VERSION_PATCH@
 
 namespace kami {
 
     namespace {
         /**
          * @brief A reference copy of the current version of Kami
-         *
-         * @return the version as a `semver` object
          */
         constexpr auto version = semver::version{KAMI_VERSION_MAJOR, KAMI_VERSION_MINOR, KAMI_VERSION_PATCH};
     }

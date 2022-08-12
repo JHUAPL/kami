@@ -1,10 +1,22 @@
 [![Build (main)](https://github.com/JHUAPL/kami/actions/workflows/build-main.yml/badge.svg)](https://github.com/JHUAPL/kami/actions/workflows/build-main.yml)
 [![Build (develop)](https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml/badge.svg)](https://github.com/JHUAPL/kami/actions/workflows/build-develop.yml)
-[![Documentation status](https://readthedocs.org/projects/kami/badge/?version=latest)](https://kami.readthedocs.io/en/latest/?badge=latest)
+[![Documentation status](https://readthedocs.org/projects/kami/badge/?version=main)](https://kami.readthedocs.io/en/main/)
 [![Release status](https://img.shields.io/github/release/JHUAPL/kami.svg)](https://github.com/JHUAPL/kami/releases)
 ![License](https://img.shields.io/github/license/JHUAPL/kami)
 
 # Kami is Agent-Based Modeling in Modern C++
+
+Agent-based models (ABMs) are models for simulating the actions of
+individual actors within a provided environment to understand the
+behavior of the agents, most individually and collectively. ABMs
+are particularly suited for addressing problems governed by nonlinear
+processes or where there is a wide variety of potential responses
+an individual agent may provide depending on the environment and
+behavior of other agents. Because of this, ABMs have become powerful
+tools in both simulation and modeling, especially in public health
+and ecology, where they are also known as individual-based models.
+ABMs also provide support in economic, business, robotics, and many
+other fields.
 
 ## Compiling
 

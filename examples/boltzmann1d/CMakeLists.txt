@@ -15,4 +15,4 @@ create_executable(
         PUBLIC_LINKED_TARGETS fmt spdlog::spdlog kami::libkami
 )
 
-set_target_properties(${EXAMPLE_NAME} PROPERTIES VERSION ${KAMI_VERSION_STRING})
+set_target_properties(${EXAMPLE_NAME} PROPERTIES VERSION ${VERSION_STRING})
