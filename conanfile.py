@@ -49,3 +49,4 @@ class KamiConan(ConanFile):
         self.requires("cli11/1.9.1")
         self.requires("neargye-semver/0.3.0")
         self.requires("gtest/cci.20210126")
+        self.requires("nlohmann_json/3.11.1")
