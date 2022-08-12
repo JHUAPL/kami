@@ -6,6 +6,18 @@
 
 # Kami is Agent-Based Modeling in Modern C++
 
+Agent-based models (ABMs) are models for simulating the actions of
+individual actors within a provided environment to understand the
+behavior of the agents, most individually and collectively. ABMs
+are particularly suited for addressing problems governed by nonlinear
+processes or where there is a wide variety of potential responses
+an individual agent may provide depending on the environment and
+behavior of other agents. Because of this, ABMs have become powerful
+tools in both simulation and modeling, especially in public health
+and ecology, where they are also known as individual-based models.
+ABMs also provide support in economic, business, robotics, and many
+other fields.
+
 ## Compiling
 
 ```Bash
