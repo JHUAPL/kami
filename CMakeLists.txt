@@ -23,9 +23,6 @@ conan_basic_setup()
 
 set(PROJECT_NAMESPACE ${PROJECT_NAME})
 
-find_package(spdlog)
-find_package(Threads)
-
 if(CMAKE_COMPILER_IS_GNUCC)
     option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
 endif()
