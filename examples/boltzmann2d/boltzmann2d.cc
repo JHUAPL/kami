@@ -26,15 +26,14 @@
 #include "boltzmann2d.h"
 
 #include <exception>
+#include <list>
 #include <map>
 #include <memory>
 #include <optional>
 #include <random>
 #include <stdexcept>
 
-#include <CLI/App.hpp>
-#include <CLI/Config.hpp>
-#include <CLI/Formatter.hpp>
+#include <CLI/CLI.hpp>
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
@@ -176,8 +175,14 @@ int main(int argc, char **argv) {
     CLI::App app{ident};
     unsigned int x_size = 16, y_size = 16, agent_count = x_size * y_size, max_steps = 100, initial_seed = 42;
 
+    // This exercise is really stupid.
+    auto levels_list = std::make_unique<std::list<std::string>>();
+    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+        levels_list->push_back(std::string(level_name.data(), level_name.size()));
+
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
-    app.add_option("-l", log_level_option, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
+    app.add_option("-l", log_level_option, "Set the logging level")->check(
+            CLI::IsMember(levels_list.get(), CLI::ignore_case));
     app.add_option("-n", max_steps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
     app.add_option("-s", initial_seed, "Set the initial seed")->check(CLI::Number);
     app.add_option("-x", x_size, "Set the number of columns")->check(CLI::PositiveNumber);
