@@ -31,9 +31,10 @@
 
 #include <iostream>
 #include <map>
-#include <optional>
+#include <memory>
+#include <set>
 #include <unordered_map>
-#include <vector>
+#include <unordered_set>
 
 #include <kami/domain.h>
 #include <kami/grid.h>
@@ -181,12 +182,13 @@ namespace kami {
          *
          * @param[in] coord the coordinates of the query.
          *
-         * @return a pointer to a `vector` of `AgentID`s.  The pointer is to the
+         * @return a pointer to a `set` of `AgentID`s.  The pointer is to the
          * internal copy of the agent list at the location, therefore, any changes
          * to that object will update the state of the gird.  Further, the pointer
          * should not be deleted when no longer used.
          */
-        [[nodiscard]] std::unique_ptr<std::vector<AgentID>> get_location_contents(const GridCoord2D &coord) const;
+        [[nodiscard]] std::optional<std::shared_ptr<std::set<AgentID>>>
+        get_location_contents(const GridCoord2D &coord) const;
 
         /**
          * @brief Inquire to whether the grid wraps in the `x` dimension.
@@ -210,12 +212,12 @@ namespace kami {
          * @param[in] include_center should the center-point, occupied by the agent,
          * be in the list.
          *
-         * @return a vector of `GridCoord1D` that includes all of the coordinates
+         * @return a set of `GridCoord1D` that includes all of the coordinates
          * for all adjacent points.
          *
          * @see `NeighborhoodType`
          */
-        [[nodiscard]] std::unique_ptr<std::vector<GridCoord2D>>
+        [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
         get_neighborhood(AgentID agent_id, bool include_center, GridNeighborhoodType neighborhood_type) const;
 
         /**
@@ -226,12 +228,12 @@ namespace kami {
          * @param[in] include_center should the center-point, occupied by the agent,
          * be in the list.
          *
-         * @return a vector of `GridCoord1D` that includes all of the coordinates
+         * @return a set of `GridCoord2D` that includes all of the coordinates
          * for all adjacent points.
          *
          * @see `NeighborhoodType`
          */
-        [[nodiscard]] std::unique_ptr<std::vector<GridCoord2D>>
+        [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
         get_neighborhood(const GridCoord2D &coord, bool include_center, GridNeighborhoodType neighborhood_type) const;
 
         /**
@@ -250,7 +252,7 @@ namespace kami {
 
     protected:
         /**
-         * @brief  A vector containing the `AgentID`s of all agents assigned to this
+         * @brief  A map containing the `AgentID`s of all agents assigned to this
          * grid.
          */
         std::unique_ptr<std::unordered_multimap<GridCoord2D, AgentID>> _agent_grid;

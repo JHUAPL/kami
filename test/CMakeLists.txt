@@ -22,6 +22,22 @@ create_test(
 )
 
 create_test(
+        NAME unit-kami-gridcoord1d
+        SOURCES unit-kami-gridcoord1d.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-gridcoord1d
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
+        NAME unit-kami-gridcoord2d
+        SOURCES unit-kami-gridcoord2d.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-gridcoord2d
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
         NAME unit-kami-model
         SOURCES unit-kami-model.cc
         PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
@@ -34,6 +50,30 @@ create_test(
         SOURCES unit-kami-multigrid1d.cc
         PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
         COMMAND unit-kami-multigrid1d
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
+        NAME unit-kami-multigrid2d
+        SOURCES unit-kami-multigrid2d.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-multigrid2d
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
+        NAME unit-kami-sologrid1d
+        SOURCES unit-kami-sologrid1d.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-sologrid1d
+        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+)
+
+create_test(
+        NAME unit-kami-sologrid2d
+        SOURCES unit-kami-sologrid2d.cc
+        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+        COMMAND unit-kami-sologrid2d
         PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
 )
 

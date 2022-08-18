@@ -65,7 +65,7 @@ public:
     /**
      * Move the agent to a random location on the world
      */
-    kami::GridCoord1D move_agent(std::shared_ptr<kami::Model> model);
+    std::optional<kami::GridCoord1D> move_agent(std::shared_ptr<kami::Model> model);
 
     /**
      * Give money to a random agent

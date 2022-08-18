@@ -118,45 +118,47 @@ namespace kami {
         return add_agent(agent_id, coord);
     }
 
-    std::unique_ptr<std::vector<GridCoord2D>>
+    std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
     Grid2D::get_neighborhood(const AgentID agent_id, const bool include_center,
                              const GridNeighborhoodType neighborhood_type) const {
         auto coord = get_location_by_agent(agent_id);
+        if (!coord)
+            return std::nullopt;
 
         return std::move(get_neighborhood(coord.value(), include_center, neighborhood_type));
     }
 
-    std::unique_ptr<std::vector<GridCoord2D>>
+    std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
     Grid2D::get_neighborhood(const GridCoord2D &coord, const bool include_center,
                              const GridNeighborhoodType neighborhood_type) const {
-        auto neighborhood = std::make_unique<std::vector<GridCoord2D>>();
+        auto neighborhood = std::make_unique<std::unordered_set<GridCoord2D>>();
         auto x = coord.get_x_location();
         auto y = coord.get_y_location();
 
         // We assume our starting position is valid
         if (include_center)
-            neighborhood->push_back(coord);
+            neighborhood->insert(coord);
 
         // N, E, S, W
         {
             auto new_location = coord_wrap(GridCoord2D(x, y - 1));
             if (is_location_valid(new_location))
-                neighborhood->push_back(coord_wrap(new_location));
+                neighborhood->insert(coord_wrap(new_location));
         }
         {
             auto new_location = coord_wrap(GridCoord2D(x, y + 1));
             if (is_location_valid(new_location))
-                neighborhood->push_back(coord_wrap(new_location));
+                neighborhood->insert(coord_wrap(new_location));
         }
         {
             auto new_location = coord_wrap(GridCoord2D(x + 1, y));
             if (is_location_valid(new_location))
-                neighborhood->push_back(coord_wrap(new_location));
+                neighborhood->insert(coord_wrap(new_location));
         }
         {
             auto new_location = coord_wrap(GridCoord2D(x - 1, y));
             if (is_location_valid(new_location))
-                neighborhood->push_back(coord_wrap(new_location));
+                neighborhood->insert(coord_wrap(new_location));
         }
 
         if (neighborhood_type == GridNeighborhoodType::Moore) {
@@ -164,42 +166,43 @@ namespace kami {
             {
                 auto new_location = coord_wrap(GridCoord2D(x + 1, y - 1));
                 if (is_location_valid(new_location))
-                    neighborhood->push_back(coord_wrap(new_location));
+                    neighborhood->insert(coord_wrap(new_location));
             }
             {
                 auto new_location = coord_wrap(GridCoord2D(x + 1, y + 1));
                 if (is_location_valid(new_location))
-                    neighborhood->push_back(coord_wrap(new_location));
+                    neighborhood->insert(coord_wrap(new_location));
             }
             {
                 auto new_location = coord_wrap(GridCoord2D(x - 1, y + 1));
                 if (is_location_valid(new_location))
-                    neighborhood->push_back(coord_wrap(new_location));
+                    neighborhood->insert(coord_wrap(new_location));
             }
             {
                 auto new_location = coord_wrap(GridCoord2D(x - 1, y - 1));
                 if (is_location_valid(new_location))
-                    neighborhood->push_back(coord_wrap(new_location));
+                    neighborhood->insert(coord_wrap(new_location));
             }
         }
 
         return std::move(neighborhood);
     }
 
-    std::unique_ptr<std::vector<AgentID>> Grid2D::get_location_contents(const GridCoord2D &coord) const {
-        auto agent_ids = std::make_unique<std::vector<AgentID>>();
+    std::optional<std::shared_ptr<std::set<AgentID>>> Grid2D::get_location_contents(const GridCoord2D &coord) const {
+        auto agent_ids = std::make_shared<std::set<AgentID>>();
+
         if (!is_location_valid(coord))
-            return std::move(agent_ids);
+            return std::nullopt;
         if (is_location_empty(coord))
-            return std::move(agent_ids);
+            return agent_ids;
 
         auto agent_range = _agent_grid->equal_range(coord);
         if (agent_range.first == agent_range.second)
-            return std::move(agent_ids);
+            return agent_ids;
 
         for (auto i = agent_range.first; i != agent_range.second; i++)
-            agent_ids->push_back(i->second);
-        return std::move(agent_ids);
+            agent_ids->insert(i->second);
+        return agent_ids;
     }
 
     bool Grid2D::get_wrap_x() const { return _wrap_x; }
