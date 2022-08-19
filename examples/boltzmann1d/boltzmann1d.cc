@@ -163,12 +163,6 @@ BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents, unsig
     }
 }
 
-std::shared_ptr<kami::Model> BoltzmannWealthModel1D::run(unsigned int steps) {
-    for (auto i = 0; i < steps; i++)
-        step();
-    return shared_from_this();
-}
-
 std::shared_ptr<kami::Model> BoltzmannWealthModel1D::step() {
     console->trace("Executing model step {}", ++_step_count);
     _sched->step(shared_from_this());

@@ -46,27 +46,6 @@ namespace kami {
 
     public:
         /**
-         * @brief Execute a fixed number of time-steps for the model.
-         *
-         * @details This function should execute a fixed number of time-steps for the model.
-         *
-         * @param[in] n the number of time steps to execute.
-         *
-         * @returns a shared pointer to this instance of `Model`
-         */
-        virtual std::shared_ptr<Model> run(unsigned int n) = 0;
-
-        /**
-         * @brief Execute a single time-step for the model.
-         *
-         * @details This function should step the model instance.  Any activities that the
-         * model should perform as part of its time step should be in this function.
-         *
-         * @returns a shared pointer to this instance of `Model`
-         */
-        virtual std::shared_ptr<Model> step() = 0;
-
-        /**
          * @brief Get the `Domain` associated with this model
          *
          * @returns a shared pointer to the `Domain`

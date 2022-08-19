@@ -23,14 +23,15 @@
  * SOFTWARE.
  */
 
-#include <memory>
-
 #include <kami/agent.h>
-#include <kami/model.h>
+#include <kami/population.h>
+#include <kami/sequential.h>
 
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace std;
 
 class TestAgent : public Agent {
 public:
@@ -40,47 +41,48 @@ public:
 };
 
 class TestModel : public Model {
+public:
+    std::optional<std::shared_ptr<std::vector<AgentID>>> step() {
+        return _sched->step(shared_from_this());
+    }
 };
 
-TEST(Agent, DefaultConstructor) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+class SequentialSchedulerTest : public ::testing::Test {
+protected:
+    std::shared_ptr<TestModel> mod = nullptr;
 
-    EXPECT_EQ(agent_foo, agent_foo);
-    EXPECT_NE(agent_foo, agent_bar);
+    void SetUp() override {
+        mod = std::make_shared<TestModel>();
+        auto popul_foo = std::make_shared<Population>();
+        auto sched_foo = std::make_shared<SequentialScheduler>();
+
+        // Domain is not required for this test
+        static_cast<void>(mod->set_population(popul_foo));
+        static_cast<void>(mod->set_scheduler(sched_foo));
+
+        for (auto i = 0; i < 10; i++) {
+            auto agent_foo = std::make_shared<TestAgent>();
+            static_cast<void>(popul_foo->add_agent(agent_foo));
+        }
+    }
+};
+
+TEST(SequentialScheduler, DefaultConstructor) {
+    // There is really no way this can go wrong, but
+    // we add this check anyway in case of future
+    // changes.
+    EXPECT_NO_THROW(
+            const SequentialScheduler sched_foo;
+    );
 }
 
-TEST(Agent, get_agent_id) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+TEST_F(SequentialSchedulerTest, step) {
+    auto tval = mod->get_population().value()->get_agent_list();
+    auto rval = mod->step();
 
-    EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.get_agent_id());
-    EXPECT_NE(agent_bar.get_agent_id(), agent_foo.get_agent_id());
-}
-
-TEST(Agent, step) {
-    TestAgent agent_foo;
-    TestAgent agent_bar;
-    auto model_world = std::make_shared<TestModel>();
-
-    EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
-    EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));
-}
-
-TEST(Agent, Equality) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
-
-    EXPECT_TRUE(agent_foo == agent_foo);
-    EXPECT_TRUE(agent_bar == agent_bar);
-}
-
-TEST(Agent, Inequality) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
-
-    EXPECT_TRUE(agent_foo != agent_bar);
-    EXPECT_FALSE(agent_bar != agent_bar);
+    EXPECT_TRUE(rval);
+    EXPECT_EQ(rval.value()->size(), 10);
+    EXPECT_EQ(*rval.value(), *tval);
 }
 
 int main(int argc, char **argv) {

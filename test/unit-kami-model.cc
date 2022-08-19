@@ -44,11 +44,7 @@ public:
 
 class TestModel : public Model {
 public:
-    std::shared_ptr<Model> step() override {
-        return shared_from_this();
-    }
-
-    std::shared_ptr<Model> run(unsigned int) override {
+    std::shared_ptr<Model> step() {
         return shared_from_this();
     }
 };
