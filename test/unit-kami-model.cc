@@ -33,20 +33,22 @@
 
 #include <gtest/gtest.h>
 
-class TestAgent : public kami::Agent {
+using namespace kami;
+
+class TestAgent : public Agent {
 public:
-    kami::AgentID step(std::shared_ptr<kami::Model> model) override {
+    AgentID step(std::shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public kami::Model {
+class TestModel : public Model {
 public:
-    std::shared_ptr<kami::Model> step() override {
+    std::shared_ptr<Model> step() override {
         return shared_from_this();
     }
 
-    std::shared_ptr<kami::Model> run(unsigned int) override {
+    std::shared_ptr<Model> run(unsigned int) override {
         return shared_from_this();
     }
 };
@@ -62,7 +64,7 @@ TEST(Model, DefaultConstructor) {
 
 TEST(Model, set_population) {
     auto model_foo = std::make_shared<TestModel>();
-    auto popul_foo = std::make_shared<kami::Population>();
+    auto popul_foo = std::make_shared<Population>();
 
     auto popul_bar = model_foo->set_population(popul_foo);
     EXPECT_EQ(popul_foo, popul_bar);
@@ -70,7 +72,7 @@ TEST(Model, set_population) {
 
 TEST(Model, get_population) {
     auto model_foo = std::make_shared<TestModel>();
-    auto popul_foo = std::make_shared<kami::Population>();
+    auto popul_foo = std::make_shared<Population>();
 
     auto popul_nul = model_foo->get_population();
 
@@ -84,7 +86,7 @@ TEST(Model, get_population) {
 
 TEST(Model, set_scheduler) {
     auto model_foo = std::make_shared<TestModel>();
-    auto sched_foo = std::make_shared<kami::SequentialScheduler>();
+    auto sched_foo = std::make_shared<SequentialScheduler>();
 
     auto sched_bar = model_foo->set_scheduler(sched_foo);
     EXPECT_EQ(sched_foo, sched_bar);
@@ -92,7 +94,7 @@ TEST(Model, set_scheduler) {
 
 TEST(Model, get_scheduler) {
     auto model_foo = std::make_shared<TestModel>();
-    auto sched_foo = std::make_shared<kami::SequentialScheduler>();
+    auto sched_foo = std::make_shared<SequentialScheduler>();
 
     auto sched_nul = model_foo->get_scheduler();
     EXPECT_FALSE(sched_nul);
@@ -107,7 +109,7 @@ TEST(Model, get_scheduler) {
 
 TEST(Model, set_domain) {
     auto model_foo = std::make_shared<TestModel>();
-    auto grid2_foo = std::make_shared<kami::MultiGrid2D>(10, 10, true, true);
+    auto grid2_foo = std::make_shared<MultiGrid2D>(10, 10, true, true);
 
     auto grid2_bar = model_foo->set_domain(grid2_foo);
     EXPECT_EQ(grid2_foo, grid2_bar);
@@ -115,7 +117,7 @@ TEST(Model, set_domain) {
 
 TEST(Model, get_domain) {
     auto model_foo = std::make_shared<TestModel>();
-    auto grid2_foo = std::make_shared<kami::MultiGrid2D>(10, 10, true, true);
+    auto grid2_foo = std::make_shared<MultiGrid2D>(10, 10, true, true);
 
     auto grid2_nul = model_foo->get_domain();
     EXPECT_FALSE(grid2_nul);

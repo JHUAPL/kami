@@ -30,24 +30,26 @@
 
 #include <gtest/gtest.h>
 
-class TestStagedAgent : public kami::StagedAgent {
+using namespace kami;
+
+class TestStagedAgent : public StagedAgent {
 public:
-    kami::AgentID advance(std::shared_ptr<kami::Model> model) override {
+    AgentID advance(std::shared_ptr<Model> model) override {
         return get_agent_id();
     }
 
-    kami::AgentID step(std::shared_ptr<kami::Model> model) override {
+    AgentID step(std::shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public kami::Model {
+class TestModel : public Model {
 public:
-    std::shared_ptr<kami::Model> step() override {
+    std::shared_ptr<Model> step() override {
         return shared_from_this();
     }
 
-    std::shared_ptr<kami::Model> run(unsigned int) override {
+    std::shared_ptr<Model> run(unsigned int) override {
         return shared_from_this();
     }
 };

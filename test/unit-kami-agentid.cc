@@ -28,25 +28,27 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using namespace kami;
+
 TEST(AgentID, DefaultConstructor) {
-    const kami::AgentID agent_id_foo;
-    const kami::AgentID agent_id_bar;
+    const AgentID agent_id_foo;
+    const AgentID agent_id_bar;
 
     EXPECT_EQ(agent_id_foo, agent_id_foo);
     EXPECT_NE(agent_id_foo, agent_id_bar);
 }
 
 TEST(AgentID, to_string) {
-    const kami::AgentID agent_id_foo;
-    const kami::AgentID agent_id_bar;
+    const AgentID agent_id_foo;
+    const AgentID agent_id_bar;
 
     EXPECT_THAT(agent_id_foo.to_string(), testing::MatchesRegex("[0-9]+"));
     EXPECT_THAT(agent_id_bar.to_string(), testing::MatchesRegex("[0-9]+"));
 }
 
 TEST(AgentID, Equality) {
-    const kami::AgentID agent_id_foo;
-    const kami::AgentID agent_id_bar;
+    const AgentID agent_id_foo;
+    const AgentID agent_id_bar;
 
     EXPECT_TRUE(agent_id_foo == agent_id_foo);
     EXPECT_TRUE(agent_id_bar == agent_id_bar);
@@ -54,16 +56,16 @@ TEST(AgentID, Equality) {
 }
 
 TEST(AgentID, Inequality) {
-    const kami::AgentID agent_id_foo;
-    const kami::AgentID agent_id_bar;
+    const AgentID agent_id_foo;
+    const AgentID agent_id_bar;
 
     EXPECT_TRUE(agent_id_foo != agent_id_bar);
     EXPECT_FALSE(agent_id_bar != agent_id_bar);
 }
 
 TEST(AgentID, Ordering) {
-    const kami::AgentID agent_id_foo;
-    const kami::AgentID agent_id_bar;
+    const AgentID agent_id_foo;
+    const AgentID agent_id_bar;
 
     EXPECT_TRUE(agent_id_foo < agent_id_bar);
     EXPECT_FALSE(agent_id_bar < agent_id_foo);

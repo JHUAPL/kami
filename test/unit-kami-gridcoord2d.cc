@@ -28,12 +28,14 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using namespace kami;
+
 TEST(GridCoord2D, DefaultConstructor) {
-    const kami::GridCoord2D gridcoord2d_foo(0, 0);
-    const kami::GridCoord2D gridcoord2d_bar(1, 1);
-    const kami::GridCoord2D gridcoord2d_baz(-1, -1);
-    const kami::GridCoord2D gridcoord2d_qux(0, 1);
-    const kami::GridCoord2D gridcoord2d_qu2(1, 0);
+    const GridCoord2D gridcoord2d_foo(0, 0);
+    const GridCoord2D gridcoord2d_bar(1, 1);
+    const GridCoord2D gridcoord2d_baz(-1, -1);
+    const GridCoord2D gridcoord2d_qux(0, 1);
+    const GridCoord2D gridcoord2d_qu2(1, 0);
 
     EXPECT_EQ(gridcoord2d_foo, gridcoord2d_foo);
 
@@ -46,11 +48,11 @@ TEST(GridCoord2D, DefaultConstructor) {
 }
 
 TEST(GridCoord2D, to_string) {
-    const kami::GridCoord2D gridcoord2d_foo(0, 0);
-    const kami::GridCoord2D gridcoord2d_bar(1, 1);
-    const kami::GridCoord2D gridcoord2d_baz(-1, -1);
-    const kami::GridCoord2D gridcoord2d_qux(0, 1);
-    const kami::GridCoord2D gridcoord2d_qu2(1, 0);
+    const GridCoord2D gridcoord2d_foo(0, 0);
+    const GridCoord2D gridcoord2d_bar(1, 1);
+    const GridCoord2D gridcoord2d_baz(-1, -1);
+    const GridCoord2D gridcoord2d_qux(0, 1);
+    const GridCoord2D gridcoord2d_qu2(1, 0);
 
     EXPECT_THAT(gridcoord2d_foo.to_string(), "(0, 0)");
     EXPECT_THAT(gridcoord2d_bar.to_string(), "(1, 1)");
@@ -60,11 +62,11 @@ TEST(GridCoord2D, to_string) {
 }
 
 TEST(GridCoord2D, Equality) {
-    const kami::GridCoord2D gridcoord2d_foo(0, 0);
-    const kami::GridCoord2D gridcoord2d_bar(1, 1);
-    const kami::GridCoord2D gridcoord2d_baz(-1, -1);
-    const kami::GridCoord2D gridcoord2d_qux(0, 1);
-    const kami::GridCoord2D gridcoord2d_qu2(1, 0);
+    const GridCoord2D gridcoord2d_foo(0, 0);
+    const GridCoord2D gridcoord2d_bar(1, 1);
+    const GridCoord2D gridcoord2d_baz(-1, -1);
+    const GridCoord2D gridcoord2d_qux(0, 1);
+    const GridCoord2D gridcoord2d_qu2(1, 0);
 
     EXPECT_TRUE(gridcoord2d_foo == gridcoord2d_foo);
 
@@ -77,11 +79,11 @@ TEST(GridCoord2D, Equality) {
 }
 
 TEST(GridCoord2D, Inequality) {
-    const kami::GridCoord2D gridcoord2d_foo(0, 0);
-    const kami::GridCoord2D gridcoord2d_bar(1, 1);
-    const kami::GridCoord2D gridcoord2d_baz(-1, -1);
-    const kami::GridCoord2D gridcoord2d_qux(0, 1);
-    const kami::GridCoord2D gridcoord2d_qu2(1, 0);
+    const GridCoord2D gridcoord2d_foo(0, 0);
+    const GridCoord2D gridcoord2d_bar(1, 1);
+    const GridCoord2D gridcoord2d_baz(-1, -1);
+    const GridCoord2D gridcoord2d_qux(0, 1);
+    const GridCoord2D gridcoord2d_qu2(1, 0);
 
     EXPECT_FALSE(gridcoord2d_foo != gridcoord2d_foo);
 
@@ -93,11 +95,11 @@ TEST(GridCoord2D, Inequality) {
 }
 
 TEST(GridCoord2D, get_x_location) {
-    const kami::GridCoord2D gridcoord2d_foo(0, 0);
-    const kami::GridCoord2D gridcoord2d_bar(1, 1);
-    const kami::GridCoord2D gridcoord2d_baz(-1, -1);
-    const kami::GridCoord2D gridcoord2d_qux(0, 1);
-    const kami::GridCoord2D gridcoord2d_qu2(1, 0);
+    const GridCoord2D gridcoord2d_foo(0, 0);
+    const GridCoord2D gridcoord2d_bar(1, 1);
+    const GridCoord2D gridcoord2d_baz(-1, -1);
+    const GridCoord2D gridcoord2d_qux(0, 1);
+    const GridCoord2D gridcoord2d_qu2(1, 0);
 
     EXPECT_TRUE(gridcoord2d_foo.get_x_location() == 0);
     EXPECT_TRUE(gridcoord2d_bar.get_x_location() == 1);
@@ -117,11 +119,11 @@ TEST(GridCoord2D, get_x_location) {
 }
 
 TEST(GridCoord2D, get_y_location) {
-    const kami::GridCoord2D gridcoord2d_foo(0, 0);
-    const kami::GridCoord2D gridcoord2d_bar(1, 1);
-    const kami::GridCoord2D gridcoord2d_baz(-1, -1);
-    const kami::GridCoord2D gridcoord2d_qux(0, 1);
-    const kami::GridCoord2D gridcoord2d_qu2(1, 0);
+    const GridCoord2D gridcoord2d_foo(0, 0);
+    const GridCoord2D gridcoord2d_bar(1, 1);
+    const GridCoord2D gridcoord2d_baz(-1, -1);
+    const GridCoord2D gridcoord2d_qux(0, 1);
+    const GridCoord2D gridcoord2d_qu2(1, 0);
 
     EXPECT_TRUE(gridcoord2d_foo.get_y_location() == 0);
     EXPECT_TRUE(gridcoord2d_bar.get_y_location() == 1);

@@ -28,11 +28,13 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+using namespace kami;
+
 TEST(GridCoord1D, DefaultConstructor) {
-    const kami::GridCoord1D gridcoord1d_foo(0);
-    const kami::GridCoord1D gridcoord1d_bar(1);
-    const kami::GridCoord1D gridcoord1d_baz(-1);
-    const kami::GridCoord1D gridcoord1d_qux(0);
+    const GridCoord1D gridcoord1d_foo(0);
+    const GridCoord1D gridcoord1d_bar(1);
+    const GridCoord1D gridcoord1d_baz(-1);
+    const GridCoord1D gridcoord1d_qux(0);
 
     EXPECT_EQ(gridcoord1d_foo, gridcoord1d_foo);
     EXPECT_EQ(gridcoord1d_foo, gridcoord1d_qux);
@@ -43,9 +45,9 @@ TEST(GridCoord1D, DefaultConstructor) {
 }
 
 TEST(GridCoord1D, to_string) {
-    const kami::GridCoord1D gridcoord1d_foo(0);
-    const kami::GridCoord1D gridcoord1d_bar(1);
-    const kami::GridCoord1D gridcoord1d_baz(-1);
+    const GridCoord1D gridcoord1d_foo(0);
+    const GridCoord1D gridcoord1d_bar(1);
+    const GridCoord1D gridcoord1d_baz(-1);
 
     EXPECT_THAT(gridcoord1d_foo.to_string(), "(0)");
     EXPECT_THAT(gridcoord1d_bar.to_string(), "(1)");
@@ -53,10 +55,10 @@ TEST(GridCoord1D, to_string) {
 }
 
 TEST(GridCoord1D, Equality) {
-    const kami::GridCoord1D gridcoord1d_foo(0);
-    const kami::GridCoord1D gridcoord1d_bar(1);
-    const kami::GridCoord1D gridcoord1d_baz(-1);
-    const kami::GridCoord1D gridcoord1d_qux(0);
+    const GridCoord1D gridcoord1d_foo(0);
+    const GridCoord1D gridcoord1d_bar(1);
+    const GridCoord1D gridcoord1d_baz(-1);
+    const GridCoord1D gridcoord1d_qux(0);
 
     EXPECT_TRUE(gridcoord1d_foo == gridcoord1d_foo);
     EXPECT_TRUE(gridcoord1d_foo == gridcoord1d_qux);
@@ -67,10 +69,10 @@ TEST(GridCoord1D, Equality) {
 }
 
 TEST(GridCoord1D, Inequality) {
-    const kami::GridCoord1D gridcoord1d_foo(0);
-    const kami::GridCoord1D gridcoord1d_bar(1);
-    const kami::GridCoord1D gridcoord1d_baz(-1);
-    const kami::GridCoord1D gridcoord1d_qux(0);
+    const GridCoord1D gridcoord1d_foo(0);
+    const GridCoord1D gridcoord1d_bar(1);
+    const GridCoord1D gridcoord1d_baz(-1);
+    const GridCoord1D gridcoord1d_qux(0);
 
     EXPECT_FALSE(gridcoord1d_foo != gridcoord1d_foo);
     EXPECT_FALSE(gridcoord1d_foo != gridcoord1d_qux);
@@ -81,10 +83,10 @@ TEST(GridCoord1D, Inequality) {
 }
 
 TEST(GridCoord1D, get_x_location) {
-    const kami::GridCoord1D gridcoord1d_foo(0);
-    const kami::GridCoord1D gridcoord1d_bar(1);
-    const kami::GridCoord1D gridcoord1d_baz(-1);
-    const kami::GridCoord1D gridcoord1d_qux(0);
+    const GridCoord1D gridcoord1d_foo(0);
+    const GridCoord1D gridcoord1d_bar(1);
+    const GridCoord1D gridcoord1d_baz(-1);
+    const GridCoord1D gridcoord1d_qux(0);
 
     EXPECT_TRUE(gridcoord1d_foo.get_x_location() == 0);
     EXPECT_TRUE(gridcoord1d_bar.get_x_location() == 1);
