@@ -79,17 +79,12 @@ StarterModel::StarterModel(unsigned int number_agents, unsigned int new_seed) {
 
     _step_count = 0;
 
-    for (unsigned int i = 0; i < number_agents; i++) {
+    for (auto i = 0; i < number_agents; i++) {
         auto new_agent = std::make_shared<StarterAgent>();
 
         console->trace("Initializing agent with AgentID {}", new_agent->get_agent_id());
         _pop->add_agent(new_agent);
     }
-}
-
-std::shared_ptr<kami::Model> StarterModel::run(unsigned int steps) {
-    for (auto i = 0; i < steps; i++) step();
-    return shared_from_this();
 }
 
 std::shared_ptr<kami::Model> StarterModel::step() {
