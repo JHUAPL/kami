@@ -29,7 +29,7 @@
 
 #include <kami/agent.h>
 #include <kami/population.h>
-#include <kami/sequential.h>
+#include <kami/staged.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -37,9 +37,13 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent : public StagedAgent {
 public:
     AgentID step(shared_ptr<Model> model) override {
+        return get_agent_id();
+    }
+
+    AgentID advance(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
@@ -55,14 +59,14 @@ public:
     }
 };
 
-class SequentialSchedulerTest : public ::testing::Test {
+class StagedSchedulerTest : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
 
     void SetUp() override {
         mod = make_shared<TestModel>();
         auto popul_foo = make_shared<Population>();
-        auto sched_foo = make_shared<SequentialScheduler>();
+        auto sched_foo = make_shared<StagedScheduler>();
 
         // Domain is not required for this test
         static_cast<void>(mod->set_population(popul_foo));
@@ -75,16 +79,16 @@ protected:
     }
 };
 
-TEST(SequentialScheduler, DefaultConstructor) {
+TEST(StagedScheduler, DefaultConstructor) {
     // There is really no way this can go wrong, but
     // we add this check anyway in case of future
     // changes.
     EXPECT_NO_THROW(
-            const SequentialScheduler sched_foo;
+            const StagedScheduler sched_foo;
     );
 }
 
-TEST_F(SequentialSchedulerTest, step_interface1) {
+TEST_F(StagedSchedulerTest, step_interface1) {
     auto tval = mod->get_population().value()->get_agent_list();
     auto rval = mod->step();
 
@@ -93,7 +97,7 @@ TEST_F(SequentialSchedulerTest, step_interface1) {
     EXPECT_EQ(*rval.value(), *tval);
 }
 
-TEST_F(SequentialSchedulerTest, step_interface2) {
+TEST_F(StagedSchedulerTest, step_interface2) {
     auto tval = mod->get_population().value()->get_agent_list();
     auto rval = mod->step(tval);
 
@@ -102,7 +106,7 @@ TEST_F(SequentialSchedulerTest, step_interface2) {
     EXPECT_EQ(*rval.value(), *tval);
 }
 
-TEST_F(SequentialSchedulerTest, step_10000) {
+TEST_F(StagedSchedulerTest, step_10000) {
     auto tval = mod->get_population().value()->get_agent_list();
 
     // Do it a lot...
