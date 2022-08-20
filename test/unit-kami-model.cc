@@ -34,17 +34,18 @@
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace std;
 
 class TestAgent : public Agent {
 public:
-    AgentID step(std::shared_ptr<Model> model) override {
+    AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
 class TestModel : public Model {
 public:
-    std::shared_ptr<Model> step() {
+    shared_ptr<Model> step() {
         return shared_from_this();
     }
 };
@@ -59,16 +60,16 @@ TEST(Model, DefaultConstructor) {
 }
 
 TEST(Model, set_population) {
-    auto model_foo = std::make_shared<TestModel>();
-    auto popul_foo = std::make_shared<Population>();
+    auto model_foo = make_shared<TestModel>();
+    auto popul_foo = make_shared<Population>();
 
     auto popul_bar = model_foo->set_population(popul_foo);
     EXPECT_EQ(popul_foo, popul_bar);
 }
 
 TEST(Model, get_population) {
-    auto model_foo = std::make_shared<TestModel>();
-    auto popul_foo = std::make_shared<Population>();
+    auto model_foo = make_shared<TestModel>();
+    auto popul_foo = make_shared<Population>();
 
     auto popul_nul = model_foo->get_population();
 
@@ -81,16 +82,16 @@ TEST(Model, get_population) {
 }
 
 TEST(Model, set_scheduler) {
-    auto model_foo = std::make_shared<TestModel>();
-    auto sched_foo = std::make_shared<SequentialScheduler>();
+    auto model_foo = make_shared<TestModel>();
+    auto sched_foo = make_shared<SequentialScheduler>();
 
     auto sched_bar = model_foo->set_scheduler(sched_foo);
     EXPECT_EQ(sched_foo, sched_bar);
 }
 
 TEST(Model, get_scheduler) {
-    auto model_foo = std::make_shared<TestModel>();
-    auto sched_foo = std::make_shared<SequentialScheduler>();
+    auto model_foo = make_shared<TestModel>();
+    auto sched_foo = make_shared<SequentialScheduler>();
 
     auto sched_nul = model_foo->get_scheduler();
     EXPECT_FALSE(sched_nul);
@@ -104,16 +105,16 @@ TEST(Model, get_scheduler) {
 }
 
 TEST(Model, set_domain) {
-    auto model_foo = std::make_shared<TestModel>();
-    auto grid2_foo = std::make_shared<MultiGrid2D>(10, 10, true, true);
+    auto model_foo = make_shared<TestModel>();
+    auto grid2_foo = make_shared<MultiGrid2D>(10, 10, true, true);
 
     auto grid2_bar = model_foo->set_domain(grid2_foo);
     EXPECT_EQ(grid2_foo, grid2_bar);
 }
 
 TEST(Model, get_domain) {
-    auto model_foo = std::make_shared<TestModel>();
-    auto grid2_foo = std::make_shared<MultiGrid2D>(10, 10, true, true);
+    auto model_foo = make_shared<TestModel>();
+    auto grid2_foo = make_shared<MultiGrid2D>(10, 10, true, true);
 
     auto grid2_nul = model_foo->get_domain();
     EXPECT_FALSE(grid2_nul);

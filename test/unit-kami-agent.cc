@@ -31,10 +31,11 @@
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace std;
 
 class TestAgent : public Agent {
 public:
-    AgentID step(std::shared_ptr<Model> model) override {
+    AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
@@ -61,7 +62,7 @@ TEST(Agent, get_agent_id) {
 TEST(Agent, step) {
     TestAgent agent_foo;
     TestAgent agent_bar;
-    auto model_world = std::make_shared<TestModel>();
+    auto model_world = make_shared<TestModel>();
 
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));

@@ -30,6 +30,7 @@
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace std;
 
 class TestAgent : public Agent {
 private:
@@ -38,7 +39,7 @@ private:
 public:
     explicit TestAgent(int x) : _x(x) {};
 
-    AgentID step(std::shared_ptr<Model> model) override {
+    AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 
@@ -58,8 +59,8 @@ TEST(Population, DefaultConstructor) {
 
 TEST(Population, add_agent) {
     Population population_foo;
-    auto agent_foo = std::make_shared<TestAgent>(8675309);
-    auto agent_bar = std::make_shared<TestAgent>(1729);
+    auto agent_foo = make_shared<TestAgent>(8675309);
+    auto agent_bar = make_shared<TestAgent>(1729);
 
     {
         auto agent_id_baz = population_foo.add_agent(agent_foo);
@@ -78,8 +79,8 @@ TEST(Population, add_agent) {
 }
 
 TEST(Population, get_agent_by_id) {
-    auto agent_foo = std::make_shared<TestAgent>(8675309);
-    auto agent_bar = std::make_shared<TestAgent>(1729);
+    auto agent_foo = make_shared<TestAgent>(8675309);
+    auto agent_bar = make_shared<TestAgent>(1729);
 
     {
         Population population_foo;
@@ -87,7 +88,7 @@ TEST(Population, get_agent_by_id) {
         auto agent_baz_opt = population_foo.get_agent_by_id(agent_foo->get_agent_id());
         EXPECT_TRUE(agent_baz_opt);
 
-        auto agent_baz = std::dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
+        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
         EXPECT_EQ(agent_baz->getval(), 8675309);
     }
     {
@@ -104,13 +105,13 @@ TEST(Population, get_agent_by_id) {
         auto agent_baz_opt = population_foo.get_agent_by_id(agent_foo->get_agent_id());
         EXPECT_TRUE(agent_baz_opt);
 
-        auto agent_baz = std::dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
+        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
         EXPECT_EQ(agent_baz->getval(), 8675309);
 
         auto agent_qux_opt = population_foo.get_agent_by_id(agent_bar->get_agent_id());
         EXPECT_TRUE(agent_qux_opt);
 
-        auto agent_qux = std::dynamic_pointer_cast<TestAgent>(agent_qux_opt.value());
+        auto agent_qux = dynamic_pointer_cast<TestAgent>(agent_qux_opt.value());
         EXPECT_EQ(agent_qux->getval(), 1729);
     }
     {
@@ -121,33 +122,33 @@ TEST(Population, get_agent_by_id) {
         auto agent_qux_opt = population_foo.get_agent_by_id(agent_bar->get_agent_id());
         EXPECT_TRUE(agent_qux_opt);
 
-        auto agent_qux = std::dynamic_pointer_cast<TestAgent>(agent_qux_opt.value());
+        auto agent_qux = dynamic_pointer_cast<TestAgent>(agent_qux_opt.value());
         EXPECT_EQ(agent_qux->getval(), 1729);
 
         auto agent_baz_opt = population_foo.get_agent_by_id(agent_foo->get_agent_id());
         EXPECT_TRUE(agent_baz_opt);
 
-        auto agent_baz = std::dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
+        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
         EXPECT_EQ(agent_baz->getval(), 8675309);
     }
 }
 
 TEST(Population, get_agent_list) {
-    auto agent_foo = std::make_shared<TestAgent>(8675309);
-    auto agent_bar = std::make_shared<TestAgent>(1729);
-    auto agent_baz = std::make_shared<TestAgent>(4104);
-    auto agent_qux = std::make_shared<TestAgent>(196);
+    auto agent_foo = make_shared<TestAgent>(8675309);
+    auto agent_bar = make_shared<TestAgent>(1729);
+    auto agent_baz = make_shared<TestAgent>(4104);
+    auto agent_qux = make_shared<TestAgent>(196);
 
     {
         Population population_foo;
-        auto tval = std::make_shared<std::vector<AgentID>>();
+        auto tval = make_shared<vector<AgentID>>();
         auto rval = population_foo.get_agent_list();
 
         EXPECT_EQ(*tval, *rval);
     }
     {
         Population population_foo;
-        auto tval = std::make_shared<std::vector<AgentID>>();
+        auto tval = make_shared<vector<AgentID>>();
         auto rval = population_foo.get_agent_list();
 
         tval->push_back(agent_foo->get_agent_id());
@@ -158,8 +159,8 @@ TEST(Population, get_agent_list) {
         static_cast<void>(population_foo.add_agent(agent_foo));
         static_cast<void>(population_foo.add_agent(agent_bar));
 
-        auto tval = std::make_shared<std::vector<AgentID>>();
-        auto uval = std::make_shared<std::vector<AgentID>>();
+        auto tval = make_shared<vector<AgentID>>();
+        auto uval = make_shared<vector<AgentID>>();
         auto rval = population_foo.get_agent_list();
 
         tval->push_back(agent_foo->get_agent_id());
@@ -178,7 +179,7 @@ TEST(Population, get_agent_list) {
         static_cast<void>(population_foo.add_agent(agent_baz));
         static_cast<void>(population_foo.add_agent(agent_qux));
 
-        auto tval = std::make_shared<std::vector<AgentID>>();
+        auto tval = make_shared<vector<AgentID>>();
         auto rval = population_foo.get_agent_list();
 
         tval->push_back(agent_foo->get_agent_id());

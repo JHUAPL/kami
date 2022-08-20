@@ -35,6 +35,7 @@
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace std;
 
 TEST(MultiGrid1D, DefaultConstructor) {
     // There is really no way this can go wrong, but
@@ -238,7 +239,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord9});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord9});
         auto rval = multigrid1d_foo.get_neighborhood(coord0, true);
 
         EXPECT_TRUE(rval);
@@ -247,7 +248,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(coord1, true);
 
         EXPECT_TRUE(rval);
@@ -256,7 +257,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1});
         auto rval = multigrid1d_foo.get_neighborhood(coord0, true);
 
         EXPECT_TRUE(rval);
@@ -265,7 +266,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(coord1, true);
 
         EXPECT_TRUE(rval);
@@ -274,7 +275,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord1, coord9});
+        auto tval = unordered_set<GridCoord1D>({coord1, coord9});
         auto rval = multigrid1d_foo.get_neighborhood(coord0, false);
 
         EXPECT_TRUE(rval);
@@ -283,7 +284,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(coord1, false);
 
         EXPECT_TRUE(rval);
@@ -292,7 +293,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord1});
+        auto tval = unordered_set<GridCoord1D>({coord1});
         auto rval = multigrid1d_foo.get_neighborhood(coord0, false);
 
         EXPECT_TRUE(rval);
@@ -301,7 +302,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(coord1, false);
 
         EXPECT_TRUE(rval);
@@ -309,7 +310,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord9});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord9});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_FALSE(rval);
@@ -317,7 +318,7 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord9});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord9});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_TRUE(rval);
@@ -327,7 +328,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_TRUE(rval);
@@ -337,7 +338,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_TRUE(rval);
@@ -347,7 +348,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_TRUE(rval);
@@ -357,7 +358,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord1, coord9});
+        auto tval = unordered_set<GridCoord1D>({coord1, coord9});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_TRUE(rval);
@@ -367,7 +368,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_TRUE(rval);
@@ -377,7 +378,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord1});
+        auto tval = unordered_set<GridCoord1D>({coord1});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_TRUE(rval);
@@ -387,7 +388,7 @@ TEST(MultiGrid1D, get_neighborhood) {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = std::unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_TRUE(rval);
@@ -440,7 +441,7 @@ TEST(MultiGrid1D, get_location_contents) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord1));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_baz, coord1));
 
-        auto tval = std::set<AgentID>({agent_id_foo, agent_id_bar, agent_id_baz});
+        auto tval = set<AgentID>({agent_id_foo, agent_id_bar, agent_id_baz});
         auto rval = multigrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(rval);
@@ -452,7 +453,7 @@ TEST(MultiGrid1D, get_location_contents) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord1));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_baz, coord9));
 
-        auto tval = std::set<AgentID>({agent_id_foo, agent_id_bar});
+        auto tval = set<AgentID>({agent_id_foo, agent_id_bar});
         auto rval = multigrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(rval);
