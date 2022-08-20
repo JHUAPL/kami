@@ -33,31 +33,35 @@
 
 namespace kami {
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
-        this->SequentialScheduler::step(model, agent_list);
-        return std::move(this->advance(model, agent_list));
+    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    StagedScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+        auto stepped_agent_list = this->SequentialScheduler::step(model, std::move(agent_list));
+        if (!stepped_agent_list)
+            return std::nullopt;
+        return std::move(this->advance(model, std::move(stepped_agent_list.value())));
     }
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model) {
+    std::optional<std::unique_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model) {
         auto population = model->get_population();
 
-        if(!population)
+        if (!population)
             return std::nullopt;
 
         return std::move(this->advance(model, population.value()->get_agent_list()));
     }
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
-        auto return_agent_list = std::make_shared<std::vector<AgentID>>();
+    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    StagedScheduler::advance(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+        auto return_agent_list = std::make_unique<std::vector<AgentID>>();
         auto population = model->get_population();
 
-        if(!population)
+        if (!population)
             return std::nullopt;
 
-        for(auto & agent_id : *agent_list) {
+        for (auto &agent_id: *agent_list) {
             auto agent_opt = population.value()->get_agent_by_id(agent_id);
 
-            if(agent_opt) {
+            if (agent_opt) {
                 auto agent = std::static_pointer_cast<StagedAgent>(agent_opt.value());
 
                 agent->advance(model);

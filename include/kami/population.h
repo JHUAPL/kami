@@ -85,7 +85,7 @@ namespace kami {
          *
          * @returns a `std::vector` of all the `AgentID`'s in the `Population`
          */
-        [[nodiscard]] std::shared_ptr<std::vector<AgentID>> get_agent_list() const;
+        [[nodiscard]] std::unique_ptr<std::vector<AgentID>> get_agent_list() const;
     };
 }  // namespace kami
 

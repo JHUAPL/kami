@@ -52,7 +52,7 @@ public:
         return _sched->step(shared_from_this());
     }
 
-    optional<shared_ptr<vector<AgentID>>> step(shared_ptr<vector<AgentID>> agent_list) {
+    optional<shared_ptr<vector<AgentID>>> step(unique_ptr<vector<AgentID>> agent_list) {
         return _sched->step(shared_from_this(), move(agent_list));
     }
 };
@@ -104,7 +104,8 @@ TEST_F(RandomSchedulerTest, step_interface1) {
 
 TEST_F(RandomSchedulerTest, step_interface2) {
     auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step(tval);
+    auto aval = mod->get_population().value()->get_agent_list();
+    auto rval = mod->step(std::move(aval));
 
     EXPECT_TRUE(rval);
     EXPECT_EQ(rval.value()->size(), 10);

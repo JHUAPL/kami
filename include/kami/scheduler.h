@@ -63,7 +63,7 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) = 0;
+        virtual std::optional<std::unique_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) = 0;
 
         /**
          * @brief Execute a single time step.
@@ -78,7 +78,8 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        virtual std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) = 0;
+        virtual std::optional<std::unique_ptr<std::vector<AgentID>>>
+        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) = 0;
     };
 
 }  // namespace kami

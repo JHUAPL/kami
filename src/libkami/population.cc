@@ -57,9 +57,9 @@ namespace kami {
         return std::nullopt;
     }
 
-    std::shared_ptr<std::vector<AgentID>> Population::get_agent_list() const {
-        auto key_selector = [](auto pair){ return pair.first; };
-        auto agent_ids = std::make_shared<std::vector<AgentID>>(_agent_map.size());
+    std::unique_ptr<std::vector<AgentID>> Population::get_agent_list() const {
+        auto key_selector = [](auto pair) { return pair.first; };
+        auto agent_ids = std::make_unique<std::vector<AgentID>>(_agent_map.size());
 
         transform(_agent_map.begin(), _agent_map.end(), agent_ids->begin(), key_selector);
         return std::move(agent_ids);

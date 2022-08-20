@@ -61,7 +61,7 @@ namespace kami {
          *
          * @returns returns vector of agents successfully advanced
          */
-        std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model);
+        std::optional<std::unique_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model);
 
         /**
          * @brief Advance a single time step.
@@ -76,7 +76,8 @@ namespace kami {
          *
          * @returns returns vector of agents successfully advanced
          */
-        std::optional<std::shared_ptr<std::vector<AgentID>>> advance(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list);
+        std::optional<std::unique_ptr<std::vector<AgentID>>>
+        advance(const std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list);
 
     public:
         /**
@@ -92,7 +93,8 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        std::optional<std::unique_ptr<std::vector<AgentID>>>
+        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

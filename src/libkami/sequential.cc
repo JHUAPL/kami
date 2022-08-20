@@ -32,27 +32,28 @@
 
 namespace kami {
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model) {
+    std::optional<std::unique_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model) {
         auto population = model->get_population();
 
-        if(!population)
+        if (!population)
             return std::nullopt;
 
         return std::move(this->step(model, population.value()->get_agent_list()));
     }
 
-    std::optional<std::shared_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) {
-        auto return_agent_list = std::make_shared<std::vector<AgentID>>();
+    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    SequentialScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+        auto return_agent_list = std::make_unique<std::vector<AgentID>>();
         auto population = model->get_population();
 
-        if(!population)
+        if (!population)
             return std::nullopt;
 
         Scheduler::_step_counter++;
-        for(auto & agent_id : *agent_list) {
+        for (auto &agent_id: *agent_list) {
             auto agent_opt = population.value()->get_agent_by_id(agent_id);
 
-            if(agent_opt) {
+            if (agent_opt) {
                 auto agent = agent_opt.value();
 
                 agent->step(model);
