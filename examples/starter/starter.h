@@ -82,14 +82,7 @@ public:
     /**
      * Execute a single time-step for the model.
      */
-    std::shared_ptr<kami::Model> step() override;
-
-    /**
-     * Execute a number of time-steps for the model.
-     *
-     * @param[in] n the number of steps to execute.
-     */
-    std::shared_ptr<kami::Model> run(unsigned int n) override;
+    std::shared_ptr<kami::Model> step();
 };
 
 #endif  // STARTER_H

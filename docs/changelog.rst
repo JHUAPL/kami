@@ -1,6 +1,13 @@
 Changelog
 =========
 
+- :release:`0.6.0 <2022.08.19>`
+- :feature:`0` Added a to do list to the documentation
+- :feature:`0` Completed basic unit tests
+- :feature:`0` Removed step()/run() from Model interface
+- :feature:`0` Revised interfaces to the grids
+- :feature:`0` Updated all support packages to most current versions
+
 - :release:`0.5.1 <2022.08.11>`
 - :support:`0` Completed initial unit tests
 - :support:`0` Added background info to READ ME

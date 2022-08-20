@@ -25,13 +25,12 @@
 
 #include "starter.h"
 
+#include <list>
 #include <map>
 #include <memory>
 #include <random>
 
-#include <CLI/App.hpp>
-#include <CLI/Config.hpp>
-#include <CLI/Formatter.hpp>
+#include <CLI/CLI.hpp>
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
@@ -80,17 +79,12 @@ StarterModel::StarterModel(unsigned int number_agents, unsigned int new_seed) {
 
     _step_count = 0;
 
-    for (unsigned int i = 0; i < number_agents; i++) {
+    for (auto i = 0; i < number_agents; i++) {
         auto new_agent = std::make_shared<StarterAgent>();
 
         console->trace("Initializing agent with AgentID {}", new_agent->get_agent_id());
         _pop->add_agent(new_agent);
     }
-}
-
-std::shared_ptr<kami::Model> StarterModel::run(unsigned int steps) {
-    for (auto i = 0; i < steps; i++) step();
-    return shared_from_this();
 }
 
 std::shared_ptr<kami::Model> StarterModel::step() {
@@ -105,8 +99,14 @@ int main(int argc, char **argv) {
     CLI::App app{ident};
     unsigned int agent_count = 100, max_steps = 100, initial_seed = 8675309;
 
+    // This exercise is really stupid.
+    auto levels_list = std::make_unique<std::list<std::string>>();
+    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+        levels_list->push_back(std::string(level_name.data(), level_name.size()));
+
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
-    app.add_option("-l", log_level_option, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
+    app.add_option("-l", log_level_option, "Set the logging level")->check(
+            CLI::IsMember(levels_list.get(), CLI::ignore_case));
     app.add_option("-n", max_steps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
     app.add_option("-s", initial_seed, "Set the initial seed")->check(CLI::Number);
     CLI11_PARSE(app, argc, argv);

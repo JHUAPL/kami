@@ -5,42 +5,14 @@
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 
-create_test(
-        NAME unit-kami-agent
-        SOURCES unit-kami-agent.cc
-        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
-        COMMAND unit-kami-agent
-        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
-)
-
-create_test(
-        NAME unit-kami-agentid
-        SOURCES unit-kami-agentid.cc
-        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
-        COMMAND unit-kami-agentid
-        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
-)
-
-create_test(
-        NAME unit-kami-model
-        SOURCES unit-kami-model.cc
-        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
-        COMMAND unit-kami-model
-        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
-)
-
-create_test(
-        NAME unit-kami-multigrid1d
-        SOURCES unit-kami-multigrid1d.cc
-        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
-        COMMAND unit-kami-multigrid1d
-        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
-)
-
-create_test(
-        NAME unit-kami-stagedagent
-        SOURCES unit-kami-stagedagent.cc
-        PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
-        COMMAND unit-kami-stagedagent
-        PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
-)
+file(GLOB test_modules "${CMAKE_CURRENT_SOURCE_DIR}/*.cc")
+FOREACH (test_module ${test_modules})
+    cmake_path(GET test_module STEM test_src)
+    create_test(
+            NAME ${test_src}
+            SOURCES ${test_src}.cc
+            PUBLIC_LINKED_TARGETS gmock gtest kami::libkami Threads::Threads
+            COMMAND ${test_src}
+            PUBLIC_COMPILE_FEATURES ${COVERAGE_FLAGS}
+    )
+ENDFOREACH ()

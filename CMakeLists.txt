@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.13)
 set(PROJECT_NAME "kami")
 
 set(VERSION_MAJOR 0)
-set(VERSION_MINOR 5)
-set(VERSION_PATCH 1)
+set(VERSION_MINOR 6)
+set(VERSION_PATCH 0)
 set(VERSION_STRING ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 project(${PROJECT_NAME}
@@ -22,9 +22,6 @@ include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 set(PROJECT_NAMESPACE ${PROJECT_NAME})
-
-find_package(spdlog)
-find_package(Threads)
 
 if(CMAKE_COMPILER_IS_GNUCC)
     option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)

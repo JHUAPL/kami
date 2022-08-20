@@ -88,9 +88,9 @@ namespace kami {
          * @param rng [in] A uniform random number generator of type `std::mt19937`,
          * used as the source of randomness.
          *
-         * @returns a shared pointer to this instance of `RandomScheduler`
+         * @returns a shared pointer to the random number generator
          */
-        std::shared_ptr<RandomScheduler> set_rng(std::shared_ptr<std::ranlux24> rng);
+        std::shared_ptr<std::ranlux24> set_rng(std::shared_ptr<std::ranlux24> rng);
 
         /**
          * @brief Get the RNG

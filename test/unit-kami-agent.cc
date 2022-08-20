@@ -30,22 +30,17 @@
 
 #include <gtest/gtest.h>
 
-class TestAgent : public kami::Agent {
+using namespace kami;
+using namespace std;
+
+class TestAgent : public Agent {
 public:
-    kami::AgentID step(std::shared_ptr<kami::Model> model) override {
+    AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public kami::Model {
-public:
-    std::shared_ptr<kami::Model> step() override {
-        return shared_from_this();
-    }
-
-    std::shared_ptr<kami::Model> run(unsigned int) override {
-        return shared_from_this();
-    }
+class TestModel : public Model {
 };
 
 TEST(Agent, DefaultConstructor) {
@@ -67,7 +62,7 @@ TEST(Agent, get_agent_id) {
 TEST(Agent, step) {
     TestAgent agent_foo;
     TestAgent agent_bar;
-    auto model_world = std::make_shared<TestModel>();
+    auto model_world = make_shared<TestModel>();
 
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));

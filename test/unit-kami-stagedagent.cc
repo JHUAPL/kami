@@ -30,26 +30,21 @@
 
 #include <gtest/gtest.h>
 
-class TestStagedAgent : public kami::StagedAgent {
+using namespace kami;
+using namespace std;
+
+class TestStagedAgent : public StagedAgent {
 public:
-    kami::AgentID advance(std::shared_ptr<kami::Model> model) override {
+    AgentID advance(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 
-    kami::AgentID step(std::shared_ptr<kami::Model> model) override {
+    AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public kami::Model {
-public:
-    std::shared_ptr<kami::Model> step() override {
-        return shared_from_this();
-    }
-
-    std::shared_ptr<kami::Model> run(unsigned int) override {
-        return shared_from_this();
-    }
+class TestModel : public Model {
 };
 
 TEST(StagedAgent, DefaultConstructor) {
@@ -71,7 +66,7 @@ TEST(StagedAgent, get_agent_id) {
 TEST(StagedAgent, advance) {
     TestStagedAgent agent_foo;
     TestStagedAgent agent_bar;
-    auto model_world = std::make_shared<TestModel>();
+    auto model_world = make_shared<TestModel>();
 
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.advance(model_world));
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.advance(model_world));
@@ -80,7 +75,7 @@ TEST(StagedAgent, advance) {
 TEST(StagedAgent, step) {
     TestStagedAgent agent_foo;
     TestStagedAgent agent_bar;
-    auto model_world = std::make_shared<TestModel>();
+    auto model_world = make_shared<TestModel>();
 
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));

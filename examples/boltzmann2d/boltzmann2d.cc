@@ -26,15 +26,14 @@
 #include "boltzmann2d.h"
 
 #include <exception>
+#include <list>
 #include <map>
 #include <memory>
 #include <optional>
 #include <random>
 #include <stdexcept>
 
-#include <CLI/App.hpp>
-#include <CLI/Config.hpp>
-#include <CLI/Formatter.hpp>
+#include <CLI/CLI.hpp>
 
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
@@ -78,7 +77,7 @@ kami::AgentID MoneyAgent2D::step(std::shared_ptr<kami::Model> model) {
     return this->get_agent_id();
 }
 
-kami::GridCoord2D MoneyAgent2D::move_agent(std::shared_ptr<kami::Model> model) {
+std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(std::shared_ptr<kami::Model> model) {
     console->trace("Entering move_agent");
     auto agent_id = get_agent_id();
 
@@ -87,9 +86,12 @@ kami::GridCoord2D MoneyAgent2D::move_agent(std::shared_ptr<kami::Model> model) {
         throw (std::domain_error("model is missing domain"));
     auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
 
-    auto move_list = world->get_neighborhood(agent_id, false, kami::GridNeighborhoodType::Moore);
+    auto move_list_opt = world->get_neighborhood(agent_id, false, kami::GridNeighborhoodType::VonNeumann);
+    if (!move_list_opt)
+        return std::nullopt;
+    auto move_list = move_list_opt.value();
     std::uniform_int_distribution<int> dist(0, (int) move_list->size() - 1);
-    auto new_location = move_list->at(dist(*rng));
+    auto new_location = *std::next(move_list->begin(), dist(*rng));
 
     console->trace("Moving Agent {} to location {}", agent_id, new_location);
     world->move_agent(agent_id, new_location);
@@ -113,13 +115,17 @@ std::optional<kami::AgentID> MoneyAgent2D::give_money(std::shared_ptr<kami::Mode
     auto population = std::static_pointer_cast<kami::Population>(agents.value());
 
     auto location = world->get_location_by_agent(agent_id);
-    auto cell_mates = world->get_location_contents(location.value());
+    auto cell_mates_opt = world->get_location_contents(location.value());
 
+    if (!cell_mates_opt)
+        return std::nullopt;
+
+    auto cell_mates = cell_mates_opt.value();
     if (cell_mates->size() < 2)
         return std::nullopt;
 
     std::uniform_int_distribution<int> dist(0, (int) cell_mates->size() - 1);
-    kami::AgentID other_agent_id = cell_mates->at(dist(*rng));
+    auto other_agent_id = *std::next(cell_mates->begin(), dist(*rng));
     auto other_agent = std::static_pointer_cast<MoneyAgent2D>(population->get_agent_by_id(other_agent_id).value());
 
     console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
@@ -158,12 +164,6 @@ BoltzmannWealthModel2D::BoltzmannWealthModel2D(unsigned int number_agents, unsig
     }
 }
 
-std::shared_ptr<kami::Model> BoltzmannWealthModel2D::run(unsigned int steps) {
-    for (auto i = 0; i < steps; i++)
-        step();
-    return shared_from_this();
-}
-
 std::shared_ptr<kami::Model> BoltzmannWealthModel2D::step() {
     console->trace("Executing model step {}", _step_count++);
     _sched->step(shared_from_this());
@@ -176,8 +176,14 @@ int main(int argc, char **argv) {
     CLI::App app{ident};
     unsigned int x_size = 16, y_size = 16, agent_count = x_size * y_size, max_steps = 100, initial_seed = 42;
 
+    // This exercise is really stupid.
+    auto levels_list = std::make_unique<std::list<std::string>>();
+    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+        levels_list->push_back(std::string(level_name.data(), level_name.size()));
+
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
-    app.add_option("-l", log_level_option, "Set the logging level")->check(CLI::IsMember(SPDLOG_LEVEL_NAMES));
+    app.add_option("-l", log_level_option, "Set the logging level")->check(
+            CLI::IsMember(levels_list.get(), CLI::ignore_case));
     app.add_option("-n", max_steps, "Set the number of steps to run the model")->check(CLI::PositiveNumber);
     app.add_option("-s", initial_seed, "Set the initial seed")->check(CLI::Number);
     app.add_option("-x", x_size, "Set the number of columns")->check(CLI::PositiveNumber);

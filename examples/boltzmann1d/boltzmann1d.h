@@ -65,7 +65,7 @@ public:
     /**
      * Move the agent to a random location on the world
      */
-    kami::GridCoord1D move_agent(std::shared_ptr<kami::Model> model);
+    std::optional<kami::GridCoord1D> move_agent(std::shared_ptr<kami::Model> model);
 
     /**
      * Give money to a random agent
@@ -96,14 +96,7 @@ public:
     /**
      * Execute a single time-step for the model.
      */
-    std::shared_ptr<kami::Model> step() override;
-
-    /**
-     * Execute a number of time-steps for the model.
-     *
-     * @param[in] n the number of steps to execute.
-     */
-    std::shared_ptr<kami::Model> run(unsigned int n) override;
+    std::shared_ptr<kami::Model> step();
 
 private:
     unsigned int _step_count;
