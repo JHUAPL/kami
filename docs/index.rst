@@ -62,4 +62,5 @@ model.
     tutorial
     api/library_root
     changelog
+    todo
     license

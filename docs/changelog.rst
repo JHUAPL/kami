@@ -1,7 +1,9 @@
 Changelog
 =========
 
-- :feature `0` Removed step()/run() from Model interface
+- :feature:`0` Added a to do list to the documentation
+- :feature:`0` Completed basic unit tests
+- :feature:`0` Removed step()/run() from Model interface
 - :feature:`0` Revised interfaces to the grids
 - :feature:`0` Updated all support packages to most current versions
 
