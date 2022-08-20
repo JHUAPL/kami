@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :release:`0.6.0 <2022.08.19>`
 - :feature:`0` Added a to do list to the documentation
 - :feature:`0` Completed basic unit tests
 - :feature:`0` Removed step()/run() from Model interface
