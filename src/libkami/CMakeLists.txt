@@ -23,6 +23,7 @@ create_library(
         multigrid2d.cc
         population.cc
         random.cc
+        reporter.cc
         sequential.cc
         sologrid1d.cc
         sologrid2d.cc
