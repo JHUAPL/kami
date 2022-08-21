@@ -83,7 +83,17 @@ namespace kami {
          * "taxicab distance," "rectilinear distance," or many other [formal
          * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
          */
-        Manhattan
+        Manhattan,
+
+        /**
+         * @brief Chebyshev distance.
+         *
+         * @details The Chebyshev distance, also called the "chessboard" distance
+         * is the number of single point jumps necessary to move from one point to
+         * the next.  This can be likened to a king on a chessboard and the number
+         * of moves necessary to move from a given point to any other given point.
+         */
+        Chebyshev
     };
 
     /**
