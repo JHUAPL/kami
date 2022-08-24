@@ -65,6 +65,28 @@ namespace kami {
         [[nodiscard]] std::string to_string() const override;
 
         /**
+         * @brief Find the distance between two points
+         *
+         * @details Find the distance between two points using the
+         * specified metric.  There are three options provided by
+         * the `GridDistanceType` class.  However, of the three
+         * distance types provided, all provide the same result so
+         * the value is ignored and the single result is returned.
+         *
+         * However, the coordinate class is not aware of the
+         * properties of the `Grid1D` it is operating on.  Accordingly,
+         * if the direct path is measured, without accounting for
+         * and toroidal wrapping of the underlying `Grid1D`.
+         *
+         * @param p the point to measure the distance to
+         * @param distance_type specify the distance type
+         *
+         * @returns the distance as a `double`
+         */
+        std::optional<double>
+        distance(std::shared_ptr<Coord> &p, [[maybe_unused]] GridDistanceType distance_type) const override;
+
+        /**
          * @brief Test if two coordinates are equal
          */
         friend bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs);

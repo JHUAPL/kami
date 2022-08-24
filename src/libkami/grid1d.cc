@@ -45,6 +45,14 @@ namespace kami {
         return std::string("(" + std::to_string(_x_coord) + ")");
     }
 
+    std::optional<double>
+    GridCoord1D::distance(std::shared_ptr<Coord> &p, [[maybe_unused]] GridDistanceType distance_type) const {
+        // We are going to ignore distance type since they all
+        // have the same result in one dimension.
+        auto p1d = std::static_pointer_cast<GridCoord1D>(p);
+        return static_cast<double>(abs(_x_coord - p1d->_x_coord));
+    }
+
     bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs) {
         return (lhs._x_coord == rhs._x_coord);
     }

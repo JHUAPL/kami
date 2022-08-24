@@ -29,6 +29,8 @@
 #define KAMI_GRID2D_H
 //! @endcond
 
+#include <cmath>
+#include <cstdlib>
 #include <iostream>
 #include <map>
 #include <memory>
@@ -46,12 +48,25 @@ namespace kami {
      * @brief Two-dimensional coordinates
      */
     class LIBKAMI_EXPORT GridCoord2D : public GridCoord {
+    protected:
+        inline double distance_chebyshev(std::shared_ptr<GridCoord2D> &p) const {
+            return static_cast<double>(fmax(abs(_x_coord - p->_x_coord), abs(_x_coord - p->_x_coord)));
+        };
+
+        inline double distance_euclidean(std::shared_ptr<GridCoord2D> &p) const {
+            return sqrt(pow(_x_coord - p->_x_coord, 2) + pow(_x_coord - p->_x_coord, 2));
+        };
+
+        inline double distance_manhattan(std::shared_ptr<GridCoord2D> &p) const {
+            return static_cast<double>(abs(_x_coord - p->_x_coord) + abs(_x_coord - p->_x_coord));
+        };
+
     public:
         /**
          * @brief Constructor for two-dimensional coordinates
          */
         GridCoord2D(int x_coord, int y_coord)
-                : _x_coord(x_coord), _y_coord(y_coord){};
+                : _x_coord(x_coord), _y_coord(y_coord) {};
 
         /**
          * @brief Get the coordinate in the first dimension or `x`.
@@ -69,6 +84,25 @@ namespace kami {
          * @return a human-readable form of the `Coord` as `std::string`.
          */
         [[nodiscard]] std::string to_string() const override;
+
+        /**
+         * @brief Find the distance between two points
+         *
+         * @details Find the distance between two points using the
+         * specified metric.  There are three options provided by
+         * the `GridDistanceType` class.
+         *
+         * However, the coordinate class is not aware of the
+         * properties of the `Grid2D` it is operating on.  Accordingly,
+         * if the direct path is measured, without accounting for
+         * and toroidal wrapping of the underlying `Grid2D`.
+         *
+         * @param p the point to measure the distance to
+         * @param distance_type specify the distance type
+         *
+         * @returns the distance as a `double`
+         */
+        std::optional<double> distance(std::shared_ptr<Coord> &p, GridDistanceType distance_type) const override;
 
         /**
          * @brief Test if two coordinates are equal
