@@ -60,11 +60,11 @@ public:
 class RandomSchedulerTest : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
-    shared_ptr<ranlux24> rng = nullptr;
+    shared_ptr<mt19937> rng = nullptr;
 
     void SetUp() override {
         mod = make_shared<TestModel>();
-        rng = make_shared<ranlux24>();
+        rng = make_shared<mt19937>();
         auto popul_foo = make_shared<Population>();
         auto sched_foo = make_shared<RandomScheduler>(rng);
 
@@ -137,7 +137,7 @@ TEST_F(RandomSchedulerTest, get_rng) {
 }
 
 TEST_F(RandomSchedulerTest, set_rng) {
-    auto new_rng = make_shared<ranlux24>();
+    auto new_rng = make_shared<mt19937>();
     auto rval1 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
 
     static_cast<void>(static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->set_rng(new_rng));

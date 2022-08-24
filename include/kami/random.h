@@ -39,7 +39,6 @@
 #include <kami/sequential.h>
 
 namespace kami {
-
     /**
      * @brief Will execute all agent steps in a random order.
      *
@@ -50,7 +49,7 @@ namespace kami {
      */
     class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler, std::enable_shared_from_this<RandomScheduler> {
     private:
-        std::shared_ptr<std::ranlux24> _rng = nullptr;
+        std::shared_ptr<std::mt19937> _rng = nullptr;
 
     public:
         /**
@@ -64,7 +63,7 @@ namespace kami {
          * @param rng [in] A uniform random number generator of type
          * `std::mt19937`, used as the source of randomness.
          */
-        explicit RandomScheduler(std::shared_ptr<std::ranlux24> rng);
+        explicit RandomScheduler(std::shared_ptr<std::mt19937> rng);
 
         /**
          * @brief Execute a single time step.
@@ -91,7 +90,7 @@ namespace kami {
          *
          * @returns a shared pointer to the random number generator
          */
-        std::shared_ptr<std::ranlux24> set_rng(std::shared_ptr<std::ranlux24> rng);
+        std::shared_ptr<std::mt19937> set_rng(std::shared_ptr<std::mt19937> rng);
 
         /**
          * @brief Get the RNG
@@ -99,7 +98,7 @@ namespace kami {
          * @details Get a reference to the random number generator used to randomize
          * the order of agent stepping.
          */
-        std::shared_ptr<std::ranlux24> get_rng();
+        std::shared_ptr<std::mt19937> get_rng();
     };
 
 }  // namespace kami
