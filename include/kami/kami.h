@@ -41,7 +41,9 @@ namespace kami {
     class AgentID;
     class Domain;
     class Model;
+
     class Population;
+
     class Scheduler;
 
     /**
@@ -50,6 +52,28 @@ namespace kami {
      * @return a `semver::version` object containing version information
      */
     inline semver::version get_version() { return version; }
+
+    /**
+     * @brief A catalog of handy constants, mostly useful for seeding
+     * a random number generator
+     */
+    class Constants {
+    public:
+        /**
+         * @brief Life, the Universe, and Everything!
+         */
+        static constexpr auto ADAMS_CONSTANT = 42u;
+
+        /**
+         * @brief Jenny, I've got your number
+         */
+        static constexpr auto JENNYS_NUMBER = 8675309u;
+
+        /**
+         * @brief $(7^(\e - 1/\e) - 9)*\pi^2$
+         */
+        static constexpr auto JENNYS_CONSTANT = 867.530901989;
+    };
 
 }  // namespace kami
 
