@@ -54,14 +54,19 @@ namespace kami {
     }
 
     std::optional<std::shared_ptr<Scheduler>> Model::get_scheduler() {
-        if(_sched == nullptr)
+        if (_sched == nullptr)
             return std::nullopt;
-        return(_sched);
+        return (_sched);
     }
 
     std::shared_ptr<Scheduler> Model::set_scheduler(std::shared_ptr<Scheduler> scheduler) {
         _sched = std::move(scheduler);
         return _sched;
+    }
+
+    std::shared_ptr<Model> Model::step() {
+        _sched->step(shared_from_this());
+        return shared_from_this();
     }
 
 }  // namespace kami

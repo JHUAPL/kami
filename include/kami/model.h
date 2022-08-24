@@ -96,6 +96,11 @@ namespace kami {
          */
         std::shared_ptr<Scheduler> set_scheduler(std::shared_ptr<Scheduler> scheduler);
 
+        /**
+         *
+         */
+        virtual std::shared_ptr<Model> step();
+
     protected:
         /**
         * @brief Reference copy of the `Domain`
