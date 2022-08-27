@@ -1,6 +1,12 @@
 Changelog
 =========
 
+- :feature:`0` Added Bank Reserves model to demonstrate reporting
+- :feature:`0` Added data collecting and reporting modules
+- :feature:`0` Added some useful constants, for use as random seeds
+- :feature:`0` Switched from ranlux24 to mt19937 due to speed
+- :feature:`0` Added distance measures to grid coordinate objects
+
 - :release:`0.6.0 <2022.08.19>`
 - :feature:`0` Added a to do list to the documentation
 - :feature:`0` Completed basic unit tests

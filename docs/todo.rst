@@ -7,8 +7,8 @@ The list below is a list of things considered necessary before
 a 1.0 release.  This list is *not* static.
 
 - Network domain
-- Data collection process
-- Demonstration of data collection process
+- Hexgrid domain
+- Continuous grid domain
 - Tutorial write up
 
 Wishlist
@@ -20,5 +20,6 @@ any point.
 - Documentation with basic introduction to ABMs
 - Network Boltzmann model example
 - Additional examples as appropriate
+- Globe domain, on sphere, with latitude and longitude
 
 ..  toctree::
