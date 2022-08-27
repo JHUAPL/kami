@@ -51,12 +51,16 @@ public:
 
 class TestModel : public Model {
 public:
-    optional<shared_ptr<vector<AgentID>>> step() {
-        return _sched->step(shared_from_this());
+    shared_ptr<vector<AgentID>> retval;
+
+    shared_ptr<Model> step() override {
+        retval = _sched->step(shared_from_this()).value();
+        return shared_from_this();
     }
 
-    optional<shared_ptr<vector<AgentID>>> step(unique_ptr<vector<AgentID>> agent_list) {
-        return _sched->step(shared_from_this(), move(agent_list));
+    shared_ptr<Model> step(unique_ptr<vector<AgentID>> agent_list) {
+        retval = _sched->step(shared_from_this(), std::move(agent_list)).value();
+        return shared_from_this();
     }
 };
 
@@ -91,32 +95,40 @@ TEST(StagedScheduler, DefaultConstructor) {
 
 TEST_F(StagedSchedulerTest, step_interface1) {
     auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step();
+    auto aval = mod->get_population().value()->get_agent_list();
+    mod->step(std::move(aval));
+
+    auto rval = mod->retval;
 
     EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
-    EXPECT_EQ(*rval.value(), *tval);
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
 }
 
 TEST_F(StagedSchedulerTest, step_interface2) {
     auto tval = mod->get_population().value()->get_agent_list();
     auto aval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step(std::move(aval));
+    mod->step(std::move(aval));
+
+    auto rval = mod->retval;
 
     EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
-    EXPECT_EQ(*rval.value(), *tval);
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
 }
 
 TEST_F(StagedSchedulerTest, step_10000) {
-    auto tval = mod->get_population().value()->get_agent_list();
-
     // Do it a lot...
     for (auto i = 0; i < 10000; i++) {
-        auto rval = mod->step();
+        auto tval = mod->get_population().value()->get_agent_list();
+        auto aval = mod->get_population().value()->get_agent_list();
+        mod->step(std::move(aval));
+
+        auto rval = mod->retval;
+
         EXPECT_TRUE(rval);
-        EXPECT_EQ(rval.value()->size(), 10);
-        EXPECT_EQ(*rval.value(), *tval);
+        EXPECT_EQ(rval->size(), 10);
+        EXPECT_EQ(*rval, *tval);
     }
 }
 

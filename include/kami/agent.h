@@ -33,7 +33,6 @@
 #include <memory>
 #include <string>
 
-#include <kami/kami.h>
 #include <kami/model.h>
 
 namespace kami {

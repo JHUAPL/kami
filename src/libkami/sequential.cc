@@ -28,11 +28,22 @@
 #include <vector>
 
 #include <kami/agent.h>
+#include <kami/reporter.h>
 #include <kami/sequential.h>
 
 namespace kami {
 
     std::optional<std::unique_ptr<std::vector<AgentID>>> SequentialScheduler::step(std::shared_ptr<Model> model) {
+        auto population = model->get_population();
+
+        if (!population)
+            return std::nullopt;
+
+        return std::move(this->step(model, population.value()->get_agent_list()));
+    }
+
+    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    SequentialScheduler::step(std::shared_ptr<ReporterModel> model) {
         auto population = model->get_population();
 
         if (!population)
@@ -55,6 +66,29 @@ namespace kami {
 
             if (agent_opt) {
                 auto agent = agent_opt.value();
+
+                agent->step(model);
+                return_agent_list->push_back(agent_id);
+            }
+        }
+
+        return std::move(return_agent_list);
+    }
+
+    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    SequentialScheduler::step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+        auto return_agent_list = std::make_unique<std::vector<AgentID>>();
+        auto population = model->get_population();
+
+        if (!population)
+            return std::nullopt;
+
+        Scheduler::_step_counter++;
+        for (auto &agent_id: *agent_list) {
+            auto agent_opt = population.value()->get_agent_by_id(agent_id);
+
+            if (agent_opt) {
+                auto agent = std::dynamic_pointer_cast<ReporterAgent>(agent_opt.value());
 
                 agent->step(model);
                 return_agent_list->push_back(agent_id);

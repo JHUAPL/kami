@@ -23,15 +23,15 @@
  * SOFTWARE.
  */
 
+#include <algorithm>
 #include <memory>
-#include <random>
-#include <set>
 #include <utility>
 #include <vector>
 
 #include <kami/agent.h>
 #include <kami/population.h>
-#include <kami/random.h>
+#include <kami/reporter.h>
+#include <kami/staged.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
@@ -39,14 +39,23 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent : public ReporterAgent {
 public:
-    AgentID step(shared_ptr<Model> model) override {
+    AgentID step(shared_ptr<ReporterModel> model) override {
         return get_agent_id();
+    }
+
+    std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+        auto json_ret_val = std::make_unique<nlohmann::json>();
+
+        (*json_ret_val)["fname"] = "Jesse";
+        (*json_ret_val)["lname"] = "Pinkman";
+
+        return json_ret_val;
     }
 };
 
-class TestModel : public Model {
+class TestModel : public ReporterModel {
 public:
     shared_ptr<vector<AgentID>> retval;
 
@@ -59,18 +68,25 @@ public:
         retval = _sched->step(shared_from_this(), std::move(agent_list)).value();
         return shared_from_this();
     }
+
+    std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+        auto json_ret_val = std::make_unique<nlohmann::json>();
+
+        (*json_ret_val)["fname"] = "Walter";
+        (*json_ret_val)["lname"] = "White";
+
+        return json_ret_val;
+    }
 };
 
-class RandomSchedulerTest : public ::testing::Test {
+class ReporterModelTest : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
-    shared_ptr<mt19937> rng = nullptr;
 
     void SetUp() override {
         mod = make_shared<TestModel>();
-        rng = make_shared<mt19937>();
         auto popul_foo = make_shared<Population>();
-        auto sched_foo = make_shared<RandomScheduler>(rng);
+        auto sched_foo = make_shared<SequentialScheduler>();
 
         // Domain is not required for this test
         static_cast<void>(mod->set_population(popul_foo));
@@ -83,32 +99,16 @@ protected:
     }
 };
 
-TEST(RandomScheduler, DefaultConstructor) {
+TEST(ReporterModel, DefaultConstructor) {
     // There is really no way this can go wrong, but
     // we add this check anyway in case of future
     // changes.
     EXPECT_NO_THROW(
-            const RandomScheduler sched_foo;
+            const TestModel reporter_foo;
     );
 }
 
-TEST_F(RandomSchedulerTest, step_interface1) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto aval = mod->get_population().value()->get_agent_list();
-    mod->step(std::move(aval));
-
-    auto rval = mod->retval;
-
-    EXPECT_EQ(rval->size(), 10);
-
-    // Sort both return values and just make sure all of them all the same...
-    // We cannot test permutation since, well, you know...
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-    set<AgentID> rval_set = set(rval->begin(), rval->end());
-    EXPECT_EQ(tval_set, rval_set);
-}
-
-TEST_F(RandomSchedulerTest, step_interface2) {
+TEST_F(ReporterModelTest, step_interface1) {
     auto tval = mod->get_population().value()->get_agent_list();
     auto aval = mod->get_population().value()->get_agent_list();
     mod->step(std::move(aval));
@@ -117,13 +117,22 @@ TEST_F(RandomSchedulerTest, step_interface2) {
 
     EXPECT_TRUE(rval);
     EXPECT_EQ(rval->size(), 10);
-
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-    set<AgentID> rval_set = set(rval->begin(), rval->end());
-    EXPECT_EQ(tval_set, rval_set);
+    EXPECT_EQ(*rval, *tval);
 }
 
-TEST_F(RandomSchedulerTest, step_10000) {
+TEST_F(ReporterModelTest, step_interface2) {
+    auto tval = mod->get_population().value()->get_agent_list();
+    auto aval = mod->get_population().value()->get_agent_list();
+    mod->step(std::move(aval));
+
+    auto rval = mod->retval;
+
+    EXPECT_TRUE(rval);
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
+}
+
+TEST_F(ReporterModelTest, step_10000) {
     // Do it a lot...
     for (auto i = 0; i < 10000; i++) {
         auto tval = mod->get_population().value()->get_agent_list();
@@ -134,31 +143,21 @@ TEST_F(RandomSchedulerTest, step_10000) {
 
         EXPECT_TRUE(rval);
         EXPECT_EQ(rval->size(), 10);
-
-        set<AgentID> tval_set = set(tval->begin(), tval->end());
-        set<AgentID> rval_set = set(rval->begin(), rval->end());
-        EXPECT_EQ(tval_set, rval_set);
+        EXPECT_EQ(*rval, *tval);
     }
 }
 
-TEST_F(RandomSchedulerTest, get_rng) {
-    auto rval = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+TEST_F(ReporterModelTest, collect) {
+    auto aval = mod->get_population().value()->get_agent_list();
+    mod->step(std::move(aval));
 
-    EXPECT_EQ(rng, rval);
-}
-
-TEST_F(RandomSchedulerTest, set_rng) {
-    auto new_rng = make_shared<mt19937>();
-    auto rval1 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
-
-    static_cast<void>(static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->set_rng(new_rng));
-    auto rval2 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
-
-    EXPECT_EQ(new_rng, rval2);
-    EXPECT_NE(new_rng, rval1);
+    auto rval = mod->collect();
+    EXPECT_TRUE(rval);
+    EXPECT_TRUE(rval.value()->dump() == "{\"fname\":\"Walter\",\"lname\":\"White\"}");
 }
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
+

@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+#include <algorithm>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -31,22 +32,36 @@
 
 #include <kami/population.h>
 #include <kami/reporter.h>
+#include <kami/scheduler.h>
 
 namespace kami {
 
-    Reporter::Reporter() {
-        _report_data = std::make_shared<std::unordered_map<std::shared_ptr<ReporterModel>, std::shared_ptr<std::vector<nlohmann::json>>>>();
+    ReporterModel::ReporterModel() {
+        _step_count = 0;
+        _rpt = std::make_shared<Reporter>();
     }
 
-    std::shared_ptr<Reporter> Reporter::clear() {
-        for (const auto &i: *_report_data)
-            static_cast<void>(clear(i.first));
+    std::shared_ptr<Model> ReporterModel::step() {
+        _step_count++;
+
+        auto ret = _sched->step(std::static_pointer_cast<ReporterModel>(shared_from_this()));
+        auto rpt = _rpt->collect(std::static_pointer_cast<ReporterModel>(shared_from_this()));
+
         return shared_from_this();
     }
 
-    std::shared_ptr<Reporter> Reporter::clear(const std::shared_ptr<ReporterModel> &model) {
-        auto _model_data = _report_data->at(model);
-        _model_data->clear();
+    std::unique_ptr<nlohmann::json> ReporterModel::report() {
+        return std::move(_rpt->report(std::static_pointer_cast<ReporterModel>(shared_from_this())));
+    }
+
+    Reporter::Reporter() {
+        _report_data = std::make_unique<std::vector<nlohmann::json>>();
+    }
+
+    std::shared_ptr<Reporter> Reporter::clear() {
+        // I _can_ do this in one line, but I won't
+        _report_data.reset();
+        _report_data = std::make_unique<std::vector<nlohmann::json>>();
         return shared_from_this();
     }
 
@@ -77,7 +92,8 @@ namespace kami {
             } else {
                 auto agent = std::static_pointer_cast<ReporterAgent>(agent_opt.value());
                 auto agent_collection = agent->collect();
-                agent_data["data"] = *agent_collection;
+                if (agent_collection)
+                    agent_data["data"] = *agent_collection.value();
             }
             collection_array.push_back(agent_data);
         }
@@ -85,26 +101,19 @@ namespace kami {
         auto agent_collection = std::make_unique<nlohmann::json>(collection_array);
         auto collection = std::make_unique<nlohmann::json>();
 
-        (*collection)["step_id"] = model->get_stepid();
-        (*collection)["model_data"] = *model_data;
+        (*collection)["step_id"] = model->get_step_id();
+        if (model_data)
+            (*collection)["model_data"] = *model_data.value();
         (*collection)["agent_data"] = *agent_collection;
 
-        auto jsonvec = _report_data->at(model);
-        if (!jsonvec)
-            jsonvec = std::make_shared<std::vector<nlohmann::json>>();
-        jsonvec->push_back(*collection);
+        _report_data->push_back(*collection);
 
         return std::move(collection);
     }
 
     std::unique_ptr<nlohmann::json> Reporter::report(const std::shared_ptr<ReporterModel> &model) {
-        auto jsonvec = _report_data->at(model);
-
-        if (!jsonvec)
-            jsonvec = std::make_shared<std::vector<nlohmann::json>>();
-        auto jsonrpt = std::make_unique<nlohmann::json>(*jsonvec);
-
-        return std::move(jsonrpt);
+        auto json_data = std::make_unique<nlohmann::json>(*_report_data);
+        return std::move(json_data);
     }
 
 }  // namespace kami

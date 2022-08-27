@@ -64,6 +64,8 @@ namespace kami {
          */
         std::optional<std::unique_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) override;
 
+        std::optional<std::unique_ptr<std::vector<AgentID>>> step(std::shared_ptr<ReporterModel> model) override;
+
         /**
          * @brief Execute a single time step.
          *
@@ -79,6 +81,9 @@ namespace kami {
          */
         std::optional<std::unique_ptr<std::vector<AgentID>>>
         step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+
+        std::optional<std::unique_ptr<std::vector<AgentID>>>
+        step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami
