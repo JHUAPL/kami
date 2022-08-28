@@ -28,12 +28,13 @@
 #include <kami/agent.h>
 #include <kami/model.h>
 
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
 using namespace std;
 
-class TestStagedAgent : public StagedAgent {
+class TestAgent : public StagedAgent {
 public:
     AgentID advance(shared_ptr<Model> model) override {
         return get_agent_id();
@@ -47,52 +48,50 @@ public:
 class TestModel : public Model {
 };
 
-TEST(StagedAgent, DefaultConstructor) {
-    const TestStagedAgent agent_foo;
-    const TestStagedAgent agent_bar;
+class StagedAgentTest : public ::testing::Test {
+protected:
+    TestAgent agent_foo;
+    TestAgent agent_bar;
+    shared_ptr<TestModel> model_world = nullptr;
 
+    void SetUp() override {
+        auto model_world = make_shared<TestModel>();
+    }
+};
+
+TEST(StagedAgent, DefaultConstructor) {
+    EXPECT_NO_THROW(
+            const TestAgent agent_baz;
+            const TestAgent agent_qux;
+    );
+}
+
+TEST_F(StagedAgentTest, equivalance) {
     EXPECT_EQ(agent_foo, agent_foo);
     EXPECT_NE(agent_foo, agent_bar);
 }
 
-TEST(StagedAgent, get_agent_id) {
-    const TestStagedAgent agent_foo;
-    const TestStagedAgent agent_bar;
-
+TEST_F(StagedAgentTest, get_agent_id) {
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.get_agent_id());
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.get_agent_id());
 }
 
-TEST(StagedAgent, advance) {
-    TestStagedAgent agent_foo;
-    TestStagedAgent agent_bar;
-    auto model_world = make_shared<TestModel>();
-
-    EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.advance(model_world));
-    EXPECT_NE(agent_bar.get_agent_id(), agent_foo.advance(model_world));
-}
-
-TEST(StagedAgent, step) {
-    TestStagedAgent agent_foo;
-    TestStagedAgent agent_bar;
-    auto model_world = make_shared<TestModel>();
-
+TEST_F(StagedAgentTest, step) {
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));
 }
 
-TEST(StagedAgent, Equality) {
-    const TestStagedAgent agent_foo;
-    const TestStagedAgent agent_bar;
+TEST_F(StagedAgentTest, advance) {
+    EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.advance(model_world));
+    EXPECT_NE(agent_bar.get_agent_id(), agent_foo.advance(model_world));
+}
 
+TEST_F(StagedAgentTest, equality) {
     EXPECT_TRUE(agent_foo == agent_foo);
     EXPECT_TRUE(agent_bar == agent_bar);
 }
 
-TEST(StagedAgent, Inequality) {
-    const TestStagedAgent agent_foo;
-    const TestStagedAgent agent_bar;
-
+TEST_F(StagedAgentTest, inequality) {
     EXPECT_TRUE(agent_foo != agent_bar);
     EXPECT_FALSE(agent_bar != agent_bar);
 }
