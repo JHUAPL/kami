@@ -18,6 +18,7 @@ create_library(
         domain.cc
         grid1d.cc
         grid2d.cc
+        hexgrid.cc
         model.cc
         multigrid1d.cc
         multigrid2d.cc
