@@ -104,7 +104,7 @@ TEST_F(ReporterModelTest, collect) {
 
     auto rval = mod->collect();
     EXPECT_TRUE(rval);
-    EXPECT_TRUE(rval.value()->dump() == "{\"fname\":\"Walter\",\"lname\":\"White\"}");
+    EXPECT_EQ(rval.value()->dump(), "{\"fname\":\"Walter\",\"lname\":\"White\"}");
 }
 
 TEST_F(ReporterModelTest, report) {
@@ -116,8 +116,8 @@ TEST_F(ReporterModelTest, report) {
     }
 
     auto rval = mod->report();
-    EXPECT_TRUE(rval->dump() ==
-                "[{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":1},{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":2}]");
+    EXPECT_EQ(rval->dump(),
+              "[{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":1},{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":2}]");
 }
 
 int main(int argc, char **argv) {

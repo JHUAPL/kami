@@ -30,12 +30,15 @@
 
 using namespace kami;
 
-TEST(GridCoord1D, DefaultConstructor) {
-    const GridCoord1D gridcoord1d_foo(0);
-    const GridCoord1D gridcoord1d_bar(1);
-    const GridCoord1D gridcoord1d_baz(-1);
-    const GridCoord1D gridcoord1d_qux(0);
+class GridCoord1DTest : public ::testing::Test {
+protected:
+    GridCoord1D gridcoord1d_foo = GridCoord1D(0);
+    GridCoord1D gridcoord1d_bar = GridCoord1D(1);
+    GridCoord1D gridcoord1d_baz = GridCoord1D(-1);
+    GridCoord1D gridcoord1d_qux = GridCoord1D(0);
+};
 
+TEST_F(GridCoord1DTest, DefaultConstructor) {
     EXPECT_EQ(gridcoord1d_foo, gridcoord1d_foo);
     EXPECT_EQ(gridcoord1d_foo, gridcoord1d_qux);
 
@@ -44,22 +47,13 @@ TEST(GridCoord1D, DefaultConstructor) {
     EXPECT_NE(gridcoord1d_bar, gridcoord1d_baz);
 }
 
-TEST(GridCoord1D, to_string) {
-    const GridCoord1D gridcoord1d_foo(0);
-    const GridCoord1D gridcoord1d_bar(1);
-    const GridCoord1D gridcoord1d_baz(-1);
-
+TEST_F(GridCoord1DTest, to_string) {
     EXPECT_THAT(gridcoord1d_foo.to_string(), "(0)");
     EXPECT_THAT(gridcoord1d_bar.to_string(), "(1)");
     EXPECT_THAT(gridcoord1d_baz.to_string(), "(-1)");
 }
 
-TEST(GridCoord1D, Equality) {
-    const GridCoord1D gridcoord1d_foo(0);
-    const GridCoord1D gridcoord1d_bar(1);
-    const GridCoord1D gridcoord1d_baz(-1);
-    const GridCoord1D gridcoord1d_qux(0);
-
+TEST_F(GridCoord1DTest, equality) {
     EXPECT_TRUE(gridcoord1d_foo == gridcoord1d_foo);
     EXPECT_TRUE(gridcoord1d_foo == gridcoord1d_qux);
 
@@ -68,12 +62,7 @@ TEST(GridCoord1D, Equality) {
     EXPECT_FALSE(gridcoord1d_bar == gridcoord1d_baz);
 }
 
-TEST(GridCoord1D, Inequality) {
-    const GridCoord1D gridcoord1d_foo(0);
-    const GridCoord1D gridcoord1d_bar(1);
-    const GridCoord1D gridcoord1d_baz(-1);
-    const GridCoord1D gridcoord1d_qux(0);
-
+TEST_F(GridCoord1DTest, inequality) {
     EXPECT_FALSE(gridcoord1d_foo != gridcoord1d_foo);
     EXPECT_FALSE(gridcoord1d_foo != gridcoord1d_qux);
 
@@ -82,12 +71,7 @@ TEST(GridCoord1D, Inequality) {
     EXPECT_TRUE(gridcoord1d_bar != gridcoord1d_baz);
 }
 
-TEST(GridCoord1D, get_x_location) {
-    const GridCoord1D gridcoord1d_foo(0);
-    const GridCoord1D gridcoord1d_bar(1);
-    const GridCoord1D gridcoord1d_baz(-1);
-    const GridCoord1D gridcoord1d_qux(0);
-
+TEST_F(GridCoord1DTest, get_x_location) {
     EXPECT_TRUE(gridcoord1d_foo.get_x_location() == 0);
     EXPECT_TRUE(gridcoord1d_bar.get_x_location() == 1);
     EXPECT_TRUE(gridcoord1d_baz.get_x_location() == -1);
