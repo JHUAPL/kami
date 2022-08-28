@@ -59,16 +59,6 @@ class TestModel : public ReporterModel {
 public:
     shared_ptr<vector<AgentID>> retval;
 
-    shared_ptr<Model> step() override {
-        retval = _sched->step(shared_from_this()).value();
-        return shared_from_this();
-    }
-
-    shared_ptr<Model> step(unique_ptr<vector<AgentID>> agent_list) {
-        retval = _sched->step(shared_from_this(), std::move(agent_list)).value();
-        return shared_from_this();
-    }
-
     std::optional<std::unique_ptr<nlohmann::json>> collect() override {
         auto json_ret_val = std::make_unique<nlohmann::json>();
 
@@ -92,7 +82,7 @@ protected:
         static_cast<void>(mod->set_population(popul_foo));
         static_cast<void>(mod->set_scheduler(sched_foo));
 
-        for (auto i = 0; i < 10; i++) {
+        for (auto i = 0; i < 3; i++) {
             auto agent_foo = make_shared<TestAgent>();
             static_cast<void>(popul_foo->add_agent(agent_foo));
         }
@@ -108,52 +98,26 @@ TEST(ReporterModel, DefaultConstructor) {
     );
 }
 
-TEST_F(ReporterModelTest, step_interface1) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto aval = mod->get_population().value()->get_agent_list();
-    mod->step(std::move(aval));
-
-    auto rval = mod->retval;
-
-    EXPECT_TRUE(rval);
-    EXPECT_EQ(rval->size(), 10);
-    EXPECT_EQ(*rval, *tval);
-}
-
-TEST_F(ReporterModelTest, step_interface2) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto aval = mod->get_population().value()->get_agent_list();
-    mod->step(std::move(aval));
-
-    auto rval = mod->retval;
-
-    EXPECT_TRUE(rval);
-    EXPECT_EQ(rval->size(), 10);
-    EXPECT_EQ(*rval, *tval);
-}
-
-TEST_F(ReporterModelTest, step_10000) {
-    // Do it a lot...
-    for (auto i = 0; i < 10000; i++) {
-        auto tval = mod->get_population().value()->get_agent_list();
-        auto aval = mod->get_population().value()->get_agent_list();
-        mod->step(std::move(aval));
-
-        auto rval = mod->retval;
-
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(rval->size(), 10);
-        EXPECT_EQ(*rval, *tval);
-    }
-}
-
 TEST_F(ReporterModelTest, collect) {
     auto aval = mod->get_population().value()->get_agent_list();
-    mod->step(std::move(aval));
+    mod->step();
 
     auto rval = mod->collect();
     EXPECT_TRUE(rval);
     EXPECT_TRUE(rval.value()->dump() == "{\"fname\":\"Walter\",\"lname\":\"White\"}");
+}
+
+TEST_F(ReporterModelTest, report) {
+    for (auto i = 0; i < 2; i++) {
+        auto aval = mod->get_population().value()->get_agent_list();
+
+        mod->step();
+        auto rval = mod->collect();
+    }
+
+    auto rval = mod->report();
+    EXPECT_TRUE(rval->dump() ==
+                "[{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":1},{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":2}]");
 }
 
 int main(int argc, char **argv) {
