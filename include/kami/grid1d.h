@@ -132,7 +132,7 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true.
          */
-        virtual std::optional<AgentID> add_agent(const AgentID agent_id, const GridCoord1D &coord) = 0;
+        virtual std::optional<AgentID> add_agent(AgentID agent_id, const GridCoord1D &coord) = 0;
 
         /**
          * @brief Remove agent from the grid.
@@ -141,7 +141,7 @@ namespace kami {
          *
          * @returns the `AgentID` of the `Agent` deleted
          */
-        std::optional<AgentID> delete_agent(const AgentID agent_id);
+        std::optional<AgentID> delete_agent(AgentID agent_id);
 
         /**
          * @brief Remove agent from the grid at the specified location
@@ -151,7 +151,7 @@ namespace kami {
          *
          * @returns the `AgentID` of the `Agent` deleted
          */
-        std::optional<AgentID> delete_agent(const AgentID agent_id, const GridCoord1D &coord);
+        std::optional<AgentID> delete_agent(AgentID agent_id, const GridCoord1D &coord);
 
         /**
          * @brief Move an agent to the specified location.
@@ -159,7 +159,7 @@ namespace kami {
          * @param[in] agent_id the `AgentID` of the agent to move.
          * @param[in] coord the coordinates of the agent.
          */
-        std::optional<AgentID> move_agent(const AgentID agent_id, const GridCoord1D &coord);
+        std::optional<AgentID> move_agent(AgentID agent_id, const GridCoord1D &coord);
 
         /**
          * @brief Inquire if the specified location is empty.
@@ -220,7 +220,7 @@ namespace kami {
          * for all adjacent points.
          */
         [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord1D>>>
-        get_neighborhood(const AgentID agent_id, const bool include_center) const;
+        get_neighborhood(AgentID agent_id, const bool include_center) const;
 
         /**
          * @brief Return the neighborhood of the specified location
@@ -233,7 +233,7 @@ namespace kami {
          * for all adjacent points.
          */
         [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord1D>>>
-        get_neighborhood(const GridCoord1D &coord, const bool include_center) const;
+        get_neighborhood(const GridCoord1D &coord, bool include_center) const;
 
         /**
          * @brief Get the size of the grid in the `x` dimension.

@@ -65,16 +65,16 @@ protected:
 
     void SetUp() override {
         mod = make_shared<TestModel>();
-        auto popul_foo = make_shared<Population>();
+        auto pop_foo = make_shared<Population>();
         auto sched_foo = make_shared<SequentialScheduler>();
 
         // Domain is not required for this test
-        static_cast<void>(mod->set_population(popul_foo));
+        static_cast<void>(mod->set_population(pop_foo));
         static_cast<void>(mod->set_scheduler(sched_foo));
 
         for (auto i = 0; i < 10; i++) {
             auto agent_foo = make_shared<TestAgent>();
-            static_cast<void>(popul_foo->add_agent(agent_foo));
+            static_cast<void>(pop_foo->add_agent(agent_foo));
         }
     }
 };

@@ -77,7 +77,7 @@ kami::AgentID MoneyAgent2D::step(std::shared_ptr<kami::Model> model) {
     return this->get_agent_id();
 }
 
-std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(std::shared_ptr<kami::Model> model) {
+std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(const std::shared_ptr<kami::Model> &model) {
     console->trace("Entering move_agent");
     auto agent_id = get_agent_id();
 
@@ -100,7 +100,7 @@ std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(std::shared_ptr<kami::
     return new_location;
 }
 
-std::optional<kami::AgentID> MoneyAgent2D::give_money(std::shared_ptr<kami::Model> model) {
+std::optional<kami::AgentID> MoneyAgent2D::give_money(const std::shared_ptr<kami::Model> &model) {
     console->trace("Entering give_money");
     auto agent_id = get_agent_id();
 
@@ -170,6 +170,9 @@ std::shared_ptr<kami::Model> BoltzmannWealthModel2D::step() {
     return shared_from_this();
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+
 int main(int argc, char **argv) {
     std::string ident = "boltzmann2d";
     std::string log_level_option = "info";
@@ -204,3 +207,5 @@ int main(int argc, char **argv) {
 
     console->info("Boltzmann Wealth Model simulation complete, requiring {} seconds", sw);
 }
+
+#pragma clang diagnostic pop

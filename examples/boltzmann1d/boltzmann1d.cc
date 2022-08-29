@@ -169,6 +169,9 @@ std::shared_ptr<kami::Model> BoltzmannWealthModel1D::step() {
     return shared_from_this();
 }
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+
 int main(int argc, char **argv) {
     std::string ident = "boltzmann1d";
     std::string log_level_option = "info";
@@ -202,3 +205,5 @@ int main(int argc, char **argv) {
 
     console->info("Boltzmann Wealth Model simulation complete, requiring {} seconds", sw);
 }
+
+#pragma clang diagnostic pop

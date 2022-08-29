@@ -45,7 +45,7 @@ public:
 
 class TestModel : public Model {
 public:
-    shared_ptr<Model> step() {
+    shared_ptr<Model> step() final {
         return shared_from_this();
     }
 };
@@ -61,24 +61,24 @@ TEST(Model, DefaultConstructor) {
 
 TEST(Model, set_population) {
     auto model_foo = make_shared<TestModel>();
-    auto popul_foo = make_shared<Population>();
+    auto pop_foo = make_shared<Population>();
 
-    auto popul_bar = model_foo->set_population(popul_foo);
-    EXPECT_EQ(popul_foo, popul_bar);
+    auto pop_bar = model_foo->set_population(pop_foo);
+    EXPECT_EQ(pop_foo, pop_bar);
 }
 
 TEST(Model, get_population) {
     auto model_foo = make_shared<TestModel>();
-    auto popul_foo = make_shared<Population>();
+    auto pop_foo = make_shared<Population>();
 
-    auto popul_nul = model_foo->get_population();
+    auto pop_nul = model_foo->get_population();
 
-    auto popul_bar = model_foo->set_population(popul_foo);
-    auto popul_baz = model_foo->get_population();
+    auto pop_bar = model_foo->set_population(pop_foo);
+    auto pop_baz = model_foo->get_population();
 
-    EXPECT_TRUE(popul_baz);
-    EXPECT_EQ(popul_foo, popul_baz);
-    EXPECT_EQ(popul_bar, popul_baz);
+    EXPECT_TRUE(pop_baz);
+    EXPECT_EQ(pop_foo, pop_baz);
+    EXPECT_EQ(pop_bar, pop_baz);
 }
 
 TEST(Model, set_scheduler) {

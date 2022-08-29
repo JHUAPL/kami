@@ -85,7 +85,7 @@ std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::Repo
         return std::nullopt;
 
     // Note, here we reverse the logic from that used in the Mesa
-    // implementation.  We prefer the guard clause to to the nested
+    // implementation.  We prefer the guard clause to the nested
     // if statements.  See Fowler.
     auto cell_mates = cell_mates_opt.value();
     if (cell_mates->size() < 2)

@@ -53,6 +53,9 @@
 std::shared_ptr<spdlog::logger> console = nullptr;
 std::shared_ptr<std::mt19937> rng = nullptr;
 
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+
 int main(int argc, char **argv) {
     std::string ident = "bankreserves";
     std::string log_level_option = "info";
@@ -99,3 +102,5 @@ int main(int argc, char **argv) {
     console->info("JSON data report written to {}", output_file_name);
     console->trace("Done.");
 }
+
+#pragma clang diagnostic pop

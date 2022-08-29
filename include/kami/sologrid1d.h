@@ -37,7 +37,7 @@
 namespace kami {
 
     /**
-     * @brief A one-dimensional grid where each cell may contain one agenta
+     * @brief A one-dimensional grid where each cell may contain one agents
      *
      * @details The grid is linear and may wrap around in its only dimension.
      *
@@ -64,7 +64,7 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true
          */
-        std::optional<AgentID> add_agent(const AgentID agent_id, const GridCoord1D &coord) override;
+        std::optional<AgentID> add_agent(AgentID agent_id, const GridCoord1D &coord) override;
     };
 
 }  // namespace kami

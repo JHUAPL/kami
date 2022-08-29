@@ -96,11 +96,10 @@ public:
     /**
      * Execute a single time-step for the model.
      */
-    std::shared_ptr<kami::Model> step();
+    std::shared_ptr<kami::Model> step() final;
 
 private:
     unsigned int _step_count;
-
 };
 
 #endif  // BOLTZMANN1D_H

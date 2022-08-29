@@ -154,7 +154,7 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true.
          */
-        virtual std::optional<AgentID> add_agent(const AgentID agent_id, const GridCoord2D &coord) = 0;
+        virtual std::optional<AgentID> add_agent(AgentID agent_id, const GridCoord2D &coord) = 0;
 
         /**
          * @brief Remove agent from the grid.
@@ -163,7 +163,7 @@ namespace kami {
          *
          * @returns false if the agent is not removed, otherwise, true.
          */
-        std::optional<AgentID> delete_agent(const AgentID agent_id);
+        std::optional<AgentID> delete_agent(AgentID agent_id);
 
         /**
          * @brief Remove agent from the grid at the specified location
@@ -173,7 +173,7 @@ namespace kami {
          *
          * @returns false if the agent is not removed, otherwise, true.
          */
-        std::optional<AgentID> delete_agent(const AgentID agent_id, const GridCoord2D &coord);
+        std::optional<AgentID> delete_agent(AgentID agent_id, const GridCoord2D &coord);
 
         /**
          * @brief Move an agent to the specified location.
@@ -181,7 +181,7 @@ namespace kami {
          * @param[in] agent_id the `AgentID` of the agent to move.
          * @param[in] coord the coordinates of the agent.
          */
-        std::optional<AgentID> move_agent(const AgentID agent_id, const GridCoord2D &coord);
+        std::optional<AgentID> move_agent(AgentID agent_id, const GridCoord2D &coord);
 
         /**
          * @brief Inquire if the specified location is empty.

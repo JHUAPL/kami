@@ -51,7 +51,7 @@ protected:
     shared_ptr<TestModel> model_world = nullptr;
 
     void SetUp() override {
-        auto model_world = make_shared<TestModel>();
+        model_world = make_shared<TestModel>();
     }
 };
 
