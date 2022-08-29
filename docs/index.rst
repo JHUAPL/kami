@@ -15,6 +15,9 @@ Introduction
     :alt: Release Status
 ..  image:: https://img.shields.io/github/license/JHUAPL/kami
     :alt: License Information
+..  image:: https://img.shields.io/badge/DOI-10.5281%2Fzenodo.6975259-success.svg
+    :target: https://doi.org/10.5281/zenodo.6975259
+    :alt: Package DOI
 
 Kami is Agent-Based Modeling in Modern C++.
 
