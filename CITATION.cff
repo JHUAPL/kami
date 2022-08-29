@@ -1,0 +1,25 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Kami is Agent-Based Modeling in Modern C++
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+license: MIT
+repository-code: "https://github.com/JHUAPL/kami"
+authors:
+  - given-names: James Patrick
+    family-names: Howard
+    name-suffix: II
+    email: james.howard@jhu.edu
+    affiliation: Johns Hopkins Applied Physics Laboratory
+    orcid: 'https://orcid.org/0000-0003-4530-1547'
+keywords:
+  - "agent-based modelling"
+  - research
+identifiers:
+  - description: "This is the collection of archived snapshots of all versions of My Research Software"
+    type: doi
+    value: 10.5281/zenodo.6975259
