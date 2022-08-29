@@ -312,6 +312,7 @@ namespace kami {
 
 }  // namespace kami
 
+//! @cond SuppressHashMethod
 namespace std {
     template<>
     struct hash<kami::HexCoord> {
@@ -320,5 +321,6 @@ namespace std {
         }
     };
 }  // namespace std
+//! @endcond
 
 #endif  // KAMI_HEXGRID_H

@@ -270,6 +270,8 @@ namespace kami {
 
 }  // namespace kami
 
+//! @cond SuppressHashMethod
+#define KAMI_GRID1D_H
 namespace std {
     template<>
     struct hash<kami::GridCoord1D> {
@@ -278,5 +280,6 @@ namespace std {
         }
     };
 }  // namespace std
+//! @endcond
 
 #endif  // KAMI_GRID1D_H

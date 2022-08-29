@@ -312,6 +312,7 @@ namespace kami {
 
 }  // namespace kami
 
+//! @cond SuppressHashMethod
 namespace std {
     template<>
     struct hash<kami::GridCoord2D> {
@@ -320,5 +321,6 @@ namespace std {
         }
     };
 }  // namespace std
+//! @endcond
 
 #endif  // KAMI_GRID2D_H
