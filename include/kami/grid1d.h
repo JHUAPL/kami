@@ -35,6 +35,7 @@
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #include <kami/domain.h>
 #include <kami/grid.h>
@@ -220,7 +221,7 @@ namespace kami {
          * for all adjacent points.
          */
         [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord1D>>>
-        get_neighborhood(AgentID agent_id, const bool include_center) const;
+        get_neighborhood(AgentID agent_id, bool include_center) const;
 
         /**
          * @brief Return the neighborhood of the specified location
@@ -243,6 +244,17 @@ namespace kami {
         [[nodiscard]] unsigned int get_maximum_x() const;
 
     protected:
+        /**
+         * @brief Direction coordinates
+         *
+         * @details This can be used for addition to coordinates.  Direction
+         * `0` is the first direction clockwise from "vertical."  In this
+         * case, it can be on a vertically-oriented column, upwards, or to
+         * the right on a horizontally-oriented column.  Then the additional
+         * directions are enumerated clockwise.
+         */
+        const std::vector<GridCoord1D> directions = {GridCoord1D(1), GridCoord1D(-1)};
+
         /**
          * @brief An `unordered_set` containing the `AgentID`s of all agents assigned to this
          * grid.

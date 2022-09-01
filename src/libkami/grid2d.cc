@@ -146,57 +146,27 @@ namespace kami {
     Grid2D::get_neighborhood(const GridCoord2D &coord, const bool include_center,
                              const GridNeighborhoodType neighborhood_type) const {
         auto neighborhood = std::make_unique<std::unordered_set<GridCoord2D>>();
-        auto x = coord.get_x_location();
-        auto y = coord.get_y_location();
+        std::vector<GridCoord2D> directions;
 
+        switch (neighborhood_type) {
+            case GridNeighborhoodType::VonNeumann:
+                directions = directions_vonneumann;
+                break;
+            case GridNeighborhoodType::Moore:
+                directions = directions_moore;
+                break;
+            default:
+                return std::nullopt;
+        }
         // We assume our starting position is valid
         if (include_center)
             neighborhood->insert(coord);
 
-        // N, E, S, W
-        {
-            auto new_location = coord_wrap(GridCoord2D(x, y - 1));
-            if (is_location_valid(new_location))
-                neighborhood->insert(coord_wrap(new_location));
-        }
-        {
-            auto new_location = coord_wrap(GridCoord2D(x, y + 1));
-            if (is_location_valid(new_location))
-                neighborhood->insert(coord_wrap(new_location));
-        }
-        {
-            auto new_location = coord_wrap(GridCoord2D(x + 1, y));
-            if (is_location_valid(new_location))
-                neighborhood->insert(coord_wrap(new_location));
-        }
-        {
-            auto new_location = coord_wrap(GridCoord2D(x - 1, y));
-            if (is_location_valid(new_location))
-                neighborhood->insert(coord_wrap(new_location));
-        }
+        for (auto &direction: directions) {
+            auto new_location = coord_wrap(coord + direction);
 
-        if (neighborhood_type == GridNeighborhoodType::Moore) {
-            // NE, SE, SW, NW
-            {
-                auto new_location = coord_wrap(GridCoord2D(x + 1, y - 1));
-                if (is_location_valid(new_location))
-                    neighborhood->insert(coord_wrap(new_location));
-            }
-            {
-                auto new_location = coord_wrap(GridCoord2D(x + 1, y + 1));
-                if (is_location_valid(new_location))
-                    neighborhood->insert(coord_wrap(new_location));
-            }
-            {
-                auto new_location = coord_wrap(GridCoord2D(x - 1, y + 1));
-                if (is_location_valid(new_location))
-                    neighborhood->insert(coord_wrap(new_location));
-            }
-            {
-                auto new_location = coord_wrap(GridCoord2D(x - 1, y - 1));
-                if (is_location_valid(new_location))
-                    neighborhood->insert(coord_wrap(new_location));
-            }
+            if (is_location_valid(new_location))
+                neighborhood->insert(new_location);
         }
 
         return std::move(neighborhood);

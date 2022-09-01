@@ -130,22 +130,16 @@ namespace kami {
     std::optional<std::shared_ptr<std::unordered_set<GridCoord1D>>>
     Grid1D::get_neighborhood(const GridCoord1D &coord, const bool include_center) const {
         auto neighborhood = std::make_shared<std::unordered_set<GridCoord1D>>();
-        auto x = coord.get_x_location();
 
         // We assume our starting position is valid
         if (include_center)
             neighborhood->insert(coord);
 
-        // E, W
-        {
-            auto new_location = coord_wrap(GridCoord1D(x + 1));
+        for (auto &direction: directions) {
+            auto new_location = coord_wrap(coord + direction);
+
             if (is_location_valid(new_location))
-                neighborhood->insert(coord_wrap(new_location));
-        }
-        {
-            auto new_location = coord_wrap(GridCoord1D(x - 1));
-            if (is_location_valid(new_location))
-                neighborhood->insert(coord_wrap(new_location));
+                neighborhood->insert(new_location);
         }
 
         return std::move(neighborhood);

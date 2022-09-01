@@ -37,6 +37,7 @@
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 #include <kami/domain.h>
 #include <kami/grid.h>
@@ -118,6 +119,40 @@ namespace kami {
          * @brief Output a given coordinate to the specified stream
          */
         friend std::ostream &operator<<(std::ostream &, const GridCoord2D &);
+
+        /**
+         * @brief Add two coordinates together
+         */
+        inline friend GridCoord2D operator+(const GridCoord2D &lhs, const GridCoord2D &rhs) {
+            return {lhs._x_coord + rhs._x_coord, lhs._y_coord + rhs._y_coord};
+        }
+
+        /**
+         * @brief Subtract one coordinate from another
+         */
+        inline friend GridCoord2D operator-(const GridCoord2D &lhs, const GridCoord2D &rhs) {
+            return {lhs._x_coord - rhs._x_coord, lhs._y_coord - rhs._y_coord};
+        }
+
+        /**
+         * @brief Multiply a coordinate by a scalar
+         *
+         * @details If any component of the resulting value is not a whole number, it is
+         * truncated following the same rules as `int`.
+         */
+        inline friend GridCoord2D operator*(const GridCoord2D &lhs, const double rhs) {
+            return {static_cast<int>(lhs._x_coord * rhs), static_cast<int>(lhs._y_coord * rhs)};
+        }
+
+        /**
+         * @brief Multiply a coordinate by a scalar
+         *
+         * @details If any component of the resulting value is not a whole number, it is
+         * truncated following the same rules as `int`.
+         */
+        inline friend GridCoord2D operator*(const double lhs, const GridCoord2D &rhs) {
+            return {static_cast<int>(rhs._x_coord * lhs), static_cast<int>(rhs._y_coord * lhs)};
+        }
 
     private:
         int _x_coord, _y_coord;
@@ -246,7 +281,7 @@ namespace kami {
          * @param[in] include_center should the center-point, occupied by the agent,
          * be in the list.
          *
-         * @return a set of `GridCoord1D` that includes all of the coordinates
+         * @return a set of `GridCoord2D` that includes all of the coordinates
          * for all adjacent points.
          *
          * @see `NeighborhoodType`
@@ -285,6 +320,28 @@ namespace kami {
         [[nodiscard]] unsigned int get_maximum_y() const;
 
     protected:
+        /**
+         * @brief von Neumann neighborhood coordinates
+         *
+         * @details This can be used for addition to coordinates.  Direction
+         * `0` is the first direction clockwise from "vertical."  Then the additional
+         * directions are enumerated clockwise.
+         */
+        const std::vector<GridCoord2D> directions_vonneumann = {GridCoord2D(0, 1), GridCoord2D(1, 0),
+                                                                GridCoord2D(0, -1), GridCoord2D(-1, 0)};
+
+        /**
+         * @brief Moore neighborhood coordinates
+         *
+         * @details This can be used for addition to coordinates.  Direction
+         * `0` is the first direction clockwise from "vertical."  Then the additional
+         * directions are enumerated clockwise.
+         */
+        const std::vector<GridCoord2D> directions_moore = {GridCoord2D(0, 1), GridCoord2D(1, 1),
+                                                           GridCoord2D(1, 0), GridCoord2D(1, -1),
+                                                           GridCoord2D(0, -1), GridCoord2D(-1, -1),
+                                                           GridCoord2D(-1, 0), GridCoord2D(-1, 1)};
+
         /**
          * @brief  A map containing the `AgentID`s of all agents assigned to this
          * grid.
