@@ -65,9 +65,20 @@ namespace kami {
          */
         virtual std::optional<std::unique_ptr<nlohmann::json>> collect() = 0;
 
+        /**
+         * @brief Execute a time-step for the agent
+         *
+         * @details This function should step the agent instance.  Any activities that the
+         * agent should perform as part of its time step should be in this function.
+         *
+         * @param model a reference copy of the model
+         *
+         * @returns a copy of the AgentID
+         */
         virtual AgentID step(std::shared_ptr<ReporterModel> model) = 0;
 
     private:
+        // This should be uncallable, but knocks out the inherited method.
         AgentID step(std::shared_ptr<Model> model) override {
             return get_agent_id();
         };
@@ -107,9 +118,15 @@ namespace kami {
         };
 
         /**
+         * @brief Execute a single time step of the model
          *
+         * @details This method will collect all the `Agent`s in the `Population` associated
+         * with the model and pass them to the associated `Scheduler` for stepping.  After scheduling,
+         * this method will run the collect() for the `Reporter` associated with this model.
+         *
+         * @returns a shared pointer to the model instance
          */
-        std::shared_ptr<Model> step() override;
+        virtual std::shared_ptr<Model> step() override;
 
         std::unique_ptr<nlohmann::json> report();
 

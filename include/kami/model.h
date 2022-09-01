@@ -97,7 +97,12 @@ namespace kami {
         std::shared_ptr<Scheduler> set_scheduler(std::shared_ptr<Scheduler> scheduler);
 
         /**
+         * @brief Execute a single time step of the model
          *
+         * @details This method will collect all the `Agent`s in the `Population` associated
+         * with model and pass them to the associated `Scheduler` for stepping.
+         *
+         * @returns a shared pointer to the model instance
          */
         virtual std::shared_ptr<Model> step();
 

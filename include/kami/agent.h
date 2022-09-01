@@ -146,6 +146,8 @@ namespace kami {
          * agent should perform as part of its time step should be in this function.
          *
          * @param model a reference copy of the model
+         *
+         * @returns a copy of the AgentID
          */
         virtual AgentID step(std::shared_ptr<Model> model) = 0;
 
