@@ -54,8 +54,7 @@ namespace kami {
          * @param[in] wrap_x should the grid wrap around on itself in the first dimension
          * @param[in] wrap_y should the grid wrap around on itself in the second dimension
          */
-        SoloGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x, bool wrap_y)
-                : Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {};
+        SoloGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x, bool wrap_y);;
 
         /**
          * @details Place agent on the grid at the specified location.

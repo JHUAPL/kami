@@ -51,7 +51,7 @@ namespace kami {
         /**
          * @brief Constructor for one-dimensional coordinates
          */
-        explicit GridCoord1D(int x_coord) : _x_coord(x_coord){};
+        explicit GridCoord1D(int x_coord);;
 
         /**
          * @brief Return the `x` coordinate
@@ -101,6 +101,32 @@ namespace kami {
          * @brief Output a given coordinate to the specified stream
          */
         friend std::ostream &operator<<(std::ostream &lhs, const GridCoord1D &rhs);
+
+        /**
+         * @brief Add two coordinates together
+         */
+        inline friend GridCoord1D operator+(const GridCoord1D &lhs, const GridCoord1D &rhs);
+
+        /**
+         * @brief Subtract one coordinate from another
+         */
+        inline friend GridCoord1D operator-(const GridCoord1D &lhs, const GridCoord1D &rhs);
+
+        /**
+         * @brief Multiply a coordinate by a scalar
+         *
+         * @details If any component of the resulting value is not a whole number, it is
+         * truncated following the same rules as `int`.
+         */
+        inline friend GridCoord1D operator*(const GridCoord1D &lhs, const double rhs);
+
+        /**
+         * @brief Multiply a coordinate by a scalar
+         *
+         * @details If any component of the resulting value is not a whole number, it is
+         * truncated following the same rules as `int`.
+         */
+        inline friend GridCoord1D operator*(const double lhs, const GridCoord1D &rhs);
 
     private:
         int _x_coord;

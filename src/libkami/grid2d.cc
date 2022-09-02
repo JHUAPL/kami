@@ -74,6 +74,37 @@ namespace kami {
         return lhs << rhs.to_string();
     }
 
+    GridCoord2D::GridCoord2D(int x_coord, int y_coord)
+            : _x_coord(x_coord), _y_coord(y_coord) {}
+
+    double GridCoord2D::distance_chebyshev(std::shared_ptr<GridCoord2D> &p) const {
+        return static_cast<double>(fmax(abs(_x_coord - p->_x_coord), abs(_x_coord - p->_x_coord)));
+    }
+
+    double GridCoord2D::distance_euclidean(std::shared_ptr<GridCoord2D> &p) const {
+        return sqrt(pow(_x_coord - p->_x_coord, 2) + pow(_x_coord - p->_x_coord, 2));
+    }
+
+    double GridCoord2D::distance_manhattan(std::shared_ptr<GridCoord2D> &p) const {
+        return static_cast<double>(abs(_x_coord - p->_x_coord) + abs(_x_coord - p->_x_coord));
+    }
+
+    GridCoord2D operator+(const GridCoord2D &lhs, const GridCoord2D &rhs) {
+        return {lhs._x_coord + rhs._x_coord, lhs._y_coord + rhs._y_coord};
+    }
+
+    GridCoord2D operator-(const GridCoord2D &lhs, const GridCoord2D &rhs) {
+        return {lhs._x_coord - rhs._x_coord, lhs._y_coord - rhs._y_coord};
+    }
+
+    GridCoord2D operator*(const GridCoord2D &lhs, const double rhs) {
+        return {static_cast<int>(lhs._x_coord * rhs), static_cast<int>(lhs._y_coord * rhs)};
+    }
+
+    GridCoord2D operator*(const double lhs, const GridCoord2D &rhs) {
+        return {static_cast<int>(rhs._x_coord * lhs), static_cast<int>(rhs._y_coord * lhs)};
+    }
+
     Grid2D::Grid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x,
                    bool wrap_y) {
         _maximum_x = maximum_x;

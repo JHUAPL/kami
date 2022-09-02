@@ -48,9 +48,6 @@ namespace kami {
      * but is not guaranteed not to repeat.
      */
     class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler, std::enable_shared_from_this<RandomScheduler> {
-    private:
-        std::shared_ptr<std::mt19937> _rng = nullptr;
-
     public:
         /**
          * @brief Constructor.
@@ -102,6 +99,10 @@ namespace kami {
          * the order of agent stepping.
          */
         std::shared_ptr<std::mt19937> get_rng();
+
+    private:
+        std::shared_ptr<std::mt19937> _rng = nullptr;
+
     };
 
 }  // namespace kami

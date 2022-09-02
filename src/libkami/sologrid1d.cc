@@ -28,6 +28,9 @@
 
 namespace kami {
 
+    SoloGrid1D::SoloGrid1D(unsigned int maximum_x, bool wrap_x)
+            : Grid1D(maximum_x, wrap_x) {}
+
     std::optional<AgentID> SoloGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
         if (!is_location_valid(coord))
             return std::nullopt;

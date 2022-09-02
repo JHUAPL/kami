@@ -23,12 +23,16 @@
  * SOFTWARE.
  */
 
-#include <kami/agent.h>
-
 #include <iostream>
 #include <string>
 
+#include <kami/agent.h>
+
 namespace kami {
+
+    AgentID::AgentID() : _id(_id_next++) {}
+
+    std::string AgentID::to_string() const { return std::to_string(_id); }
 
     bool operator==(const AgentID &lhs, const AgentID &rhs) {
         return lhs._id == rhs._id;

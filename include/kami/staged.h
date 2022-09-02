@@ -48,6 +48,26 @@ namespace kami {
      * `delete_agent()`.
      */
     class LIBKAMI_EXPORT StagedScheduler : public SequentialScheduler {
+    public:
+        /**
+         * @brief Execute a single time step
+         *
+         * @details This method will step through the list of Agents in the scheduler's
+         * internal queue and execute the `Agent::step()` method for  each `Agent`
+         * in the same order.  Finally, it will execute the  `Agent::advance()`
+         * method for each Agent in the same order.
+         *
+         * @param model a reference copy of the model
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
+         */
+        std::optional<std::unique_ptr<std::vector<AgentID>>>
+        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+
+        std::optional<std::unique_ptr<std::vector<AgentID>>>
+        step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+
     private:
         /**
          * @brief Advance a single time step.
@@ -83,26 +103,6 @@ namespace kami {
 
         std::optional<std::unique_ptr<std::vector<AgentID>>>
         advance(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list);
-
-    public:
-        /**
-         * @brief Execute a single time step
-         *
-         * @details This method will step through the list of Agents in the scheduler's
-         * internal queue and execute the `Agent::step()` method for  each `Agent`
-         * in the same order.  Finally, it will execute the  `Agent::advance()`
-         * method for each Agent in the same order.
-         *
-         * @param model a reference copy of the model
-         * @param agent_list list of agents to execute the step
-         *
-         * @returns returns vector of agents successfully stepped
-         */
-        std::optional<std::unique_ptr<std::vector<AgentID>>>
-        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
-
-        std::optional<std::unique_ptr<std::vector<AgentID>>>
-        step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
     };
 
 }  // namespace kami

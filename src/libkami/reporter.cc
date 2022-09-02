@@ -54,6 +54,10 @@ namespace kami {
         return std::move(_rpt->report(std::static_pointer_cast<ReporterModel>(shared_from_this())));
     }
 
+    inline unsigned int ReporterModel::get_step_id() {
+        return _step_count;
+    }
+
     Reporter::Reporter() {
         _report_data = std::make_unique<std::vector<nlohmann::json>>();
     }
@@ -115,5 +119,10 @@ namespace kami {
         auto json_data = std::make_unique<nlohmann::json>(*_report_data);
         return std::move(json_data);
     }
+
+    AgentID ReporterAgent::step(std::shared_ptr<Model> model) {
+        return get_agent_id();
+    }
+
 
 }  // namespace kami

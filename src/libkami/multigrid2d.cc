@@ -30,6 +30,9 @@
 
 namespace kami {
 
+    MultiGrid2D::MultiGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x, bool wrap_y)
+            : Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {}
+
     std::optional<AgentID> MultiGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
         if (!is_location_valid(coord))
             return std::nullopt;

@@ -79,9 +79,7 @@ namespace kami {
 
     private:
         // This should be uncallable, but knocks out the inherited method.
-        AgentID step(std::shared_ptr<Model> model) override {
-            return get_agent_id();
-        };
+        AgentID step(std::shared_ptr<Model> model) override;;
 
         int _step_counter = 0;
     };
@@ -113,9 +111,7 @@ namespace kami {
          * @details The step_id should probably be a monotonically
          * incrementing integer.
          */
-        inline virtual unsigned int get_step_id() {
-            return _step_count;
-        };
+        virtual unsigned int get_step_id();
 
         /**
          * @brief Execute a single time step of the model

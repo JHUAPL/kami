@@ -49,25 +49,11 @@ namespace kami {
      * @brief Two-dimensional coordinates
      */
     class LIBKAMI_EXPORT GridCoord2D : public GridCoord {
-    protected:
-        inline double distance_chebyshev(std::shared_ptr<GridCoord2D> &p) const {
-            return static_cast<double>(fmax(abs(_x_coord - p->_x_coord), abs(_x_coord - p->_x_coord)));
-        };
-
-        inline double distance_euclidean(std::shared_ptr<GridCoord2D> &p) const {
-            return sqrt(pow(_x_coord - p->_x_coord, 2) + pow(_x_coord - p->_x_coord, 2));
-        };
-
-        inline double distance_manhattan(std::shared_ptr<GridCoord2D> &p) const {
-            return static_cast<double>(abs(_x_coord - p->_x_coord) + abs(_x_coord - p->_x_coord));
-        };
-
     public:
         /**
          * @brief Constructor for two-dimensional coordinates
          */
-        GridCoord2D(int x_coord, int y_coord)
-                : _x_coord(x_coord), _y_coord(y_coord) {};
+        GridCoord2D(int x_coord, int y_coord);;
 
         /**
          * @brief Get the coordinate in the first dimension or `x`.
@@ -123,16 +109,12 @@ namespace kami {
         /**
          * @brief Add two coordinates together
          */
-        inline friend GridCoord2D operator+(const GridCoord2D &lhs, const GridCoord2D &rhs) {
-            return {lhs._x_coord + rhs._x_coord, lhs._y_coord + rhs._y_coord};
-        }
+        inline friend GridCoord2D operator+(const GridCoord2D &lhs, const GridCoord2D &rhs);
 
         /**
          * @brief Subtract one coordinate from another
          */
-        inline friend GridCoord2D operator-(const GridCoord2D &lhs, const GridCoord2D &rhs) {
-            return {lhs._x_coord - rhs._x_coord, lhs._y_coord - rhs._y_coord};
-        }
+        inline friend GridCoord2D operator-(const GridCoord2D &lhs, const GridCoord2D &rhs);
 
         /**
          * @brief Multiply a coordinate by a scalar
@@ -140,9 +122,7 @@ namespace kami {
          * @details If any component of the resulting value is not a whole number, it is
          * truncated following the same rules as `int`.
          */
-        inline friend GridCoord2D operator*(const GridCoord2D &lhs, const double rhs) {
-            return {static_cast<int>(lhs._x_coord * rhs), static_cast<int>(lhs._y_coord * rhs)};
-        }
+        inline friend GridCoord2D operator*(const GridCoord2D &lhs, const double rhs);
 
         /**
          * @brief Multiply a coordinate by a scalar
@@ -150,9 +130,14 @@ namespace kami {
          * @details If any component of the resulting value is not a whole number, it is
          * truncated following the same rules as `int`.
          */
-        inline friend GridCoord2D operator*(const double lhs, const GridCoord2D &rhs) {
-            return {static_cast<int>(rhs._x_coord * lhs), static_cast<int>(rhs._y_coord * lhs)};
-        }
+        inline friend GridCoord2D operator*(const double lhs, const GridCoord2D &rhs);
+
+    protected:
+        inline double distance_chebyshev(std::shared_ptr<GridCoord2D> &p) const;
+
+        inline double distance_euclidean(std::shared_ptr<GridCoord2D> &p) const;
+
+        inline double distance_manhattan(std::shared_ptr<GridCoord2D> &p) const;
 
     private:
         int _x_coord, _y_coord;

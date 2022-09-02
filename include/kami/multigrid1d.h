@@ -53,8 +53,7 @@ namespace kami {
          * @param[in] maximum_x the length of the grid.
          * @param[in] wrap_x should the grid wrap around on itself.
          */
-        MultiGrid1D(unsigned int maximum_x, bool wrap_x)
-                : Grid1D(maximum_x, wrap_x) {}
+        MultiGrid1D(unsigned int maximum_x, bool wrap_x);
 
         /**
          * @brief Place agent on the grid at the specified location.

@@ -37,6 +37,8 @@
 
 namespace kami {
 
+    GridCoord1D::GridCoord1D(int x_coord) : _x_coord(x_coord) {}
+
     int GridCoord1D::get_x_location() const {
         return _x_coord;
     }
@@ -64,6 +66,23 @@ namespace kami {
     std::ostream &operator<<(std::ostream &lhs, const GridCoord1D &rhs) {
         return lhs << rhs.to_string();
     }
+
+    GridCoord1D operator+(const GridCoord1D &lhs, const GridCoord1D &rhs) {
+        return GridCoord1D(lhs._x_coord + rhs._x_coord);
+    }
+
+    GridCoord1D operator-(const GridCoord1D &lhs, const GridCoord1D &rhs) {
+        return GridCoord1D(lhs._x_coord - rhs._x_coord);
+    }
+
+    GridCoord1D operator*(const GridCoord1D &lhs, const double rhs) {
+        return GridCoord1D(static_cast<int>(lhs._x_coord * rhs));
+    }
+
+    GridCoord1D operator*(const double lhs, const GridCoord1D &rhs) {
+        return GridCoord1D(static_cast<int>(rhs._x_coord * lhs));
+    }
+
 
     Grid1D::Grid1D(unsigned int maximum_x, bool wrap_x) {
         _maximum_x = maximum_x;

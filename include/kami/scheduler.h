@@ -46,12 +46,6 @@ namespace kami {
  * the step function for each agent based on the type of scheduling implemented.
  */
     class LIBKAMI_EXPORT Scheduler {
-    protected:
-        /**
-         * Counter to increment on each step
-         */
-        int _step_counter = 0;
-
     public:
         /**
          * @brief Execute a single time step.
@@ -87,6 +81,12 @@ namespace kami {
 
         virtual std::optional<std::unique_ptr<std::vector<AgentID>>>
         step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) = 0;
+
+    protected:
+        /**
+         * Counter to increment on each step
+         */
+        int _step_counter = 0;
     };
 
 }  // namespace kami

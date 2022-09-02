@@ -41,17 +41,6 @@ namespace kami {
      * @brief An abstract for generic models
      */
     class LIBKAMI_EXPORT Population {
-    protected:
-        /**
-         * @brief A mapping of `AgentID` to `Agent` pointers
-         *
-         * @details This is the mapping of all `AgentID`s to
-         * pointers to the corresponding `Agent` in this population.
-         * This is left exposed as protected should any subclass
-         * wish to manipulate this mapping directly.
-         */
-        std::map<kami::AgentID, std::shared_ptr<Agent>> _agent_map;
-
     public:
         /**
          * @brief Get a reference to an `Agent` by `AgentID`
@@ -86,6 +75,17 @@ namespace kami {
          * @returns a `std::vector` of all the `AgentID`'s in the `Population`
          */
         [[nodiscard]] std::unique_ptr<std::vector<AgentID>> get_agent_list() const;
+
+    protected:
+        /**
+         * @brief A mapping of `AgentID` to `Agent` pointers
+         *
+         * @details This is the mapping of all `AgentID`s to
+         * pointers to the corresponding `Agent` in this population.
+         * This is left exposed as protected should any subclass
+         * wish to manipulate this mapping directly.
+         */
+        std::map<kami::AgentID, std::shared_ptr<Agent>> _agent_map;
     };
 }  // namespace kami
 

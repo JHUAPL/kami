@@ -30,6 +30,9 @@
 
 namespace kami {
 
+    MultiGrid1D::MultiGrid1D(unsigned int maximum_x, bool wrap_x)
+            : Grid1D(maximum_x, wrap_x) {}
+
     std::optional<AgentID> MultiGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
         if (!is_location_valid(coord))
             return std::nullopt;

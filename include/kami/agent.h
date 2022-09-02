@@ -64,14 +64,14 @@ namespace kami {
         /**
          * @brief Constructs a new unique identifier.
          */
-        AgentID() : _id(_id_next++) {};
+        AgentID();
 
         /**
          * @brief Convert the identifier to a human-readable string.
          *
          * @return a human-readable form of the `AgentID` as `std::string`.
          */
-        [[nodiscard]] std::string to_string() const { return std::to_string(_id); }
+        [[nodiscard]] std::string to_string() const;
 
         /**
          * @brief Test if two `AgentID` instances are equal.
