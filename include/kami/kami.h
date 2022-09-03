@@ -79,7 +79,7 @@ namespace kami {
         /**
          * @brief $(7^(\e - 1/\e) - 9)*\pi^2$
          */
-        static constexpr auto JENNYS_CONSTANT = 867.530901989;
+        static constexpr auto JENNYS_CONSTANT = 867.530901981;
     };
 
 }  // namespace kami
