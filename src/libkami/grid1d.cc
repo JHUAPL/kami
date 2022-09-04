@@ -23,10 +23,6 @@
  * SOFTWARE.
  */
 
-#include <kami/agent.h>
-#include <kami/domain.h>
-#include <kami/grid1d.h>
-
 #include <map>
 #include <memory>
 #include <optional>
@@ -34,6 +30,10 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+
+#include <kami/agent.h>
+#include <kami/domain.h>
+#include <kami/grid1d.h>
 
 namespace kami {
 

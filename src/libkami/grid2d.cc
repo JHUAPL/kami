@@ -23,16 +23,16 @@
  * SOFTWARE.
  */
 
-#include <kami/agent.h>
-#include <kami/domain.h>
-#include <kami/grid2d.h>
-
 #include <map>
 #include <memory>
 #include <optional>
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
+#include <kami/agent.h>
+#include <kami/domain.h>
+#include <kami/grid2d.h>
 
 namespace kami {
 

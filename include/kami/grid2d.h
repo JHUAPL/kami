@@ -133,10 +133,31 @@ namespace kami {
         inline friend GridCoord2D operator*(const double lhs, const GridCoord2D &rhs);
 
     protected:
+        /**
+         * @brief Find the distance between two points using the Chebyshev metric
+         *
+         * @param p the point to measure the distance to
+         *
+         * @returns the distance as a `double`
+         */
         inline double distance_chebyshev(std::shared_ptr<GridCoord2D> &p) const;
 
+        /**
+         * @brief Find the distance between two points using the Euclidean metric
+         *
+         * @param p the point to measure the distance to
+         *
+         * @returns the distance as a `double`
+         */
         inline double distance_euclidean(std::shared_ptr<GridCoord2D> &p) const;
 
+        /**
+         * @brief Find the distance between two points using the Manhattan metric
+         *
+         * @param p the point to measure the distance to
+         *
+         * @returns the distance as a `double`
+         */
         inline double distance_manhattan(std::shared_ptr<GridCoord2D> &p) const;
 
     private:

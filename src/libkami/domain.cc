@@ -23,10 +23,10 @@
  * SOFTWARE.
  */
 
-#include <kami/domain.h>
-
 #include <iostream>
 #include <string>
+
+#include <kami/domain.h>
 
 namespace kami {
 

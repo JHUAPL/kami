@@ -51,7 +51,7 @@ namespace kami {
         /**
          * @brief Constructor for one-dimensional coordinates
          */
-        explicit GridCoord1D(int x_coord);;
+        explicit GridCoord1D(int x_coord);
 
         /**
          * @brief Return the `x` coordinate
