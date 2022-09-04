@@ -25,13 +25,11 @@
 
 #include "boltzmann1d.h"
 
-#include <exception>
 #include <list>
 #include <map>
 #include <memory>
 #include <optional>
 #include <random>
-#include <stdexcept>
 
 #include <CLI/CLI.hpp>
 

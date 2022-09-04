@@ -30,8 +30,6 @@
 #include <memory>
 #include <random>
 
-#include <cassert>
-
 #include <CLI/CLI.hpp>
 
 #include <spdlog/sinks/stdout_color_sinks.h>

@@ -31,9 +31,6 @@
 #include <memory>
 #include <random>
 
-#include <fmt/core.h>
-#include <fmt/format.h>
-
 #include <CLI/CLI.hpp>
 
 #include <nlohmann/json.hpp>
