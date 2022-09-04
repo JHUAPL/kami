@@ -36,11 +36,11 @@
 
 namespace kami {
 
-    int GridCoord2D::get_x_location() const {
+    int GridCoord2D::x() const {
         return _x_coord;
     }
 
-    int GridCoord2D::get_y_location() const {
+    int GridCoord2D::y() const {
         return _y_coord;
     }
 
@@ -140,8 +140,8 @@ namespace kami {
     }
 
     bool Grid2D::is_location_valid(const GridCoord2D &coord) const {
-        auto x = coord.get_x_location();
-        auto y = coord.get_y_location();
+        auto x = coord.x();
+        auto y = coord.y();
 
         return (x >= 0 && x < static_cast<int>(_maximum_x) &&
                 y >= 0 && y < static_cast<int>(_maximum_y));
@@ -236,8 +236,8 @@ namespace kami {
     }
 
     GridCoord2D Grid2D::coord_wrap(const GridCoord2D &coord) const {
-        auto x = coord.get_x_location();
-        auto y = coord.get_y_location();
+        auto x = coord.x();
+        auto y = coord.y();
 
         if (_wrap_x)
             x = (x + static_cast<int>(_maximum_x)) % static_cast<int>(_maximum_x);

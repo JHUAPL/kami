@@ -71,17 +71,17 @@ TEST_F(GridCoord1DTest, inequality) {
     EXPECT_TRUE(gridcoord1d_bar != gridcoord1d_baz);
 }
 
-TEST_F(GridCoord1DTest, get_x_location) {
-    EXPECT_TRUE(gridcoord1d_foo.get_x_location() == 0);
-    EXPECT_TRUE(gridcoord1d_bar.get_x_location() == 1);
-    EXPECT_TRUE(gridcoord1d_baz.get_x_location() == -1);
+TEST_F(GridCoord1DTest, x) {
+    EXPECT_TRUE(gridcoord1d_foo.x() == 0);
+    EXPECT_TRUE(gridcoord1d_bar.x() == 1);
+    EXPECT_TRUE(gridcoord1d_baz.x() == -1);
 
-    EXPECT_TRUE(gridcoord1d_foo.get_x_location() == gridcoord1d_foo.get_x_location());
-    EXPECT_TRUE(gridcoord1d_foo.get_x_location() == gridcoord1d_qux.get_x_location());
+    EXPECT_TRUE(gridcoord1d_foo.x() == gridcoord1d_foo.x());
+    EXPECT_TRUE(gridcoord1d_foo.x() == gridcoord1d_qux.x());
 
-    EXPECT_FALSE(gridcoord1d_foo.get_x_location() == gridcoord1d_bar.get_x_location());
-    EXPECT_FALSE(gridcoord1d_foo.get_x_location() == gridcoord1d_baz.get_x_location());
-    EXPECT_FALSE(gridcoord1d_bar.get_x_location() == gridcoord1d_baz.get_x_location());
+    EXPECT_FALSE(gridcoord1d_foo.x() == gridcoord1d_bar.x());
+    EXPECT_FALSE(gridcoord1d_foo.x() == gridcoord1d_baz.x());
+    EXPECT_FALSE(gridcoord1d_bar.x() == gridcoord1d_baz.x());
 }
 
 int main(int argc, char **argv) {

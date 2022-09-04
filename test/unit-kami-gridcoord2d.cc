@@ -97,52 +97,52 @@ TEST_F(GridCoord2DTest, Inequality) {
     EXPECT_TRUE(gridcoord2d_qux != gridcoord2d_qu2);
 }
 
-TEST_F(GridCoord2DTest, get_x_location) {
+TEST_F(GridCoord2DTest, x) {
     const GridCoord2D gridcoord2d_foo(0, 0);
     const GridCoord2D gridcoord2d_bar(1, 1);
     const GridCoord2D gridcoord2d_baz(-1, -1);
     const GridCoord2D gridcoord2d_qux(0, 1);
     const GridCoord2D gridcoord2d_qu2(1, 0);
 
-    EXPECT_TRUE(gridcoord2d_foo.get_x_location() == 0);
-    EXPECT_TRUE(gridcoord2d_bar.get_x_location() == 1);
-    EXPECT_TRUE(gridcoord2d_baz.get_x_location() == -1);
-    EXPECT_FALSE(gridcoord2d_qux.get_x_location() == -1);
-    EXPECT_FALSE(gridcoord2d_qu2.get_x_location() == -1);
+    EXPECT_TRUE(gridcoord2d_foo.x() == 0);
+    EXPECT_TRUE(gridcoord2d_bar.x() == 1);
+    EXPECT_TRUE(gridcoord2d_baz.x() == -1);
+    EXPECT_FALSE(gridcoord2d_qux.x() == -1);
+    EXPECT_FALSE(gridcoord2d_qu2.x() == -1);
 
-    EXPECT_TRUE(gridcoord2d_foo.get_x_location() == gridcoord2d_foo.get_x_location());
-    EXPECT_TRUE(gridcoord2d_foo.get_x_location() == gridcoord2d_qux.get_x_location());
-    EXPECT_TRUE(gridcoord2d_bar.get_x_location() == gridcoord2d_qu2.get_x_location());
+    EXPECT_TRUE(gridcoord2d_foo.x() == gridcoord2d_foo.x());
+    EXPECT_TRUE(gridcoord2d_foo.x() == gridcoord2d_qux.x());
+    EXPECT_TRUE(gridcoord2d_bar.x() == gridcoord2d_qu2.x());
 
-    EXPECT_FALSE(gridcoord2d_foo.get_x_location() == gridcoord2d_bar.get_x_location());
-    EXPECT_FALSE(gridcoord2d_foo.get_x_location() == gridcoord2d_baz.get_x_location());
-    EXPECT_FALSE(gridcoord2d_bar.get_x_location() == gridcoord2d_baz.get_x_location());
-    EXPECT_FALSE(gridcoord2d_foo.get_x_location() == gridcoord2d_baz.get_x_location());
-    EXPECT_FALSE(gridcoord2d_qux.get_x_location() == gridcoord2d_qu2.get_x_location());
+    EXPECT_FALSE(gridcoord2d_foo.x() == gridcoord2d_bar.x());
+    EXPECT_FALSE(gridcoord2d_foo.x() == gridcoord2d_baz.x());
+    EXPECT_FALSE(gridcoord2d_bar.x() == gridcoord2d_baz.x());
+    EXPECT_FALSE(gridcoord2d_foo.x() == gridcoord2d_baz.x());
+    EXPECT_FALSE(gridcoord2d_qux.x() == gridcoord2d_qu2.x());
 }
 
-TEST_F(GridCoord2DTest, get_y_location) {
+TEST_F(GridCoord2DTest, y) {
     const GridCoord2D gridcoord2d_foo(0, 0);
     const GridCoord2D gridcoord2d_bar(1, 1);
     const GridCoord2D gridcoord2d_baz(-1, -1);
     const GridCoord2D gridcoord2d_qux(0, 1);
     const GridCoord2D gridcoord2d_qu2(1, 0);
 
-    EXPECT_TRUE(gridcoord2d_foo.get_y_location() == 0);
-    EXPECT_TRUE(gridcoord2d_bar.get_y_location() == 1);
-    EXPECT_TRUE(gridcoord2d_baz.get_y_location() == -1);
-    EXPECT_FALSE(gridcoord2d_qux.get_y_location() == -1);
-    EXPECT_FALSE(gridcoord2d_qu2.get_y_location() == -1);
+    EXPECT_TRUE(gridcoord2d_foo.y() == 0);
+    EXPECT_TRUE(gridcoord2d_bar.y() == 1);
+    EXPECT_TRUE(gridcoord2d_baz.y() == -1);
+    EXPECT_FALSE(gridcoord2d_qux.y() == -1);
+    EXPECT_FALSE(gridcoord2d_qu2.y() == -1);
 
-    EXPECT_TRUE(gridcoord2d_foo.get_y_location() == gridcoord2d_foo.get_y_location());
-    EXPECT_TRUE(gridcoord2d_bar.get_y_location() == gridcoord2d_qux.get_y_location());
+    EXPECT_TRUE(gridcoord2d_foo.y() == gridcoord2d_foo.y());
+    EXPECT_TRUE(gridcoord2d_bar.y() == gridcoord2d_qux.y());
 
-    EXPECT_FALSE(gridcoord2d_foo.get_y_location() == gridcoord2d_bar.get_y_location());
-    EXPECT_FALSE(gridcoord2d_foo.get_y_location() == gridcoord2d_baz.get_y_location());
-    EXPECT_FALSE(gridcoord2d_bar.get_y_location() == gridcoord2d_baz.get_y_location());
-    EXPECT_FALSE(gridcoord2d_foo.get_y_location() == gridcoord2d_baz.get_y_location());
-    EXPECT_FALSE(gridcoord2d_qux.get_y_location() == gridcoord2d_qu2.get_y_location());
-    EXPECT_FALSE(gridcoord2d_bar.get_y_location() == gridcoord2d_qu2.get_y_location());
+    EXPECT_FALSE(gridcoord2d_foo.y() == gridcoord2d_bar.y());
+    EXPECT_FALSE(gridcoord2d_foo.y() == gridcoord2d_baz.y());
+    EXPECT_FALSE(gridcoord2d_bar.y() == gridcoord2d_baz.y());
+    EXPECT_FALSE(gridcoord2d_foo.y() == gridcoord2d_baz.y());
+    EXPECT_FALSE(gridcoord2d_qux.y() == gridcoord2d_qu2.y());
+    EXPECT_FALSE(gridcoord2d_bar.y() == gridcoord2d_qu2.y());
 }
 
 int main(int argc, char **argv) {

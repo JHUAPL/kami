@@ -58,12 +58,12 @@ namespace kami {
         /**
          * @brief Get the coordinate in the first dimension or `x`.
          */
-        [[nodiscard]] int get_x_location() const;
+        [[nodiscard]] int x() const;
 
         /**
          * @brief Get the coordinate in the second dimension or `y`.
          */
-        [[nodiscard]] int get_y_location() const;
+        [[nodiscard]] int y() const;
 
         /**
          * @brief Convert the coordinate to a human-readable string.
@@ -380,7 +380,7 @@ namespace std {
     template<>
     struct hash<kami::GridCoord2D> {
         size_t operator()(const kami::GridCoord2D &key) const {
-            return ((hash<int>()(key.get_x_location()) ^ (hash<int>()(key.get_y_location()) << 1)) >> 1);
+            return ((hash<int>()(key.x()) ^ (hash<int>()(key.y()) << 1)) >> 1);
         }
     };
 }  // namespace std

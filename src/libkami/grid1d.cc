@@ -39,7 +39,7 @@ namespace kami {
 
     GridCoord1D::GridCoord1D(int x_coord) : _x_coord(x_coord) {}
 
-    int GridCoord1D::get_x_location() const {
+    int GridCoord1D::x() const {
         return _x_coord;
     }
 
@@ -116,7 +116,7 @@ namespace kami {
     }
 
     bool Grid1D::is_location_valid(const GridCoord1D &coord) const {
-        auto x = coord.get_x_location();
+        auto x = coord.x();
 
         return (x >= 0 && x < static_cast<int>(_maximum_x));
     }
@@ -193,7 +193,7 @@ namespace kami {
     }
 
     GridCoord1D Grid1D::coord_wrap(const GridCoord1D &coord) const {
-        auto x = coord.get_x_location();
+        auto x = coord.x();
 
         if (_wrap_x)
             x = (x + static_cast<int>(_maximum_x)) % static_cast<int>(_maximum_x);

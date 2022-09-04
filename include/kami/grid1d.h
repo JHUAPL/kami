@@ -56,7 +56,7 @@ namespace kami {
         /**
          * @brief Return the `x` coordinate
          */
-        [[nodiscard]] int get_x_location() const;
+        [[nodiscard]] int x() const;
 
         /**
          * @brief Convert the coordinate to a human-readable string.
@@ -314,7 +314,7 @@ namespace std {
     template<>
     struct hash<kami::GridCoord1D> {
         size_t operator()(const kami::GridCoord1D &key) const {
-            return (hash<int>()(key.get_x_location()));
+            return (hash<int>()(key.x()));
         }
     };
 }  // namespace std
