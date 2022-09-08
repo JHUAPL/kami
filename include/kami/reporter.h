@@ -86,6 +86,9 @@ namespace kami {
 
     class LIBKAMI_EXPORT ReporterModel : public Model {
     public:
+        /**
+         * @brief Constructor
+         */
         ReporterModel();
 
         /**
@@ -124,30 +127,103 @@ namespace kami {
          */
         virtual std::shared_ptr<Model> step() override;
 
+        /**
+         * @brief Get the current report
+         *
+         * @details This method will return an object containg the data collected to that
+         * point in the simulation.
+         *
+         * @returns a unique pointer to a `nlohmann::json` object representing the current report
+         */
         std::unique_ptr<nlohmann::json> report();
 
     protected:
+
+        /**
+         * @brief The current report
+         */
         std::shared_ptr<Reporter> _rpt;
+
+        /**
+         * @brief The model's current step count
+         */
         unsigned int _step_count{};
     };
 
     class LIBKAMI_EXPORT Reporter : public std::enable_shared_from_this<Reporter> {
     public:
+        /**
+         * @brief Constructor
+         */
         Reporter();
 
+        /**
+         * @brief Empty the report
+         *
+         * @details Clear all entries from the report; new collection
+         * operations begin with a blank slate.
+         *
+         * @returns a reference copy of the `Reporter`
+         */
         std::shared_ptr<Reporter> clear();
 
+        /**
+         * @brief Collect the current state of the model
+         *
+         * @details This will collect the current state of
+         * each agent associated with the population returned
+         * by the `Model`'s `get_population()`.
+         *
+         * @param model reference copy of the model
+         *
+         * @returns a copy of the current report
+         */
         std::unique_ptr<nlohmann::json> collect(const std::shared_ptr<ReporterModel> &model);
 
+        /**
+         * @brief Collect the current state of the model
+         *
+         * @details This will collect the current state of
+         * each agent associated with the `Population`.
+         *
+         * @param model reference copy of the model
+         * @param pop Population to collect on
+         *
+         * @returns a copy of the current report
+         */
         std::unique_ptr<nlohmann::json>
         collect(const std::shared_ptr<ReporterModel> &model, const std::shared_ptr<Population> &pop);
 
+        /**
+         * @brief Collect the current state of the model
+         *
+         * @details This will collect the current state of
+         * each agent given
+         *
+         * @param model reference copy of the model
+         * @param agent_list a vector agents to report on
+         *
+         * @returns a copy of the current report
+         */
         std::unique_ptr<nlohmann::json>
         collect(const std::shared_ptr<ReporterModel> &model, const std::unique_ptr<std::vector<AgentID>> &agent_list);
 
+        /**
+         * @brief Collect the report
+         *
+         * @details This will return the aggregate report
+         * of all the data collected by this `Reporter`.
+         *
+         * @param model reference copy of the model
+         *
+         * @returns a copy of the current report
+         */
         std::unique_ptr<nlohmann::json> report(const std::shared_ptr<ReporterModel> &model);
 
     protected:
+        /**
+         * @brief A vector of the the report collected so far
+         */
         std::unique_ptr<std::vector<nlohmann::json>> _report_data = nullptr;
     };
 
