@@ -131,7 +131,7 @@ namespace kami {
          *
          * @returns the distance as a `double`
          */
-        virtual std::optional<double> distance(std::shared_ptr<Coord> &p, GridDistanceType distance_type) const = 0;
+        virtual double distance(std::shared_ptr<Coord> &p) const = 0;
 
     };
 

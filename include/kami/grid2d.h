@@ -76,6 +76,23 @@ namespace kami {
          * @brief Find the distance between two points
          *
          * @details Find the distance between two points using the
+         * specified metric.
+         *
+         * However, the coordinate class is not aware of the
+         * properties of the `Grid2D` it is operating on.  Accordingly,
+         * if the direct path is measured, without accounting for
+         * and toroidal wrapping of the underlying `Grid2D`.
+         *
+         * @param p the point to measure the distance to
+         *
+         * @returns the distance as a `double`
+         */
+        double distance(std::shared_ptr<Coord> &p) const override;
+
+        /**
+         * @brief Find the distance between two points
+         *
+         * @details Find the distance between two points using the
          * specified metric.  There are three options provided by
          * the `GridDistanceType` class.
          *
@@ -89,7 +106,8 @@ namespace kami {
          *
          * @returns the distance as a `double`
          */
-        std::optional<double> distance(std::shared_ptr<Coord> &p, GridDistanceType distance_type) const override;
+        double
+        distance(std::shared_ptr<GridCoord2D> &p, GridDistanceType distance_type = GridDistanceType::Euclidean) const;
 
         /**
          * @brief Test if two coordinates are equal
@@ -243,14 +261,14 @@ namespace kami {
          */
         [[nodiscard]] bool is_location_valid(const GridCoord2D& coord) const;
 
-        /**
+        virtual /**
          * @brief Get the location of the specified agent.
          *
          * @param[in] agent_id the `AgentID` of the agent in question.
          *
          * @return the location of the specified `Agent`
          */
-        [[nodiscard]] std::optional<GridCoord2D> get_location_by_agent(const AgentID &agent_id) const;
+        std::optional<GridCoord2D> get_location_by_agent(const AgentID &agent_id) const;
 
         /**
          * @brief Get the contents of the specified location.
@@ -279,7 +297,7 @@ namespace kami {
          */
         [[nodiscard]] bool get_wrap_y() const;
 
-        /**
+        virtual /**
          * @brief Return the neighborhood of the specified Agent
          *
          * @param[in] agent_id the `AgentID` of the agent in question.
@@ -292,7 +310,7 @@ namespace kami {
          *
          * @see `NeighborhoodType`
          */
-        [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
+        std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
         get_neighborhood(AgentID agent_id, bool include_center, GridNeighborhoodType neighborhood_type) const;
 
         /**

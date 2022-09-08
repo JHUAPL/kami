@@ -48,7 +48,12 @@ namespace kami {
         return std::string("(" + std::to_string(_x_coord) + ", " + std::to_string(_y_coord) + ")");
     }
 
-    std::optional<double> GridCoord2D::distance(std::shared_ptr<Coord> &p, GridDistanceType distance_type) const {
+    double GridCoord2D::distance(std::shared_ptr<Coord> &p) const {
+        auto p2d = std::static_pointer_cast<GridCoord2D>(p);
+        return distance(p2d);
+    }
+
+    double GridCoord2D::distance(std::shared_ptr<GridCoord2D> &p, GridDistanceType distance_type) const {
         auto p2d = std::static_pointer_cast<GridCoord2D>(p);
 
         switch (distance_type) {
@@ -57,9 +62,9 @@ namespace kami {
             case GridDistanceType::Manhattan:
                 return distance_manhattan(p2d);
             case GridDistanceType::Euclidean:
+            default:
                 return distance_euclidean(p2d);
         }
-        return std::nullopt;
     }
 
     bool operator==(const GridCoord2D &lhs, const GridCoord2D &rhs) {

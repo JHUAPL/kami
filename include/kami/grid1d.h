@@ -80,12 +80,10 @@ namespace kami {
          * and toroidal wrapping of the underlying `Grid1D`.
          *
          * @param p the point to measure the distance to
-         * @param distance_type specify the distance type
          *
          * @returns the distance as a `double`
          */
-        std::optional<double>
-        distance(std::shared_ptr<Coord> &p, [[maybe_unused]] GridDistanceType distance_type) const override;
+        double distance(std::shared_ptr<Coord> &p) const override;
 
         /**
          * @brief Test if two coordinates are equal
@@ -118,7 +116,7 @@ namespace kami {
          * @details If any component of the resulting value is not a whole number, it is
          * truncated following the same rules as `int`.
          */
-        inline friend GridCoord1D operator*(const GridCoord1D &lhs, const double rhs);
+        inline friend GridCoord1D operator*(const GridCoord1D &lhs, double rhs);
 
         /**
          * @brief Multiply a coordinate by a scalar
@@ -126,7 +124,7 @@ namespace kami {
          * @details If any component of the resulting value is not a whole number, it is
          * truncated following the same rules as `int`.
          */
-        inline friend GridCoord1D operator*(const double lhs, const GridCoord1D &rhs);
+        inline friend GridCoord1D operator*(double lhs, const GridCoord1D &rhs);
 
     private:
         int _x_coord;
