@@ -31,6 +31,7 @@ create_library(
         staged.cc
         PUBLIC_INCLUDE_PATHS "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated_headers>"
         PRIVATE_LINKED_TARGETS ${COVERAGE_TARGET}
+        PUBLIC_LINKED_TARGETS fmt
         EXPORT_FILE_PATH "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.h"
 )
 

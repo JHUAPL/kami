@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :feature:`0` Moved to exception-based error handling
 - :feature:`0` Added Bank Reserves model to demonstrate reporting
 - :feature:`0` Added data collecting and reporting modules
 - :feature:`0` Added some useful constants, for use as random seeds

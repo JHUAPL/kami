@@ -72,7 +72,7 @@ namespace kami {
     std::unique_ptr<nlohmann::json>
     Reporter::collect(const std::shared_ptr<ReporterModel> &model) {
         auto pop = model->get_population();
-        return collect(model, pop.value());
+        return collect(model, pop);
     }
 
     std::unique_ptr<nlohmann::json>
@@ -88,17 +88,14 @@ namespace kami {
 
         for (auto &agent_id: *agent_list) {
             auto agent_data = nlohmann::json();
-            auto agent_opt = model->get_population().value()->get_agent_by_id(agent_id);
+            auto agent = std::static_pointer_cast<ReporterAgent>(model->get_population()->get_agent_by_id(agent_id));
 
             agent_data["agent_id"] = agent_id.to_string();
-            if (!agent_opt) {
-                agent_data["data"] = {};                    // Record JSON null
-            } else {
-                auto agent = std::static_pointer_cast<ReporterAgent>(agent_opt.value());
-                auto agent_collection = agent->collect();
-                if (agent_collection)
-                    agent_data["data"] = *agent_collection.value();
-            }
+
+            auto agent_collection = agent->collect();
+            if (agent_collection)
+                agent_data["data"] = *agent_collection;
+
             collection_array.push_back(agent_data);
         }
         auto model_data = model->collect();
@@ -107,7 +104,7 @@ namespace kami {
 
         (*collection)["step_id"] = model->get_step_id();
         if (model_data)
-            (*collection)["model_data"] = *model_data.value();
+            (*collection)["model_data"] = *model_data;
         (*collection)["agent_data"] = *agent_collection;
 
         _report_data->push_back(*collection);

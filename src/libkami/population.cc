@@ -24,37 +24,39 @@
  */
 
 #include <algorithm>
-#include <optional>
 #include <utility>
 #include <vector>
 
 #include <kami/agent.h>
+#include <kami/exception.h>
 #include <kami/population.h>
 
 namespace kami {
 
-    AgentID Population::add_agent(const std::shared_ptr<Agent>& agent) {
+    AgentID Population::add_agent(const std::shared_ptr<Agent> &agent) noexcept {
         auto agent_id = agent->get_agent_id();
         _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent_id, agent));
-        return(agent->get_agent_id());
+        return agent->get_agent_id();
     }
 
-    std::optional<std::shared_ptr<Agent>> Population::delete_agent(const AgentID agent_id) {
+    std::shared_ptr<Agent> Population::delete_agent(const AgentID agent_id) {
         auto agent_it = _agent_map.find(agent_id);
 
-        if(agent_it == _agent_map.end())
-            return std::nullopt;
+        if (agent_it == _agent_map.end())
+            throw exception::ResourceNotAvailable("Agent not found in population");
 
         auto agent = agent_it->second;
         _agent_map.erase(agent_it);
-        return std::make_optional(agent);
+        return std::move(agent);
     }
 
-    std::optional<std::shared_ptr<Agent>> Population::get_agent_by_id(const AgentID agent_id) const {
+    std::shared_ptr<Agent> Population::get_agent_by_id(const AgentID agent_id) const {
         auto agent_it = _agent_map.find(agent_id);
 
-        if(agent_it != _agent_map.end()) return(agent_it->second);
-        return std::nullopt;
+        if (agent_it == _agent_map.end())
+            throw exception::ResourceNotAvailable("Agent not found in population");
+
+        return agent_it->second;
     }
 
     std::unique_ptr<std::vector<AgentID>> Population::get_agent_list() const {

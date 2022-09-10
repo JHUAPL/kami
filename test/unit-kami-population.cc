@@ -88,7 +88,7 @@ TEST(Population, get_agent_by_id) {
         auto agent_baz_opt = population_foo.get_agent_by_id(agent_foo->get_agent_id());
         EXPECT_TRUE(agent_baz_opt);
 
-        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
+        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt);
         EXPECT_EQ(agent_baz->getval(), 8675309);
     }
     {
@@ -105,13 +105,13 @@ TEST(Population, get_agent_by_id) {
         auto agent_baz_opt = population_foo.get_agent_by_id(agent_foo->get_agent_id());
         EXPECT_TRUE(agent_baz_opt);
 
-        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
+        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt);
         EXPECT_EQ(agent_baz->getval(), 8675309);
 
         auto agent_qux_opt = population_foo.get_agent_by_id(agent_bar->get_agent_id());
         EXPECT_TRUE(agent_qux_opt);
 
-        auto agent_qux = dynamic_pointer_cast<TestAgent>(agent_qux_opt.value());
+        auto agent_qux = dynamic_pointer_cast<TestAgent>(agent_qux_opt);
         EXPECT_EQ(agent_qux->getval(), 1729);
     }
     {
@@ -122,13 +122,13 @@ TEST(Population, get_agent_by_id) {
         auto agent_qux_opt = population_foo.get_agent_by_id(agent_bar->get_agent_id());
         EXPECT_TRUE(agent_qux_opt);
 
-        auto agent_qux = dynamic_pointer_cast<TestAgent>(agent_qux_opt.value());
+        auto agent_qux = dynamic_pointer_cast<TestAgent>(agent_qux_opt);
         EXPECT_EQ(agent_qux->getval(), 1729);
 
         auto agent_baz_opt = population_foo.get_agent_by_id(agent_foo->get_agent_id());
         EXPECT_TRUE(agent_baz_opt);
 
-        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt.value());
+        auto agent_baz = dynamic_pointer_cast<TestAgent>(agent_baz_opt);
         EXPECT_EQ(agent_baz->getval(), 8675309);
     }
 }

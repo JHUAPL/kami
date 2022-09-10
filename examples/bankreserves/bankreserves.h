@@ -71,7 +71,7 @@ public:
      */
     explicit BankAgent(int reserve_percent) : _reserve_percent(reserve_percent) {};
 
-    inline std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+    inline std::unique_ptr<nlohmann::json> collect() override {
         auto ret = std::make_unique<nlohmann::json>();
 
         (*ret)["reserves"] = _reserves;
@@ -107,7 +107,7 @@ public:
     explicit PersonAgent(int wallet, std::shared_ptr<BankAgent> &bank) :
             _wallet(wallet), _bank(bank) {};
 
-    inline std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+    inline std::unique_ptr<nlohmann::json> collect() override {
         auto ret = std::make_unique<nlohmann::json>();
 
         (*ret)["savings"] = _savings;
@@ -164,8 +164,8 @@ public:
     explicit BankReservesModel(unsigned int agent_count, unsigned int x_size, unsigned int y_size,
                                unsigned int initial_seed, unsigned int max_initial_wealth);
 
-    inline std::optional<std::unique_ptr<nlohmann::json>> collect() override {
-        return std::nullopt;
+    inline std::unique_ptr<nlohmann::json> collect() override {
+        return nullptr;
     }
 };
 

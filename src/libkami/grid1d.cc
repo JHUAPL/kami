@@ -25,14 +25,16 @@
 
 #include <map>
 #include <memory>
-#include <optional>
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
 
+#include <fmt/format.h>
+
 #include <kami/agent.h>
 #include <kami/domain.h>
+#include <kami/exception.h>
 #include <kami/grid1d.h>
 
 namespace kami {
@@ -89,27 +91,19 @@ namespace kami {
         _agent_index = std::make_unique<std::map<AgentID, GridCoord1D>>();
     }
 
-    std::optional<AgentID> Grid1D::delete_agent(AgentID agent_id) {
-        auto coord = get_location_by_agent(agent_id);
-        if (!coord)
-            return std::nullopt;
-
-        return delete_agent(agent_id, coord.value());
+    AgentID Grid1D::delete_agent(AgentID agent_id) {
+        return delete_agent(agent_id, get_location_by_agent(agent_id));
     }
 
-    std::optional<AgentID> Grid1D::delete_agent(AgentID agent_id, const GridCoord1D &coord) {
-        auto agent_location = _agent_grid->find(coord);
-        if (agent_location == _agent_grid->end())
-            return std::nullopt;
-
-        for (auto test_agent_id = agent_location; test_agent_id != _agent_grid->end(); test_agent_id++)
+    AgentID Grid1D::delete_agent(AgentID agent_id, const GridCoord1D &coord) {
+        for (auto test_agent_id = _agent_grid->find(coord); test_agent_id != _agent_grid->end(); test_agent_id++)
             if (test_agent_id->second == agent_id) {
                 _agent_grid->erase(test_agent_id);
                 _agent_index->erase(agent_id);
                 return agent_id;
             }
 
-        return std::nullopt;
+        throw exception::AgentNotFound("");
     }
 
     bool Grid1D::is_location_valid(const GridCoord1D &coord) const {
@@ -123,27 +117,16 @@ namespace kami {
         return grid_location.first == grid_location.second;
     }
 
-    std::optional<AgentID> Grid1D::move_agent(const AgentID agent_id, const GridCoord1D &coord) {
-        auto coord_current = get_location_by_agent(agent_id);
-
-        if (!coord_current)
-            return std::nullopt;
-        if (!delete_agent(agent_id, coord_current.value()))
-            return std::nullopt;
-
-        return add_agent(agent_id, coord);
+    AgentID Grid1D::move_agent(const AgentID agent_id, const GridCoord1D &coord) {
+        return add_agent(delete_agent(agent_id, get_location_by_agent(agent_id)), coord);
     }
 
-    std::optional<std::shared_ptr<std::unordered_set<GridCoord1D>>>
+    std::shared_ptr<std::unordered_set<GridCoord1D>>
     Grid1D::get_neighborhood(const AgentID agent_id, const bool include_center) const {
-        auto coord = get_location_by_agent(agent_id);
-        if (!coord)
-            return std::nullopt;
-
-        return std::move(get_neighborhood(coord.value(), include_center));
+        return std::move(get_neighborhood(get_location_by_agent(agent_id), include_center));
     }
 
-    std::optional<std::shared_ptr<std::unordered_set<GridCoord1D>>>
+    std::shared_ptr<std::unordered_set<GridCoord1D>>
     Grid1D::get_neighborhood(const GridCoord1D &coord, const bool include_center) const {
         auto neighborhood = std::make_shared<std::unordered_set<GridCoord1D>>();
 
@@ -161,11 +144,11 @@ namespace kami {
         return std::move(neighborhood);
     }
 
-    std::optional<std::shared_ptr<std::set<AgentID>>> Grid1D::get_location_contents(const GridCoord1D &coord) const {
+    std::shared_ptr<std::set<AgentID>> Grid1D::get_location_contents(const GridCoord1D &coord) const {
         auto agent_ids = std::make_shared<std::set<AgentID>>();
 
         if (!is_location_valid(coord))
-            return std::nullopt;
+            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (is_location_empty(coord))
             return agent_ids;
 
@@ -182,10 +165,10 @@ namespace kami {
 
     unsigned int Grid1D::get_maximum_x() const { return _maximum_x; }
 
-    std::optional<GridCoord1D> Grid1D::get_location_by_agent(const AgentID &agent_id) const {
+    GridCoord1D Grid1D::get_location_by_agent(const AgentID &agent_id) const {
         auto coord = _agent_index->find(agent_id);
         if (coord == _agent_index->end())
-            return std::nullopt;
+            throw exception::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
         return coord->second;
     }
 

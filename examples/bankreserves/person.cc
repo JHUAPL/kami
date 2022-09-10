@@ -52,10 +52,9 @@ std::optional<kami::GridCoord2D> PersonAgent::move_agent(std::shared_ptr<kami::R
     auto agent_id = get_agent_id();
 
     auto domain = model->get_domain();
-    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
+    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain);
 
-    auto move_list_opt = world->get_neighborhood(agent_id, false, kami::GridNeighborhoodType::Moore);
-    auto move_list = move_list_opt.value();
+    auto move_list = world->get_neighborhood(agent_id, false, kami::GridNeighborhoodType::Moore);
     std::uniform_int_distribution<int> dist(0, (int) move_list->size() - 1);
     auto new_location = *std::next(move_list->begin(), dist(*rng));
 
@@ -72,14 +71,11 @@ std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::Repo
     if (!(_savings > 0 | _wallet > 0 | _bank->_available_to_loan > 0))
         return agent_id;
 
-    auto domain = model->get_domain();
-    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
-
-    auto agents = model->get_population();
-    auto population = std::static_pointer_cast<kami::Population>(agents.value());
+    auto world = std::static_pointer_cast<kami::MultiGrid2D>(model->get_domain());
+    auto population = model->get_population();
 
     auto location = world->get_location_by_agent(agent_id);
-    auto cell_mates_opt = world->get_location_contents(location.value());
+    auto cell_mates_opt = world->get_location_contents(location);
 
     if (!cell_mates_opt)
         return std::nullopt;
@@ -87,7 +83,7 @@ std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::Repo
     // Note, here we reverse the logic from that used in the Mesa
     // implementation.  We prefer the guard clause to the nested
     // if statements.  See Fowler.
-    auto cell_mates = cell_mates_opt.value();
+    auto cell_mates = cell_mates_opt;
     if (cell_mates->size() < 2)
         return std::nullopt;
 
@@ -106,7 +102,7 @@ std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::Repo
     // really, this is just more elegant.
     auto trade_amount = (int) std::round(coin_flip(*rng)) * 3 + 2;
 
-    auto customer = std::static_pointer_cast<PersonAgent>(population->get_agent_by_id(customer_id).value());
+    auto customer = std::static_pointer_cast<PersonAgent>(population->get_agent_by_id(customer_id));
     console->debug("Agent {} trading amount {} with agent {}", agent_id, trade_amount, customer_id);
     customer->_wallet += trade_amount;
     _wallet -= trade_amount;

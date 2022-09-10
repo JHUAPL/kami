@@ -49,7 +49,7 @@ namespace kami {
          *
          * @return a reference to the desired `Agent` or nothing is not found
          */
-        [[nodiscard]] std::optional<std::shared_ptr<Agent>> get_agent_by_id(AgentID agent_id) const;
+        [[nodiscard]] std::shared_ptr<Agent> get_agent_by_id(AgentID agent_id) const;
 
         /**
          * @brief Add an Agent to the Population.
@@ -58,7 +58,7 @@ namespace kami {
          *
          * @returns the ID of the agent added
          */
-        AgentID add_agent(const std::shared_ptr<Agent>& agent);
+        AgentID add_agent(const std::shared_ptr<Agent> &agent) noexcept;
 
         /**
          * @brief Remove an Agent from the Population.
@@ -67,7 +67,7 @@ namespace kami {
          *
          * @returns a shared pointer to the Agent deleted
          */
-        std::optional<std::shared_ptr<Agent>> delete_agent(AgentID agent_id);
+        std::shared_ptr<Agent> delete_agent(AgentID agent_id);
 
         /**
          * @brief Returns the agent list.

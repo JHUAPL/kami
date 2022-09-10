@@ -53,18 +53,15 @@ TEST(MultiGrid1D, add_agent) {
 
     {
         auto agent_id_baz = multigrid1d_foo.add_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         auto agent_id_baz = multigrid1d_foo.add_agent(agent_id_bar, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
     {
         auto agent_id_baz = multigrid1d_foo.add_agent(agent_id_bar, coord3);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
 }
 
@@ -77,8 +74,7 @@ TEST(MultiGrid1D, delete_agent) {
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_foo);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -86,8 +82,7 @@ TEST(MultiGrid1D, delete_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_foo);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -95,8 +90,7 @@ TEST(MultiGrid1D, delete_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_bar);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
 
     {
@@ -104,8 +98,7 @@ TEST(MultiGrid1D, delete_agent) {
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -113,8 +106,7 @@ TEST(MultiGrid1D, delete_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -122,15 +114,13 @@ TEST(MultiGrid1D, delete_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_bar, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_foo, coord3);
-        EXPECT_FALSE(agent_id_baz);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -138,7 +128,6 @@ TEST(MultiGrid1D, delete_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_foo, coord3);
-        EXPECT_FALSE(agent_id_baz);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -146,7 +135,6 @@ TEST(MultiGrid1D, delete_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.delete_agent(agent_id_bar, coord3);
-        EXPECT_FALSE(agent_id_baz);
     }
 }
 
@@ -202,15 +190,13 @@ TEST(MultiGrid1D, move_agent) {
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid1d_foo.move_agent(agent_id_foo, coord7);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid1d_foo.move_agent(agent_id_foo, coord10);
-        EXPECT_FALSE(agent_id_baz);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -218,8 +204,7 @@ TEST(MultiGrid1D, move_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.move_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -227,8 +212,7 @@ TEST(MultiGrid1D, move_agent) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid1d_foo.move_agent(agent_id_foo, coord7);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
 }
 
@@ -239,78 +223,70 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord9});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
         auto rval = multigrid1d_foo.get_neighborhood(coord0, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(coord1, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1 });
         auto rval = multigrid1d_foo.get_neighborhood(coord0, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(coord1, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = unordered_set<GridCoord1D>({coord1, coord9});
+        auto tval = unordered_set < GridCoord1D > ({ coord1, coord9 });
         auto rval = multigrid1d_foo.get_neighborhood(coord0, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(coord1, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = unordered_set<GridCoord1D>({coord1});
+        auto tval = unordered_set < GridCoord1D > ({ coord1 });
         auto rval = multigrid1d_foo.get_neighborhood(coord0, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(coord1, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord9});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_FALSE(rval);
@@ -318,81 +294,73 @@ TEST(MultiGrid1D, get_neighborhood) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord9});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord1, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, true);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord1D>({coord1, coord9});
+        auto tval = unordered_set < GridCoord1D > ({ coord1, coord9 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord1D>({coord1});
+        auto tval = unordered_set < GridCoord1D > ({ coord1 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, false);
         multigrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord1D>({coord0, coord2});
+        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
         auto rval = multigrid1d_foo.get_neighborhood(agent_id_foo, false);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
 }
 
@@ -403,17 +371,16 @@ TEST(MultiGrid1D, get_location_by_agent) {
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
-        EXPECT_FALSE(multigrid1d_foo.get_location_by_agent(agent_id_foo));
-        EXPECT_FALSE(multigrid1d_foo.get_location_by_agent(agent_id_bar));
+        auto loc1 = multigrid1d_foo.get_location_by_agent(agent_id_foo);
+        auto loc2 = multigrid1d_foo.get_location_by_agent(agent_id_bar);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
         auto local = multigrid1d_foo.get_location_by_agent(agent_id_foo);
-        EXPECT_TRUE(local);
         EXPECT_EQ(local, coord2);
-        EXPECT_FALSE(multigrid1d_foo.get_location_by_agent(agent_id_bar));
+        auto loc = multigrid1d_foo.get_location_by_agent(agent_id_bar);
     }
 }
 
@@ -433,7 +400,7 @@ TEST(MultiGrid1D, get_location_contents) {
         auto agent_list_foo = multigrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(agent_list_foo);
-        EXPECT_TRUE(agent_list_foo.value()->empty());
+        EXPECT_TRUE(agent_list_foo->empty());
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -441,11 +408,11 @@ TEST(MultiGrid1D, get_location_contents) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord1));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_baz, coord1));
 
-        auto tval = set<AgentID>({agent_id_foo, agent_id_bar, agent_id_baz});
+        auto tval = set < AgentID > ({ agent_id_foo, agent_id_bar, agent_id_baz });
         auto rval = multigrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
@@ -453,11 +420,11 @@ TEST(MultiGrid1D, get_location_contents) {
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_bar, coord1));
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_baz, coord9));
 
-        auto tval = set<AgentID>({agent_id_foo, agent_id_bar});
+        auto tval = set < AgentID > ({ agent_id_foo, agent_id_bar });
         auto rval = multigrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
 }
 

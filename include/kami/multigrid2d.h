@@ -65,10 +65,9 @@ namespace kami {
          * @param[in] agent_id the `AgentID` of the agent to add.
          * @param[in] coord the coordinates of the agent.
          *
-         * @returns false if the agent is not placed at the specified
-         * location, otherwise, true
+         * @returns the `AgentID` of the agent added
          */
-        std::optional<AgentID> add_agent(AgentID agent_id, const GridCoord2D &coord) override;
+        AgentID add_agent(AgentID agent_id, const GridCoord2D &coord) override;
     };
 
 }  // namespace kami

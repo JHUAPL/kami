@@ -41,7 +41,7 @@ public:
         return get_agent_id();
     }
 
-    std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+    std::unique_ptr<nlohmann::json> collect() override {
         auto json_ret_val = std::make_unique<nlohmann::json>();
 
         (*json_ret_val)["fname"] = "Gus";
@@ -53,7 +53,7 @@ public:
 
 class TestModel : public ReporterModel {
 public:
-    std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+    std::unique_ptr<nlohmann::json> collect() override {
         return std::make_unique<nlohmann::json>();
     }
 };
@@ -92,8 +92,8 @@ TEST_F(ReporterAgentTest, step) {
 }
 
 TEST_F(ReporterAgentTest, collect) {
-    EXPECT_EQ(agent_foo.collect().value()->dump(), "{\"fname\":\"Gus\",\"lname\":\"Fring\"}");
-    EXPECT_NE(agent_bar.collect().value()->dump(), "{\"fname\":\"Hank\",\"lname\":\"Schrader\"}");
+    EXPECT_EQ(agent_foo.collect()->dump(), "{\"fname\":\"Gus\",\"lname\":\"Fring\"}");
+    EXPECT_NE(agent_bar.collect()->dump(), "{\"fname\":\"Hank\",\"lname\":\"Schrader\"}");
 }
 
 TEST_F(ReporterAgentTest, equality) {

@@ -63,7 +63,7 @@ namespace kami {
          * its data as a [nlohmann::json](https://json.nlohmann.me/)
          * JSON object.  See `Reporter` for additional details.
          */
-        virtual std::optional<std::unique_ptr<nlohmann::json>> collect() = 0;
+        virtual std::unique_ptr<nlohmann::json> collect() = 0;
 
         /**
          * @brief Execute a time-step for the agent
@@ -106,7 +106,7 @@ namespace kami {
          * This is not expected to return agent data collection,
          * as the agents' information is collected separately.
          */
-        virtual std::optional<std::unique_ptr<nlohmann::json>> collect() = 0;
+        virtual std::unique_ptr<nlohmann::json> collect() = 0;
 
         /**
          * @brief Get the step id of the model

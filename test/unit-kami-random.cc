@@ -51,12 +51,12 @@ public:
     shared_ptr<vector<AgentID>> retval;
 
     shared_ptr<Model> step() override {
-        retval = _sched->step(shared_from_this()).value();
+        retval = _sched->step(shared_from_this());
         return shared_from_this();
     }
 
     shared_ptr<Model> step(unique_ptr<vector<AgentID>> agent_list) {
-        retval = _sched->step(shared_from_this(), std::move(agent_list)).value();
+        retval = _sched->step(shared_from_this(), std::move(agent_list));
         return shared_from_this();
     }
 };
@@ -93,8 +93,8 @@ TEST(RandomScheduler, DefaultConstructor) {
 }
 
 TEST_F(RandomSchedulerTest, step_interface1) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto aval = mod->get_population().value()->get_agent_list();
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
     mod->step(std::move(aval));
 
     auto rval = mod->retval;
@@ -103,14 +103,14 @@ TEST_F(RandomSchedulerTest, step_interface1) {
 
     // Sort both return values and just make sure all of them all the same...
     // We cannot test permutation since, well, you know...
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-    set<AgentID> rval_set = set(rval->begin(), rval->end());
+    set < AgentID > tval_set = set(tval->begin(), tval->end());
+    set < AgentID > rval_set = set(rval->begin(), rval->end());
     EXPECT_EQ(tval_set, rval_set);
 }
 
 TEST_F(RandomSchedulerTest, step_interface2) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto aval = mod->get_population().value()->get_agent_list();
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
     mod->step(std::move(aval));
 
     auto rval = mod->retval;
@@ -118,16 +118,16 @@ TEST_F(RandomSchedulerTest, step_interface2) {
     EXPECT_TRUE(rval);
     EXPECT_EQ(rval->size(), 10);
 
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-    set<AgentID> rval_set = set(rval->begin(), rval->end());
+    set < AgentID > tval_set = set(tval->begin(), tval->end());
+    set < AgentID > rval_set = set(rval->begin(), rval->end());
     EXPECT_EQ(tval_set, rval_set);
 }
 
 TEST_F(RandomSchedulerTest, step_10000) {
     // Do it a lot...
     for (auto i = 0; i < 10000; i++) {
-        auto tval = mod->get_population().value()->get_agent_list();
-        auto aval = mod->get_population().value()->get_agent_list();
+        auto tval = mod->get_population()->get_agent_list();
+        auto aval = mod->get_population()->get_agent_list();
         mod->step(std::move(aval));
 
         auto rval = mod->retval;
@@ -135,24 +135,24 @@ TEST_F(RandomSchedulerTest, step_10000) {
         EXPECT_TRUE(rval);
         EXPECT_EQ(rval->size(), 10);
 
-        set<AgentID> tval_set = set(tval->begin(), tval->end());
-        set<AgentID> rval_set = set(rval->begin(), rval->end());
+        set < AgentID > tval_set = set(tval->begin(), tval->end());
+        set < AgentID > rval_set = set(rval->begin(), rval->end());
         EXPECT_EQ(tval_set, rval_set);
     }
 }
 
 TEST_F(RandomSchedulerTest, get_rng) {
-    auto rval = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+    auto rval = static_pointer_cast<RandomScheduler>(mod->get_scheduler())->get_rng();
 
     EXPECT_EQ(rng, rval);
 }
 
 TEST_F(RandomSchedulerTest, set_rng) {
     auto new_rng = make_shared<mt19937>();
-    auto rval1 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+    auto rval1 = static_pointer_cast<RandomScheduler>(mod->get_scheduler())->get_rng();
 
-    static_cast<void>(static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->set_rng(new_rng));
-    auto rval2 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+    static_cast<void>(static_pointer_cast<RandomScheduler>(mod->get_scheduler())->set_rng(new_rng));
+    auto rval2 = static_pointer_cast<RandomScheduler>(mod->get_scheduler())->get_rng();
 
     EXPECT_EQ(new_rng, rval2);
     EXPECT_NE(new_rng, rval1);

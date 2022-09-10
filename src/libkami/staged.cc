@@ -35,80 +35,38 @@
 
 namespace kami {
 
-    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    std::unique_ptr<std::vector<AgentID>>
     StagedScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
         auto stepped_agent_list = this->SequentialScheduler::step(model, std::move(agent_list));
-        if (!stepped_agent_list)
-            return std::nullopt;
-        return std::move(this->advance(model, std::move(stepped_agent_list.value())));
+        return std::move(this->advance(model, std::move(stepped_agent_list)));
     }
 
-    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    std::unique_ptr<std::vector<AgentID>>
     StagedScheduler::step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
         auto stepped_agent_list = this->SequentialScheduler::step(model, std::move(agent_list));
-        if (!stepped_agent_list)
-            return std::nullopt;
-        return std::move(this->advance(model, std::move(stepped_agent_list.value())));
+        return std::move(this->advance(model, std::move(stepped_agent_list)));
     }
 
-    std::optional<std::unique_ptr<std::vector<AgentID>>> StagedScheduler::advance(std::shared_ptr<Model> model) {
+    std::unique_ptr<std::vector<AgentID>> StagedScheduler::advance(std::shared_ptr<Model> model) {
         auto population = model->get_population();
-
-        if (!population)
-            return std::nullopt;
-
-        return std::move(this->advance(model, population.value()->get_agent_list()));
+        return std::move(this->advance(model, population->get_agent_list()));
     }
 
-    std::optional<std::unique_ptr<std::vector<AgentID>>>
-    StagedScheduler::advance(std::shared_ptr<ReporterModel> model) {
+    std::unique_ptr<std::vector<AgentID>> StagedScheduler::advance(std::shared_ptr<ReporterModel> model) {
         auto population = model->get_population();
-
-        if (!population)
-            return std::nullopt;
-
-        return std::move(this->advance(model, population.value()->get_agent_list()));
+        return std::move(this->advance(model, population->get_agent_list()));
     }
 
-    std::optional<std::unique_ptr<std::vector<AgentID>>>
+    std::unique_ptr<std::vector<AgentID>>
     StagedScheduler::advance(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
         auto return_agent_list = std::make_unique<std::vector<AgentID>>();
         auto population = model->get_population();
 
-        if (!population)
-            return std::nullopt;
-
         for (auto &agent_id: *agent_list) {
-            auto agent_opt = population.value()->get_agent_by_id(agent_id);
+            auto agent = std::static_pointer_cast<StagedAgent>(population->get_agent_by_id(agent_id));
 
-            if (agent_opt) {
-                auto agent = std::static_pointer_cast<StagedAgent>(agent_opt.value());
-
-                agent->advance(model);
-                return_agent_list->push_back(agent_id);
-            }
-        }
-
-        return std::move(return_agent_list);
-    }
-
-    std::optional<std::unique_ptr<std::vector<AgentID>>>
-    StagedScheduler::advance(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
-        auto return_agent_list = std::make_unique<std::vector<AgentID>>();
-        auto population = model->get_population();
-
-        if (!population)
-            return std::nullopt;
-
-        for (auto &agent_id: *agent_list) {
-            auto agent_opt = population.value()->get_agent_by_id(agent_id);
-
-            if (agent_opt) {
-                auto agent = std::static_pointer_cast<StagedAgent>(agent_opt.value());
-
-                agent->advance(model);
-                return_agent_list->push_back(agent_id);
-            }
+            agent->advance(model);
+            return_agent_list->push_back(agent_id);
         }
 
         return std::move(return_agent_list);

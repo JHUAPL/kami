@@ -82,12 +82,12 @@ std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(const std::shared_ptr<
     auto domain = model->get_domain();
     if (!domain)
         throw (std::domain_error("model is missing domain"));
-    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
+    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain);
 
     auto move_list_opt = world->get_neighborhood(agent_id, false, kami::GridNeighborhoodType::VonNeumann);
     if (!move_list_opt)
         return std::nullopt;
-    auto move_list = move_list_opt.value();
+    auto move_list = move_list_opt;
     std::uniform_int_distribution<int> dist(0, (int) move_list->size() - 1);
     auto new_location = *std::next(move_list->begin(), dist(*rng));
 
@@ -105,26 +105,26 @@ std::optional<kami::AgentID> MoneyAgent2D::give_money(const std::shared_ptr<kami
     auto domain = model->get_domain();
     if (!domain)
         throw (std::domain_error("model is missing domain"));
-    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain.value());
+    auto world = std::static_pointer_cast<kami::MultiGrid2D>(domain);
 
     auto agents = model->get_population();
     if (!agents)
         throw (std::domain_error("model is missing population"));
-    auto population = std::static_pointer_cast<kami::Population>(agents.value());
+    auto population = std::static_pointer_cast<kami::Population>(agents);
 
     auto location = world->get_location_by_agent(agent_id);
-    auto cell_mates_opt = world->get_location_contents(location.value());
+    auto cell_mates_opt = world->get_location_contents(location);
 
     if (!cell_mates_opt)
         return std::nullopt;
 
-    auto cell_mates = cell_mates_opt.value();
+    auto cell_mates = cell_mates_opt;
     if (cell_mates->size() < 2)
         return std::nullopt;
 
     std::uniform_int_distribution<int> dist(0, (int) cell_mates->size() - 1);
     auto other_agent_id = *std::next(cell_mates->begin(), dist(*rng));
-    auto other_agent = std::static_pointer_cast<MoneyAgent2D>(population->get_agent_by_id(other_agent_id).value());
+    auto other_agent = std::static_pointer_cast<MoneyAgent2D>(population->get_agent_by_id(other_agent_id));
 
     console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
     other_agent->_agent_wealth += 1;

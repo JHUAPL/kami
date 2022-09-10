@@ -30,8 +30,11 @@
 #include <utility>
 #include <vector>
 
+#include <fmt/format.h>
+
 #include <kami/agent.h>
 #include <kami/domain.h>
+#include <kami/exception.h>
 #include <kami/grid2d.h>
 
 namespace kami {
@@ -121,27 +124,19 @@ namespace kami {
         _agent_index = std::make_unique<std::map<AgentID, GridCoord2D>>();
     }
 
-    std::optional<AgentID> Grid2D::delete_agent(AgentID agent_id) {
-        auto coord = get_location_by_agent(agent_id);
-        if (!coord)
-            return std::nullopt;
-
-        return delete_agent(agent_id, coord.value());
+    AgentID Grid2D::delete_agent(AgentID agent_id) {
+        return delete_agent(agent_id, get_location_by_agent(agent_id));
     }
 
-    std::optional<AgentID> Grid2D::delete_agent(AgentID agent_id, const GridCoord2D &coord) {
-        auto agent_location = _agent_grid->find(coord);
-        if (agent_location == _agent_grid->end())
-            return std::nullopt;
-
-        for (auto test_agent_id = agent_location; test_agent_id != _agent_grid->end(); test_agent_id++)
+    AgentID Grid2D::delete_agent(AgentID agent_id, const GridCoord2D &coord) {
+        for (auto test_agent_id = _agent_grid->find(coord); test_agent_id != _agent_grid->end(); test_agent_id++)
             if (test_agent_id->second == agent_id) {
                 _agent_grid->erase(test_agent_id);
                 _agent_index->erase(agent_id);
                 return agent_id;
             }
 
-        return std::nullopt;
+        throw exception::AgentNotFound("");
     }
 
     bool Grid2D::is_location_valid(const GridCoord2D &coord) const {
@@ -157,28 +152,17 @@ namespace kami {
         return grid_location.first == grid_location.second;
     }
 
-    std::optional<AgentID> Grid2D::move_agent(const AgentID agent_id, const GridCoord2D &coord) {
-        auto coord_current = get_location_by_agent(agent_id);
-
-        if (!coord_current)
-            return std::nullopt;
-        if (!delete_agent(agent_id, coord_current.value()))
-            return std::nullopt;
-
-        return add_agent(agent_id, coord);
+    AgentID Grid2D::move_agent(const AgentID agent_id, const GridCoord2D &coord) {
+        return add_agent(delete_agent(agent_id, get_location_by_agent(agent_id)), coord);
     }
 
-    std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
+    std::shared_ptr<std::unordered_set<GridCoord2D>>
     Grid2D::get_neighborhood(const AgentID agent_id, const bool include_center,
                              const GridNeighborhoodType neighborhood_type) const {
-        auto coord = get_location_by_agent(agent_id);
-        if (!coord)
-            return std::nullopt;
-
-        return std::move(get_neighborhood(coord.value(), include_center, neighborhood_type));
+        return std::move(get_neighborhood(get_location_by_agent(agent_id), include_center, neighborhood_type));
     }
 
-    std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
+    std::shared_ptr<std::unordered_set<GridCoord2D>>
     Grid2D::get_neighborhood(const GridCoord2D &coord, const bool include_center,
                              const GridNeighborhoodType neighborhood_type) const {
         auto neighborhood = std::make_unique<std::unordered_set<GridCoord2D>>();
@@ -192,10 +176,11 @@ namespace kami {
                 directions = directions_moore;
                 break;
             default:
-                return std::nullopt;
+                throw exception::InvalidOption(
+                        fmt::format("Invalid neighborhood type {} given", (unsigned int) neighborhood_type));
         }
-        // We assume our starting position is valid
-        if (include_center)
+
+        if (include_center and is_location_valid(coord))
             neighborhood->insert(coord);
 
         for (auto &direction: directions) {
@@ -208,11 +193,11 @@ namespace kami {
         return std::move(neighborhood);
     }
 
-    std::optional<std::shared_ptr<std::set<AgentID>>> Grid2D::get_location_contents(const GridCoord2D &coord) const {
+    std::shared_ptr<std::set<AgentID>> Grid2D::get_location_contents(const GridCoord2D &coord) const {
         auto agent_ids = std::make_shared<std::set<AgentID>>();
 
         if (!is_location_valid(coord))
-            return std::nullopt;
+            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (is_location_empty(coord))
             return agent_ids;
 
@@ -233,10 +218,10 @@ namespace kami {
 
     unsigned int Grid2D::get_maximum_y() const { return _maximum_y; }
 
-    std::optional<GridCoord2D> Grid2D::get_location_by_agent(const AgentID &agent_id) const {
+    GridCoord2D Grid2D::get_location_by_agent(const AgentID &agent_id) const {
         auto coord = _agent_index->find(agent_id);
         if (coord == _agent_index->end())
-            return std::nullopt;
+            throw exception::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
         return coord->second;
     }
 

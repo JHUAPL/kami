@@ -45,7 +45,7 @@ public:
         return get_agent_id();
     }
 
-    std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+    std::unique_ptr<nlohmann::json> collect() override {
         auto json_ret_val = std::make_unique<nlohmann::json>();
 
         (*json_ret_val)["fname"] = "Jesse";
@@ -59,7 +59,7 @@ class TestModel : public ReporterModel {
 public:
     shared_ptr<vector<AgentID>> retval;
 
-    std::optional<std::unique_ptr<nlohmann::json>> collect() override {
+    std::unique_ptr<nlohmann::json> collect() override {
         auto json_ret_val = std::make_unique<nlohmann::json>();
 
         (*json_ret_val)["fname"] = "Walter";
@@ -99,17 +99,17 @@ TEST(ReporterModel, DefaultConstructor) {
 }
 
 TEST_F(ReporterModelTest, collect) {
-    auto aval = mod->get_population().value()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
     mod->step();
 
     auto rval = mod->collect();
     EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->dump(), "{\"fname\":\"Walter\",\"lname\":\"White\"}");
+    EXPECT_EQ(rval->dump(), "{\"fname\":\"Walter\",\"lname\":\"White\"}");
 }
 
 TEST_F(ReporterModelTest, report) {
     for (auto i = 0; i < 2; i++) {
-        auto aval = mod->get_population().value()->get_agent_list();
+        auto aval = mod->get_population()->get_agent_list();
 
         mod->step();
         auto rval = mod->collect();

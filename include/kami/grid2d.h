@@ -213,7 +213,7 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true.
          */
-        virtual std::optional<AgentID> add_agent(AgentID agent_id, const GridCoord2D &coord) = 0;
+        virtual AgentID add_agent(AgentID agent_id, const GridCoord2D &coord) = 0;
 
         /**
          * @brief Remove agent from the grid.
@@ -222,7 +222,7 @@ namespace kami {
          *
          * @returns false if the agent is not removed, otherwise, true.
          */
-        std::optional<AgentID> delete_agent(AgentID agent_id);
+        AgentID delete_agent(AgentID agent_id);
 
         /**
          * @brief Remove agent from the grid at the specified location
@@ -232,7 +232,7 @@ namespace kami {
          *
          * @returns false if the agent is not removed, otherwise, true.
          */
-        std::optional<AgentID> delete_agent(AgentID agent_id, const GridCoord2D &coord);
+        AgentID delete_agent(AgentID agent_id, const GridCoord2D &coord);
 
         /**
          * @brief Move an agent to the specified location.
@@ -240,7 +240,7 @@ namespace kami {
          * @param[in] agent_id the `AgentID` of the agent to move.
          * @param[in] coord the coordinates of the agent.
          */
-        std::optional<AgentID> move_agent(AgentID agent_id, const GridCoord2D &coord);
+        AgentID move_agent(AgentID agent_id, const GridCoord2D &coord);
 
         /**
          * @brief Inquire if the specified location is empty.
@@ -268,7 +268,7 @@ namespace kami {
          *
          * @return the location of the specified `Agent`
          */
-        std::optional<GridCoord2D> get_location_by_agent(const AgentID &agent_id) const;
+        GridCoord2D get_location_by_agent(const AgentID &agent_id) const;
 
         /**
          * @brief Get the contents of the specified location.
@@ -280,7 +280,7 @@ namespace kami {
          * to that object will update the state of the gird.  Further, the pointer
          * should not be deleted when no longer used.
          */
-        [[nodiscard]] std::optional<std::shared_ptr<std::set<AgentID>>>
+        [[nodiscard]] std::shared_ptr<std::set<AgentID>>
         get_location_contents(const GridCoord2D &coord) const;
 
         /**
@@ -310,7 +310,7 @@ namespace kami {
          *
          * @see `NeighborhoodType`
          */
-        std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
+        std::shared_ptr<std::unordered_set<GridCoord2D>>
         get_neighborhood(AgentID agent_id, bool include_center, GridNeighborhoodType neighborhood_type) const;
 
         /**
@@ -326,7 +326,7 @@ namespace kami {
          *
          * @see `NeighborhoodType`
          */
-        [[nodiscard]] std::optional<std::shared_ptr<std::unordered_set<GridCoord2D>>>
+        [[nodiscard]] std::shared_ptr<std::unordered_set<GridCoord2D>>
         get_neighborhood(const GridCoord2D &coord, bool include_center, GridNeighborhoodType neighborhood_type) const;
 
         /**

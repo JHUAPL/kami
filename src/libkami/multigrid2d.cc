@@ -23,8 +23,11 @@
  * SOFTWARE.
  */
 
+#include <fmt/format.h>
+
 #include <kami/agent.h>
 #include <kami/domain.h>
+#include <kami/exception.h>
 #include <kami/grid2d.h>
 #include <kami/multigrid2d.h>
 
@@ -33,9 +36,9 @@ namespace kami {
     MultiGrid2D::MultiGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x, bool wrap_y)
             : Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {}
 
-    std::optional<AgentID> MultiGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
+    AgentID MultiGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
         if (!is_location_valid(coord))
-            return std::nullopt;
+            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
 
         _agent_index->insert(std::pair<AgentID, GridCoord2D>(agent_id, coord));
         _agent_grid->insert(std::pair<GridCoord2D, AgentID>(coord, agent_id));

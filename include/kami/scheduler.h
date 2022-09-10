@@ -30,7 +30,6 @@
 //! @endcond
 
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include <kami/agent.h>
@@ -59,9 +58,9 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        virtual std::optional<std::unique_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) = 0;
+        virtual std::unique_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model) = 0;
 
-        virtual std::optional<std::unique_ptr<std::vector<AgentID>>> step(std::shared_ptr<ReporterModel> model) = 0;
+        virtual std::unique_ptr<std::vector<AgentID>> step(std::shared_ptr<ReporterModel> model) = 0;
 
         /**
          * @brief Execute a single time step.
@@ -76,10 +75,10 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        virtual std::optional<std::unique_ptr<std::vector<AgentID>>>
+        virtual std::unique_ptr<std::vector<AgentID>>
         step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) = 0;
 
-        virtual std::optional<std::unique_ptr<std::vector<AgentID>>>
+        virtual std::unique_ptr<std::vector<AgentID>>
         step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) = 0;
 
     protected:

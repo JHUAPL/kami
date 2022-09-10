@@ -23,7 +23,10 @@
  * SOFTWARE.
  */
 
+#include <fmt/format.h>
+
 #include <kami/agent.h>
+#include <kami/exception.h>
 #include <kami/sologrid1d.h>
 
 namespace kami {
@@ -31,11 +34,11 @@ namespace kami {
     SoloGrid1D::SoloGrid1D(unsigned int maximum_x, bool wrap_x)
             : Grid1D(maximum_x, wrap_x) {}
 
-    std::optional<AgentID> SoloGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
+    AgentID SoloGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
         if (!is_location_valid(coord))
-            return std::nullopt;
+            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (!is_location_empty(coord))
-            return std::nullopt;
+            throw exception::LocationUnavailable(fmt::format("Coordinates {} already occupied", coord.to_string()));
 
         _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
         _agent_grid->insert(std::pair<GridCoord1D, AgentID>(coord, agent_id));
