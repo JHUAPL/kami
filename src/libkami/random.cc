@@ -25,7 +25,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <optional>
 #include <random>
 #include <utility>
 #include <vector>

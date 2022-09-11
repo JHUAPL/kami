@@ -53,7 +53,7 @@ namespace kami {
         /**
          * @brief Constructor for two-dimensional coordinates
          */
-        GridCoord2D(int x_coord, int y_coord);;
+        GridCoord2D(int x_coord, int y_coord);
 
         /**
          * @brief Get the coordinate in the first dimension or `x`.

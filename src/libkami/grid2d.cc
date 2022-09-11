@@ -25,7 +25,6 @@
 
 #include <map>
 #include <memory>
-#include <optional>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -57,16 +56,15 @@ namespace kami {
     }
 
     double GridCoord2D::distance(std::shared_ptr<GridCoord2D> &p, GridDistanceType distance_type) const {
-        auto p2d = std::static_pointer_cast<GridCoord2D>(p);
-
         switch (distance_type) {
             case GridDistanceType::Chebyshev:
-                return distance_chebyshev(p2d);
+                return distance_chebyshev(p);
             case GridDistanceType::Manhattan:
-                return distance_manhattan(p2d);
+                return distance_manhattan(p);
             case GridDistanceType::Euclidean:
+                return distance_euclidean(p);
             default:
-                return distance_euclidean(p2d);
+                throw exception::InvalidOption("Unknown distance type given");
         }
     }
 
@@ -124,11 +122,11 @@ namespace kami {
         _agent_index = std::make_unique<std::map<AgentID, GridCoord2D>>();
     }
 
-    AgentID Grid2D::delete_agent(AgentID agent_id) {
+    AgentID Grid2D::delete_agent(const AgentID agent_id) {
         return delete_agent(agent_id, get_location_by_agent(agent_id));
     }
 
-    AgentID Grid2D::delete_agent(AgentID agent_id, const GridCoord2D &coord) {
+    AgentID Grid2D::delete_agent(const AgentID agent_id, const GridCoord2D &coord) {
         for (auto test_agent_id = _agent_grid->find(coord); test_agent_id != _agent_grid->end(); test_agent_id++)
             if (test_agent_id->second == agent_id) {
                 _agent_grid->erase(test_agent_id);
@@ -136,7 +134,7 @@ namespace kami {
                 return agent_id;
             }
 
-        throw exception::AgentNotFound("");
+        throw exception::AgentNotFound("Agent not found");
     }
 
     bool Grid2D::is_location_valid(const GridCoord2D &coord) const {

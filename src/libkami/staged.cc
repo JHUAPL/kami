@@ -24,7 +24,6 @@
  */
 
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include <kami/agent.h>
