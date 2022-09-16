@@ -38,7 +38,7 @@ namespace kami {
 
     AgentID SoloGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
         if (!is_location_valid(coord))
-            throw error::CoordinatesInvalid(fmt::format("Coordinates {} are invalid", coord.to_string()));
+            throw error::LocationInvalid(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (!is_location_empty(coord))
             throw error::LocationUnavailable(fmt::format("Coordinates {} already occupied", coord.to_string()));
 

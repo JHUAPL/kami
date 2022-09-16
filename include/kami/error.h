@@ -18,11 +18,11 @@ namespace kami::error {
         explicit AgentNotFound(const std::string &s) : std::logic_error(s) {};
     };
 
-    class CoordinatesInvalid : public std::domain_error {
+    class LocationInvalid : public std::domain_error {
     public:
-        explicit CoordinatesInvalid(const char *s) : std::domain_error(s) {};
+        explicit LocationInvalid(const char *s) : std::domain_error(s) {};
 
-        explicit CoordinatesInvalid(const std::string &s) : std::domain_error(s) {};
+        explicit LocationInvalid(const std::string &s) : std::domain_error(s) {};
     };
 
     class LocationUnavailable : public std::domain_error {

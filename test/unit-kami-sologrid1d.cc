@@ -195,7 +195,7 @@ TEST(SoloGrid1D, move_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.move_agent(agent_id_foo, coord10), CoordinatesInvalid);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.move_agent(agent_id_foo, coord10), LocationInvalid);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
