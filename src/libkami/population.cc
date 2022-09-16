@@ -28,7 +28,7 @@
 #include <vector>
 
 #include <kami/agent.h>
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/population.h>
 
 namespace kami {
@@ -43,7 +43,7 @@ namespace kami {
         auto agent_it = _agent_map.find(agent_id);
 
         if (agent_it == _agent_map.end())
-            throw exception::ResourceNotAvailable("Agent not found in population");
+            throw error::ResourceNotAvailable("Agent not found in population");
 
         auto agent = agent_it->second;
         _agent_map.erase(agent_it);
@@ -54,7 +54,7 @@ namespace kami {
         auto agent_it = _agent_map.find(agent_id);
 
         if (agent_it == _agent_map.end())
-            throw exception::ResourceNotAvailable("Agent not found in population");
+            throw error::AgentNotFound("Agent not found in population");
 
         return agent_it->second;
     }

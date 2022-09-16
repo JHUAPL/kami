@@ -28,7 +28,7 @@
 #include <fmt/format.h>
 
 #include <kami/agent.h>
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/sologrid2d.h>
 
 namespace kami {
@@ -38,9 +38,9 @@ namespace kami {
 
     AgentID SoloGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
         if (!is_location_valid(coord))
-            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
+            throw error::InvalidCoordinates(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (!is_location_empty(coord))
-            throw exception::LocationUnavailable(fmt::format("Coordinates {} already occupied", coord.to_string()));
+            throw error::LocationUnavailable(fmt::format("Coordinates {} already occupied", coord.to_string()));
 
         _agent_index->insert(std::pair<AgentID, GridCoord2D>(agent_id, coord));
         _agent_grid->insert(std::pair<GridCoord2D, AgentID>(coord, agent_id));

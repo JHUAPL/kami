@@ -38,7 +38,7 @@
 #include <vector>
 
 #include <kami/domain.h>
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/grid.h>
 #include <kami/kami.h>
 

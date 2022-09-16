@@ -34,7 +34,7 @@
 
 #include <kami/agent.h>
 #include <kami/domain.h>
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/grid1d.h>
 
 namespace kami {
@@ -103,7 +103,8 @@ namespace kami {
                 return agent_id;
             }
 
-        throw exception::AgentNotFound("");
+        throw error::AgentNotFound(
+                fmt::format("Agent {} not found at location {}", agent_id.to_string(), coord.to_string()));
     }
 
     bool Grid1D::is_location_valid(const GridCoord1D &coord) const {
@@ -148,7 +149,7 @@ namespace kami {
         auto agent_ids = std::make_shared<std::set<AgentID>>();
 
         if (!is_location_valid(coord))
-            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
+            throw error::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (is_location_empty(coord))
             return agent_ids;
 
@@ -168,7 +169,7 @@ namespace kami {
     GridCoord1D Grid1D::get_location_by_agent(const AgentID &agent_id) const {
         auto coord = _agent_index->find(agent_id);
         if (coord == _agent_index->end())
-            throw exception::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
+            throw error::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
         return coord->second;
     }
 

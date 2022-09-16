@@ -27,7 +27,7 @@
 
 #include <kami/agent.h>
 #include <kami/domain.h>
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/grid1d.h>
 #include <kami/multigrid1d.h>
 
@@ -38,7 +38,7 @@ namespace kami {
 
     AgentID MultiGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
         if (!is_location_valid(coord))
-            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
+            throw error::InvalidCoordinates(fmt::format("Coordinates {} are invalid", coord.to_string()));
 
         _agent_index->insert(std::pair<AgentID, GridCoord1D>(agent_id, coord));
         _agent_grid->insert(std::pair<GridCoord1D, AgentID>(coord, agent_id));

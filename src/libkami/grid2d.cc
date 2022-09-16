@@ -33,7 +33,7 @@
 
 #include <kami/agent.h>
 #include <kami/domain.h>
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/grid2d.h>
 
 namespace kami {
@@ -64,7 +64,7 @@ namespace kami {
             case GridDistanceType::Euclidean:
                 return distance_euclidean(p);
             default:
-                throw exception::InvalidOption("Unknown distance type given");
+                throw error::InvalidOption("Unknown distance type given");
         }
     }
 
@@ -134,7 +134,7 @@ namespace kami {
                 return agent_id;
             }
 
-        throw exception::AgentNotFound("Agent not found");
+        throw error::AgentNotFound("Agent not found on grid");
     }
 
     bool Grid2D::is_location_valid(const GridCoord2D &coord) const {
@@ -174,7 +174,7 @@ namespace kami {
                 directions = directions_moore;
                 break;
             default:
-                throw exception::InvalidOption(
+                throw error::InvalidOption(
                         fmt::format("Invalid neighborhood type {} given", (unsigned int) neighborhood_type));
         }
 
@@ -195,7 +195,7 @@ namespace kami {
         auto agent_ids = std::make_shared<std::set<AgentID>>();
 
         if (!is_location_valid(coord))
-            throw exception::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
+            throw error::LocationUnavailable(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (is_location_empty(coord))
             return agent_ids;
 
@@ -219,7 +219,7 @@ namespace kami {
     GridCoord2D Grid2D::get_location_by_agent(const AgentID &agent_id) const {
         auto coord = _agent_index->find(agent_id);
         if (coord == _agent_index->end())
-            throw exception::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
+            throw error::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
         return coord->second;
     }
 

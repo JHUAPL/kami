@@ -29,7 +29,7 @@
 #include <utility>
 #include <vector>
 
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/model.h>
 #include <kami/random.h>
 #include <kami/sequential.h>
@@ -43,7 +43,7 @@ namespace kami {
     std::unique_ptr<std::vector<AgentID>>
     RandomScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
         if (_rng == nullptr)
-            throw exception::ResourceNotAvailable("No random number generator available");
+            throw error::ResourceNotAvailable("No random number generator available");
 
         shuffle(agent_list->begin(), agent_list->end(), *_rng);
         return std::move(this->SequentialScheduler::step(model, std::move(agent_list)));
@@ -52,7 +52,7 @@ namespace kami {
     std::unique_ptr<std::vector<AgentID>>
     RandomScheduler::step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
         if (_rng == nullptr)
-            throw exception::ResourceNotAvailable("No random number generator available");
+            throw error::ResourceNotAvailable("No random number generator available");
 
         shuffle(agent_list->begin(), agent_list->end(), *_rng);
         return std::move(this->SequentialScheduler::step(model, std::move(agent_list)));

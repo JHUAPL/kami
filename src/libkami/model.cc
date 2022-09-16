@@ -26,7 +26,7 @@
 #include <memory>
 #include <utility>
 
-#include <kami/exception.h>
+#include <kami/error.h>
 #include <kami/model.h>
 #include <kami/scheduler.h>
 
@@ -34,7 +34,7 @@ namespace kami {
 
     std::shared_ptr<Domain> Model::get_domain() {
         if (_domain == nullptr)
-            throw exception::ResourceNotAvailable("Domain not found in model");
+            throw error::ResourceNotAvailable("Domain not found in model");
         return _domain;
     }
 
@@ -45,7 +45,7 @@ namespace kami {
 
     std::shared_ptr<Population> Model::get_population() {
         if (_pop == nullptr)
-            throw exception::ResourceNotAvailable("Population not found in model");
+            throw error::ResourceNotAvailable("Population not found in model");
         return _pop;
     }
 
@@ -56,7 +56,7 @@ namespace kami {
 
     std::shared_ptr<Scheduler> Model::get_scheduler() {
         if (_sched == nullptr)
-            throw exception::ResourceNotAvailable("Scheduler not found in model");
+            throw error::ResourceNotAvailable("Scheduler not found in model");
         return _sched;
     }
 
