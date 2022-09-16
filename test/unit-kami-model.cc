@@ -26,6 +26,7 @@
 #include <memory>
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/model.h>
 #include <kami/multigrid2d.h>
 #include <kami/population.h>
@@ -34,6 +35,7 @@
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 class TestAgent : public Agent {
@@ -71,7 +73,7 @@ TEST(Model, get_population) {
     auto model_foo = make_shared<TestModel>();
     auto pop_foo = make_shared<Population>();
 
-    auto pop_nul = model_foo->get_population();
+    EXPECT_THROW(auto pop_nul = model_foo->get_population(), ResourceNotAvailable);
 
     auto pop_bar = model_foo->set_population(pop_foo);
     auto pop_baz = model_foo->get_population();
@@ -93,8 +95,7 @@ TEST(Model, get_scheduler) {
     auto model_foo = make_shared<TestModel>();
     auto sched_foo = make_shared<SequentialScheduler>();
 
-    auto sched_nul = model_foo->get_scheduler();
-    EXPECT_FALSE(sched_nul);
+    EXPECT_THROW(auto sched_nul = model_foo->get_scheduler(), ResourceNotAvailable);
 
     auto sched_bar = model_foo->set_scheduler(sched_foo);
     auto sched_baz = model_foo->get_scheduler();
@@ -116,8 +117,7 @@ TEST(Model, get_domain) {
     auto model_foo = make_shared<TestModel>();
     auto grid2_foo = make_shared<MultiGrid2D>(10, 10, true, true);
 
-    auto grid2_nul = model_foo->get_domain();
-    EXPECT_FALSE(grid2_nul);
+    EXPECT_THROW(auto grid2_nul = model_foo->get_domain(), ResourceNotAvailable);
 
     auto grid2_bar = model_foo->set_domain(grid2_foo);
     auto grid2_baz = model_foo->get_domain();

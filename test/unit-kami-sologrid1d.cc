@@ -29,12 +29,14 @@
 #include <unordered_set>
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/sologrid1d.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 TEST(SoloGrid1D, DefaultConstructor) {
@@ -56,7 +58,7 @@ TEST(SoloGrid1D, add_agent) {
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
-        auto agent_id_baz = sologrid1d_foo.add_agent(agent_id_bar, coord2);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.add_agent(agent_id_bar, coord2), LocationUnavailable);
     }
     {
         auto agent_id_baz = sologrid1d_foo.add_agent(agent_id_bar, coord3);
@@ -79,7 +81,7 @@ TEST(SoloGrid1D, delete_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_foo);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -87,8 +89,8 @@ TEST(SoloGrid1D, delete_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_bar);
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_bar), AgentNotFound);
     }
 
     {
@@ -102,7 +104,7 @@ TEST(SoloGrid1D, delete_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_foo, coord2);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -110,28 +112,28 @@ TEST(SoloGrid1D, delete_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_bar, coord2);
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_bar, coord2), AgentNotFound);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_foo, coord3);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_foo, coord3);
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_bar, coord3);
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.delete_agent(agent_id_bar, coord3), AgentNotFound);
     }
 }
 
@@ -172,7 +174,7 @@ TEST(SoloGrid1D, is_location_empty) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         EXPECT_FALSE(sologrid1d_foo.is_location_empty(coord2));
         EXPECT_TRUE(sologrid1d_foo.is_location_empty(coord3));
     }
@@ -193,13 +195,13 @@ TEST(SoloGrid1D, move_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = sologrid1d_foo.move_agent(agent_id_foo, coord10);
+        EXPECT_THROW(auto agent_id_baz = sologrid1d_foo.move_agent(agent_id_foo, coord10), InvalidCoordinates);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid1d_foo.move_agent(agent_id_foo, coord2);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -207,7 +209,7 @@ TEST(SoloGrid1D, move_agent) {
         SoloGrid1D sologrid1d_foo(10, true);
 
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid1d_foo.move_agent(agent_id_foo, coord7);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -284,9 +286,7 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
         auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
-        auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true), AgentNotFound);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
@@ -368,8 +368,8 @@ TEST(SoloGrid1D, get_location_by_agent) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
-        auto loc1 = sologrid1d_foo.get_location_by_agent(agent_id_foo);
-        auto loc2 = sologrid1d_foo.get_location_by_agent(agent_id_bar);
+        EXPECT_THROW(auto loc1 = sologrid1d_foo.get_location_by_agent(agent_id_foo), AgentNotFound);
+        EXPECT_THROW(auto loc2 = sologrid1d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
@@ -377,7 +377,7 @@ TEST(SoloGrid1D, get_location_by_agent) {
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord2));
         auto local = sologrid1d_foo.get_location_by_agent(agent_id_foo);
         EXPECT_EQ(local, coord2);
-        auto loc = sologrid1d_foo.get_location_by_agent(agent_id_bar);
+        EXPECT_THROW(auto loc = sologrid1d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
 }
 
@@ -387,9 +387,7 @@ TEST(SoloGrid1D, get_location_contents) {
 
     {
         SoloGrid1D sologrid1d_foo(10, true);
-        auto agent_list_foo = sologrid1d_foo.get_location_contents(coord10);
-
-        EXPECT_FALSE(agent_list_foo);
+        EXPECT_THROW(auto agent_list_foo = sologrid1d_foo.get_location_contents(coord10), LocationUnavailable);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
@@ -402,8 +400,8 @@ TEST(SoloGrid1D, get_location_contents) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord1));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord1));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_baz, coord1));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord1)), LocationUnavailable);
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_baz, coord1)), LocationUnavailable);
 
         auto tval = set < AgentID > ({ agent_id_foo });
         auto rval = sologrid1d_foo.get_location_contents(coord1);
@@ -414,8 +412,8 @@ TEST(SoloGrid1D, get_location_contents) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
         static_cast<void>(sologrid1d_foo.add_agent(agent_id_foo, coord1));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord1));
-        static_cast<void>(sologrid1d_foo.add_agent(agent_id_baz, coord9));
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord1)), LocationUnavailable);
+        EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_baz, coord1)), LocationUnavailable);
 
         auto tval = set < AgentID > ({ agent_id_foo });
         auto rval = sologrid1d_foo.get_location_contents(coord1);

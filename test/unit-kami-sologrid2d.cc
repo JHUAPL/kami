@@ -29,12 +29,14 @@
 #include <unordered_set>
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/sologrid2d.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 TEST(SoloGrid2D, DefaultConstructor) {
@@ -56,7 +58,7 @@ TEST(SoloGrid2D, add_agent) {
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
-        auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_bar, coord2);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_bar, coord2), LocationUnavailable);
     }
     {
         auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_bar, coord3);
@@ -79,7 +81,7 @@ TEST(SoloGrid2D, delete_agent) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -87,10 +89,9 @@ TEST(SoloGrid2D, delete_agent) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar), AgentNotFound);
     }
-
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
@@ -102,7 +103,7 @@ TEST(SoloGrid2D, delete_agent) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord2);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -110,28 +111,28 @@ TEST(SoloGrid2D, delete_agent) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord2);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord2), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord3);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord3), AgentNotFound);
     }
 }
 
@@ -172,7 +173,6 @@ TEST(SoloGrid2D, is_location_empty) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
         EXPECT_FALSE(sologrid2d_foo.is_location_empty(coord2));
         EXPECT_TRUE(sologrid2d_foo.is_location_empty(coord3));
     }
@@ -180,7 +180,7 @@ TEST(SoloGrid2D, is_location_empty) {
 
 TEST(SoloGrid2D, move_agent) {
     const AgentID agent_id_foo, agent_id_bar;
-    const GridCoord2D coord2(2, 5), coord3(3, 7), coord7(7, 2), coord10(10, 5);
+    const GridCoord2D coord2(2, 5), coord7(7, 2), coord10(10, 5);
 
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
@@ -193,21 +193,19 @@ TEST(SoloGrid2D, move_agent) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord10);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord10), InvalidCoordinates);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord2);
-        EXPECT_EQ(agent_id_baz, agent_id_foo);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord7);
         EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
@@ -322,7 +320,8 @@ TEST(SoloGrid2D, get_neighborhood_VonNeumann) {
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
-        auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
+        EXPECT_THROW(auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann),
+                     AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
@@ -573,13 +572,15 @@ TEST(SoloGrid2D, get_neighborhood_Moore) {
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
-        auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
+        EXPECT_THROW(auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore),
+                     AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
+        auto tval = unordered_set < GridCoord2D > ({
+            { 9, 9 },
+            { 9, 1 },
             { 1, 1 },
             { 0, 1 },
             { 9, 0 },
@@ -723,13 +724,13 @@ TEST(SoloGrid2D, get_neighborhood_Moore) {
 
 TEST(SoloGrid2D, get_location_by_agent) {
     const AgentID agent_id_foo, agent_id_bar;
-    const GridCoord2D coord2(2, 5), coord3(3, 7);
+    const GridCoord2D coord2(2, 5);
 
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        (sologrid2d_foo.get_location_by_agent(agent_id_foo));
-        (sologrid2d_foo.get_location_by_agent(agent_id_bar));
+        EXPECT_THROW(auto loc1 = sologrid2d_foo.get_location_by_agent(agent_id_foo), AgentNotFound);
+        EXPECT_THROW(auto loc2 = sologrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
@@ -737,7 +738,7 @@ TEST(SoloGrid2D, get_location_by_agent) {
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
         auto local = sologrid2d_foo.get_location_by_agent(agent_id_foo);
         EXPECT_EQ(local, coord2);
-        (sologrid2d_foo.get_location_by_agent(agent_id_bar));
+        EXPECT_THROW(auto loc = sologrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
 }
 

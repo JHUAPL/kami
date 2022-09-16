@@ -24,12 +24,14 @@
  */
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/population.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 class TestAgent : public Agent {
@@ -94,8 +96,7 @@ TEST(Population, get_agent_by_id) {
     {
         Population population_foo;
         static_cast<void>(population_foo.add_agent(agent_foo));
-        auto agent_baz_opt = population_foo.get_agent_by_id(agent_bar->get_agent_id());
-        EXPECT_FALSE(agent_baz_opt);
+        EXPECT_THROW(auto agent_baz_opt = population_foo.get_agent_by_id(agent_bar->get_agent_id()), AgentNotFound);
     }
     {
         Population population_foo;

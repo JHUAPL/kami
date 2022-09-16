@@ -29,12 +29,14 @@
 #include <unordered_set>
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/multigrid2d.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 TEST(MultiGrid2D, DefaultConstructor) {
@@ -120,21 +122,21 @@ TEST(MultiGrid2D, delete_agent) {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_bar, coord3);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_bar, coord3), AgentNotFound);
     }
 }
 
@@ -196,7 +198,7 @@ TEST(MultiGrid2D, move_agent) {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord10);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord10), InvalidCoordinates);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -333,9 +335,8 @@ TEST(MultiGrid2D, get_neighborhood_VonNeumann) {
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
-        auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann),
+                     AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -596,15 +597,15 @@ TEST(MultiGrid2D, get_neighborhood_Moore) {
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
-        auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore),
+                     AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
+        auto tval = unordered_set < GridCoord2D > ({
+            { 9, 9 },
+            { 9, 1 },
             { 1, 1 },
             { 0, 1 },
             { 9, 0 },
@@ -753,8 +754,8 @@ TEST(MultiGrid2D, get_location_by_agent) {
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto loc1 = multigrid2d_foo.get_location_by_agent(agent_id_foo);
-        auto loc2 = multigrid2d_foo.get_location_by_agent(agent_id_bar);
+        EXPECT_THROW(auto loc1 = multigrid2d_foo.get_location_by_agent(agent_id_foo), AgentNotFound);
+        EXPECT_THROW(auto loc2 = multigrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -762,7 +763,7 @@ TEST(MultiGrid2D, get_location_by_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         auto local = multigrid2d_foo.get_location_by_agent(agent_id_foo);
         EXPECT_EQ(local, coord2);
-        auto loc = multigrid2d_foo.get_location_by_agent(agent_id_bar);
+        EXPECT_THROW(auto loc = multigrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
 }
 
