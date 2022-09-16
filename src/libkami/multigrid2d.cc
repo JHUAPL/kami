@@ -38,7 +38,7 @@ namespace kami {
 
     AgentID MultiGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
         if (!is_location_valid(coord))
-            throw error::InvalidCoordinates(fmt::format("Coordinates {} are invalid", coord.to_string()));
+            throw error::CoordinatesInvalid(fmt::format("Coordinates {} are invalid", coord.to_string()));
 
         _agent_index->insert(std::pair<AgentID, GridCoord2D>(agent_id, coord));
         _agent_grid->insert(std::pair<GridCoord2D, AgentID>(coord, agent_id));

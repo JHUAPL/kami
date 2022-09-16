@@ -64,7 +64,7 @@ namespace kami {
             case GridDistanceType::Euclidean:
                 return distance_euclidean(p);
             default:
-                throw error::InvalidOption("Unknown distance type given");
+                throw error::OptionInvalid("Unknown distance type given");
         }
     }
 
@@ -174,7 +174,7 @@ namespace kami {
                 directions = directions_moore;
                 break;
             default:
-                throw error::InvalidOption(
+                throw error::OptionInvalid(
                         fmt::format("Invalid neighborhood type {} given", (unsigned int) neighborhood_type));
         }
 

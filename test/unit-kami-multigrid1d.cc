@@ -197,7 +197,7 @@ TEST(MultiGrid1D, move_agent) {
         MultiGrid1D multigrid1d_foo(10, true);
 
         static_cast<void>(multigrid1d_foo.add_agent(agent_id_foo, coord2));
-        EXPECT_THROW(auto agent_id_baz = multigrid1d_foo.move_agent(agent_id_foo, coord10), InvalidCoordinates);
+        EXPECT_THROW(auto agent_id_baz = multigrid1d_foo.move_agent(agent_id_foo, coord10), CoordinatesInvalid);
     }
     {
         MultiGrid1D multigrid1d_foo(10, true);
