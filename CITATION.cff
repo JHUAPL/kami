@@ -20,6 +20,6 @@ keywords:
   - "agent-based modelling"
   - research
 identifiers:
-  - description: "This is the collection of archived snapshots of all versions of My Research Software"
+  - description: "This is the collection of archived snapshots of all versions of Kami"
     type: doi
     value: 10.5281/zenodo.6975259
