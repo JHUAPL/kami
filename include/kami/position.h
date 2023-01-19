@@ -33,14 +33,12 @@
 
 #include <kami/grid1d.h>
 #include <kami/grid2d.h>
-#include <kami/hexgrid.h>
 
 namespace kami {
 
     typedef std::variant<
             GridCoord1D,
-            GridCoord2D,
-            HexCoord
+            GridCoord2D
     > Position;
 
 }
