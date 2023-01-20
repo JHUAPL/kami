@@ -118,8 +118,7 @@ namespace kami {
          * @brief Find the distance between two points
          *
          * @details Find the distance between two points using the
-         * specified metric.  There are three options provided by
-         * the `GridDistanceType` class.
+         * specified metric.
          *
          * However, the coordinate class is not aware of the
          * properties of the `GridDomain` it is operating on.  Accordingly,
@@ -127,7 +126,6 @@ namespace kami {
          * and toroidal wrapping of the underlying `GridDomain`.
          *
          * @param p the point to measure the distance to
-         * @param distance_type specify the distance type
          *
          * @returns the distance as a `double`
          */
