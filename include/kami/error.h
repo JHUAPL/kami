@@ -12,38 +12,123 @@
 
 namespace kami::error {
 
-    class AgentNotFound : public std::logic_error {
+    /**
+     * @brief Agent was not found
+     */
+    class AgentNotFound
+            : public std::logic_error {
     public:
-        explicit AgentNotFound(const char *s) : std::logic_error(s) {};
-        explicit AgentNotFound(const std::string &s) : std::logic_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit AgentNotFound(const char* s)
+                :std::logic_error(s) {
+        };
+
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit AgentNotFound(const std::string& s)
+                :std::logic_error(s) {
+        };
     };
 
-    class LocationInvalid : public std::domain_error {
+    /**
+     * @brief Location specified is invalid
+     *
+     * @see `LocationUnavailable`
+     */
+    class LocationInvalid
+            : public std::domain_error {
     public:
-        explicit LocationInvalid(const char *s) : std::domain_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit LocationInvalid(const char* s)
+                :std::domain_error(s) {
+        };
 
-        explicit LocationInvalid(const std::string &s) : std::domain_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit LocationInvalid(const std::string& s)
+                :std::domain_error(s) {
+        };
     };
 
-    class LocationUnavailable : public std::domain_error {
+    /**
+     * @brief Location specified is unavailable
+     *
+     * @see `LocationInvalid`
+     */
+    class LocationUnavailable
+            : public std::domain_error {
     public:
-        explicit LocationUnavailable(const char *s) : std::domain_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit LocationUnavailable(const char* s)
+                :std::domain_error(s) {
+        };
 
-        explicit LocationUnavailable(const std::string &s) : std::domain_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit LocationUnavailable(const std::string& s)
+                :std::domain_error(s) {
+        };
     };
 
-    class OptionInvalid : public std::invalid_argument {
+    /**
+     * @brief The option given is not valid at this time
+     */
+    class OptionInvalid
+            : public std::invalid_argument {
     public:
-        explicit OptionInvalid(const char *s) : std::invalid_argument(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit OptionInvalid(const char* s)
+                :std::invalid_argument(s) {
+        };
 
-        explicit OptionInvalid(const std::string &s) : std::invalid_argument(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit OptionInvalid(const std::string& s)
+                :std::invalid_argument(s) {
+        };
     };
 
-    class ResourceNotAvailable : public std::logic_error {
+    /**
+     * @brief The resource specified is not available at this time
+     */
+    class ResourceNotAvailable
+            : public std::logic_error {
     public:
-        explicit ResourceNotAvailable(const char *s) : std::logic_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit ResourceNotAvailable(const char* s)
+                :std::logic_error(s) {
+        };
 
-        explicit ResourceNotAvailable(const std::string &s) : std::logic_error(s) {};
+        /**
+         * @brief Constructor
+         * @param s text description of the exception
+         */
+        explicit ResourceNotAvailable(const std::string& s)
+                :std::logic_error(s) {
+        };
     };
 
 }
