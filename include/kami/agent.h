@@ -125,7 +125,7 @@ namespace kami {
      * implement the `step()` function, to execute a single time step for each
      * agent.
      *
-     * @see `StagedAgent`
+     * @see `ReporterAgent`, `StagedAgent`
      */
     class LIBKAMI_EXPORT Agent {
     private:

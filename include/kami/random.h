@@ -73,10 +73,27 @@ namespace kami {
          * @returns returns vector of agents successfully stepped
          */
         std::unique_ptr<std::vector<AgentID>>
-        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+        step(
+                std::shared_ptr<Model> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) override;
 
+        /**
+         * @brief Execute a single time step for a `ReporterModel`
+         *
+         * @details This method will randomize the list of Agents provided
+         * then execute the `Agent::step()` method for every Agent listed.
+         *
+         * @param model a reference copy of the `ReporterModel`
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
+         */
         std::unique_ptr<std::vector<AgentID>>
-        step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+        step(
+                std::shared_ptr<ReporterModel> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) override;
 
         /**
          * @brief Set the RNG

@@ -40,6 +40,8 @@ namespace kami {
 
     /**
      * @brief An abstract for generic models
+     *
+     * @see `ReporterModel`
      */
     class LIBKAMI_EXPORT Model : public std::enable_shared_from_this<Model> {
 

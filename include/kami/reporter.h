@@ -45,7 +45,17 @@ namespace kami {
 
     class ReporterModel;
 
-    class LIBKAMI_EXPORT ReporterAgent : public Agent {
+    /**
+     * @brief A superclass for all reporting agents
+     *
+     * @details All reporting agents should subclass the `ReportingAgent` class. At a minimum,
+     * subclasses must implement the `step()` function, to execute a single time step for each
+     * agent.
+     *
+     * @see `Agent`, `StagedAgent`
+     */
+    class LIBKAMI_EXPORT ReporterAgent
+            : public Agent {
     public:
         /**
          * @brief Collect the current state of the agent
@@ -84,7 +94,13 @@ namespace kami {
         int _step_counter = 0;
     };
 
-    class LIBKAMI_EXPORT ReporterModel : public Model {
+    /**
+     * @brief An abstract for generic models with a reporting capability
+     *
+     * @see `Model`
+     */
+    class LIBKAMI_EXPORT ReporterModel
+            : public Model {
     public:
         /**
          * @brief Constructor
@@ -150,7 +166,12 @@ namespace kami {
         unsigned int _step_count{};
     };
 
-    class LIBKAMI_EXPORT Reporter : public std::enable_shared_from_this<Reporter> {
+    /**
+     * @brief A `Reporter` is a module that works with `ReporterAgent` and `ReporterModel`
+     * to collect information about the state of the model for later analysis
+     */
+    class LIBKAMI_EXPORT Reporter
+            : public std::enable_shared_from_this<Reporter> {
     public:
         /**
          * @brief Constructor

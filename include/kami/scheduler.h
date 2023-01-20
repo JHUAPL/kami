@@ -60,6 +60,18 @@ namespace kami {
          */
         virtual std::unique_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model) = 0;
 
+        /**
+         * @brief Execute a single time step for a `ReporterModel`
+         *
+         * @details This method will step through the list of Agents in the
+         * scheduler's internal queue and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the `ReporterModel`
+         *
+         * @returns returns vector of agents successfully stepped
+         */
         virtual std::unique_ptr<std::vector<AgentID>> step(std::shared_ptr<ReporterModel> model) = 0;
 
         /**
@@ -76,10 +88,29 @@ namespace kami {
          * @returns returns vector of agents successfully stepped
          */
         virtual std::unique_ptr<std::vector<AgentID>>
-        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) = 0;
+        step(
+                std::shared_ptr<Model> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) = 0;
 
+        /**
+         * @brief Execute a single time step for a `ReporterModel`
+         *
+         * @details This method will step through the list of Agents in the
+         * scheduler's internal queue and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the `ReporterModel`
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
+         */
         virtual std::unique_ptr<std::vector<AgentID>>
-        step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) = 0;
+        step(
+                std::shared_ptr<ReporterModel> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) = 0;
 
     protected:
         /**
