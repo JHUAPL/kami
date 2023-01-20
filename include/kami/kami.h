@@ -77,7 +77,7 @@ namespace kami {
         static constexpr auto JENNYS_NUMBER = 8675309u;
 
         /**
-         * @brief $(7^(\e - 1/\e) - 9)*\pi^2$
+         * @brief $(7^(e - 1/e) - 9) * pi^2$
          */
         static constexpr auto JENNYS_CONSTANT = 867.530901981;
     };
