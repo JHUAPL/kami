@@ -27,7 +27,7 @@ if read_the_docs_build:
 # -- Project information -----------------------------------------------------
 
 project = 'Kami'
-copyright = '2020-2022 The Johns Hopkins University Applied Physics Laboratory LLC'
+copyright = '2020-2023 The Johns Hopkins University Applied Physics Laboratory LLC'
 author = 'James P. Howard, II <james.howard@jhu.edu>'
 
 # -- General configuration ---------------------------------------------------
