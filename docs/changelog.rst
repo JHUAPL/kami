@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :support:`0` Added documentation for each example
 - :feature:`0` Readded step() to the Model interface
 - :feature:`0` Moved to exception-based error handling
 - :feature:`0` Added Bank Reserves model to demonstrate reporting
