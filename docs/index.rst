@@ -65,6 +65,7 @@ model.
     abm
     tutorial
     api/library_root
+    examples/index
     changelog
     todo
     license
