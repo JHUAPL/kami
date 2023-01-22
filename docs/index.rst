@@ -62,6 +62,7 @@ model.
     :maxdepth: 2
 
     installation
+    abm
     tutorial
     api/library_root
     changelog
