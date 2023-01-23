@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :release:`0.7.0 <2023.01.22>`
 - :support:`0` Added a minimal example and tutorial
 - :support:`0` Added documentation for each example
 - :feature:`0` Readded step() to the Model interface
