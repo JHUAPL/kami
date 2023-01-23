@@ -41,6 +41,41 @@ namespace kami {
      * @brief An abstract for generic models
      */
     class LIBKAMI_EXPORT Population {
+    public:
+        /**
+         * @brief Get a reference to an `Agent` by `AgentID`
+         *
+         * @param[in] agent_id the `AgentID` to search for.
+         *
+         * @return a reference to the desired `Agent` or nothing is not found
+         */
+        [[nodiscard]] std::shared_ptr<Agent> get_agent_by_id(AgentID agent_id) const;
+
+        /**
+         * @brief Add an Agent to the Population.
+         *
+         * @param agent The Agent to add.
+         *
+         * @returns the ID of the agent added
+         */
+        AgentID add_agent(const std::shared_ptr<Agent>& agent) noexcept;
+
+        /**
+         * @brief Remove an Agent from the Population.
+         *
+         * @param agent_id The AgentID of the agent to remove.
+         *
+         * @returns a shared pointer to the Agent deleted
+         */
+        std::shared_ptr<Agent> delete_agent(AgentID agent_id);
+
+        /**
+         * @brief Returns the agent list.
+         *
+         * @returns a `std::vector` of all the `AgentID`'s in the `Population`
+         */
+        [[nodiscard]] std::unique_ptr<std::vector<AgentID>> get_agent_list() const;
+
     protected:
         /**
          * @brief A mapping of `AgentID` to `Agent` pointers
@@ -51,41 +86,6 @@ namespace kami {
          * wish to manipulate this mapping directly.
          */
         std::map<kami::AgentID, std::shared_ptr<Agent>> _agent_map;
-
-    public:
-        /**
-         * @brief Get a reference to an `Agent` by `AgentID`
-         *
-         * @param[in] agent_id the `AgentID` to search for.
-         *
-         * @return a reference to the desired `Agent` or nothing is not found
-         */
-        [[nodiscard]] std::optional<std::shared_ptr<Agent>> get_agent_by_id(AgentID agent_id) const;
-
-        /**
-         * @brief Add an Agent to the Population.
-         *
-         * @param agent The Agent to add.
-         *
-         * @returns the ID of the agent added
-         */
-        AgentID add_agent(const std::shared_ptr<Agent>& agent);
-
-        /**
-         * @brief Remove an Agent from the Population.
-         *
-         * @param agent_id The AgentID of the agent to remove.
-         *
-         * @returns a shared pointer to the Agent deleted
-         */
-        std::optional<std::shared_ptr<Agent>> delete_agent(AgentID agent_id);
-
-        /**
-         * @brief Returns the agent list.
-         *
-         * @returns a `std::vector` of all the `AgentID`'s in the `Population`
-         */
-        [[nodiscard]] std::shared_ptr<std::vector<AgentID>> get_agent_list() const;
     };
 }  // namespace kami
 

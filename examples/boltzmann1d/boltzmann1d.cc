@@ -25,13 +25,11 @@
 
 #include "boltzmann1d.h"
 
-#include <exception>
 #include <list>
 #include <map>
 #include <memory>
 #include <optional>
 #include <random>
-#include <stdexcept>
 
 #include <CLI/CLI.hpp>
 
@@ -46,18 +44,26 @@
 #include <kami/random.h>
 
 std::shared_ptr<spdlog::logger> console = nullptr;
-std::shared_ptr<std::ranlux24> rng = nullptr;
+std::shared_ptr<std::mt19937> rng = nullptr;
 
-template <>
-struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
-    static auto format(kami::AgentID agent_id, format_context &ctx) {
+template<>
+struct fmt::formatter<kami::AgentID>
+        : fmt::formatter<std::string> {
+    static auto format(
+            kami::AgentID agent_id,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template<>
-struct fmt::formatter<kami::GridCoord1D> : fmt::formatter<std::string> {
-    static auto format(const kami::GridCoord1D &coord, format_context &ctx) {
+struct fmt::formatter<kami::GridCoord1D>
+        : fmt::formatter<std::string> {
+    static auto format(
+            const kami::GridCoord1D& coord,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
@@ -84,12 +90,12 @@ std::optional<kami::GridCoord1D> MoneyAgent1D::move_agent(std::shared_ptr<kami::
     auto domain = model->get_domain();
     if (!domain)
         throw (std::domain_error("model is missing domain"));
-    auto world = std::static_pointer_cast<kami::MultiGrid1D>(domain.value());
+    auto world = std::static_pointer_cast<kami::MultiGrid1D>(domain);
 
     auto move_list_opt = world->get_neighborhood(agent_id, false);
     if (!move_list_opt)
         return std::nullopt;
-    auto move_list = move_list_opt.value();
+    auto move_list = move_list_opt;
     std::uniform_int_distribution<int> dist(0, (int) move_list->size() - 1);
     auto new_location = *std::next(move_list->begin(), dist(*rng));
 
@@ -107,26 +113,26 @@ std::optional<kami::AgentID> MoneyAgent1D::give_money(std::shared_ptr<kami::Mode
     auto domain = model->get_domain();
     if (!domain)
         throw (std::domain_error("model is missing domain"));
-    auto world = std::static_pointer_cast<kami::MultiGrid1D>(domain.value());
+    auto world = std::static_pointer_cast<kami::MultiGrid1D>(domain);
 
     auto agents = model->get_population();
     if (!agents)
         throw (std::domain_error("model is missing population"));
-    auto population = std::static_pointer_cast<kami::Population>(agents.value());
+    auto population = std::static_pointer_cast<kami::Population>(agents);
 
     auto location = world->get_location_by_agent(agent_id);
-    auto cell_mates_opt = world->get_location_contents(location.value());
+    auto cell_mates_opt = world->get_location_contents(location);
 
     if (!cell_mates_opt)
         return std::nullopt;
 
-    auto cell_mates = cell_mates_opt.value();
+    auto cell_mates = cell_mates_opt;
     if (cell_mates->size() < 2)
         return std::nullopt;
 
     std::uniform_int_distribution<int> dist(0, (int) cell_mates->size() - 1);
     auto other_agent_id = *std::next(cell_mates->begin(), dist(*rng));
-    auto other_agent = std::static_pointer_cast<MoneyAgent1D>(population->get_agent_by_id(other_agent_id).value());
+    auto other_agent = std::static_pointer_cast<MoneyAgent1D>(population->get_agent_by_id(other_agent_id));
 
     console->trace("Agent {} giving unit of wealth to agent {}", agent_id, other_agent_id);
     other_agent->_agent_wealth += 1;
@@ -136,8 +142,12 @@ std::optional<kami::AgentID> MoneyAgent1D::give_money(std::shared_ptr<kami::Mode
     return other_agent_id;
 }
 
-BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents, unsigned int length_x, unsigned int new_seed) {
-    rng = std::make_shared<std::ranlux24>();
+BoltzmannWealthModel1D::BoltzmannWealthModel1D(
+        unsigned int number_agents,
+        unsigned int length_x,
+        unsigned int new_seed
+) {
+    rng = std::make_shared<std::mt19937>();
     rng->seed(new_seed);
 
     auto domain = std::make_shared<kami::MultiGrid1D>(length_x, true);
@@ -169,7 +179,13 @@ std::shared_ptr<kami::Model> BoltzmannWealthModel1D::step() {
     return shared_from_this();
 }
 
-int main(int argc, char **argv) {
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "EmptyDeclOrStmt"
+
+int main(
+        int argc,
+        char** argv
+) {
     std::string ident = "boltzmann1d";
     std::string log_level_option = "info";
     CLI::App app{ident};
@@ -177,7 +193,7 @@ int main(int argc, char **argv) {
 
     // This exercise is really stupid.
     auto levels_list = std::make_unique<std::list<std::string>>();
-    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+    for (auto& level_name : SPDLOG_LEVEL_NAMES)
         levels_list->push_back(std::string(level_name.data(), level_name.size()));
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
@@ -191,8 +207,9 @@ int main(int argc, char **argv) {
     console = spdlog::stdout_color_st(ident);
     console->set_level(spdlog::level::from_str(log_level_option));
     console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), log_level_option);
-    console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agent_count, x_size,
-                  max_steps);
+    console->info(
+            "Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agent_count, x_size,
+            max_steps);
 
     spdlog::stopwatch sw;
 
@@ -202,3 +219,5 @@ int main(int argc, char **argv) {
 
     console->info("Boltzmann Wealth Model simulation complete, requiring {} seconds", sw);
 }
+
+#pragma clang diagnostic pop

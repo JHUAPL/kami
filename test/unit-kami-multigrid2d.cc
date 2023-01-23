@@ -29,12 +29,14 @@
 #include <unordered_set>
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/multigrid2d.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 TEST(MultiGrid2D, DefaultConstructor) {
@@ -53,18 +55,15 @@ TEST(MultiGrid2D, add_agent) {
 
     {
         auto agent_id_baz = multigrid2d_foo.add_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         auto agent_id_baz = multigrid2d_foo.add_agent(agent_id_bar, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
     {
         auto agent_id_baz = multigrid2d_foo.add_agent(agent_id_bar, coord3);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
 }
 
@@ -77,8 +76,7 @@ TEST(MultiGrid2D, delete_agent) {
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -86,8 +84,7 @@ TEST(MultiGrid2D, delete_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -95,8 +92,7 @@ TEST(MultiGrid2D, delete_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_bar);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
 
     {
@@ -104,8 +100,7 @@ TEST(MultiGrid2D, delete_agent) {
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -113,8 +108,7 @@ TEST(MultiGrid2D, delete_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -122,31 +116,27 @@ TEST(MultiGrid2D, delete_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_bar, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3);
-        EXPECT_FALSE(agent_id_baz);
-    }
-    {
-        MultiGrid2D multigrid2d_foo(10, 10, true, true);
-
-        static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_bar, coord3);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
+    }
+    {
+        MultiGrid2D multigrid2d_foo(10, 10, true, true);
+
+        static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
+        static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.delete_agent(agent_id_bar, coord3), AgentNotFound);
     }
 }
 
@@ -202,15 +192,13 @@ TEST(MultiGrid2D, move_agent) {
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord7);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord10);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord10), LocationInvalid);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -218,8 +206,7 @@ TEST(MultiGrid2D, move_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
@@ -227,8 +214,7 @@ TEST(MultiGrid2D, move_agent) {
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_bar, coord2));
         auto agent_id_baz = multigrid2d_foo.move_agent(agent_id_foo, coord7);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
 }
 
@@ -239,206 +225,363 @@ TEST(MultiGrid2D, get_neighborhood_VonNeumann) {
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
-        auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann),
+                AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {9, 0},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 2},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 2},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
 }
 
@@ -449,254 +592,507 @@ TEST(MultiGrid2D, get_neighborhood_Moore) {
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 1},
-                                                {0, 1},
-                                                {9, 0},
-                                                {1, 9},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                1, 9
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 1},
-                                                {0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 0},
-                                                {1, 1},
-                                                {0, 1},
-                                                {0, 9},
-                                                {1, 9},
-                                                {9, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 9
+            },
+            {
+                1, 9
+            },
+            {
+                9, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 0},
-                                                {1, 1},
-                                                {0, 1},
-                                                {0, 9},
-                                                {1, 9},
-                                                {9, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 9
+            },
+            {
+                1, 9
+            },
+            {
+                9, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {1, 1},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {1, 1},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
-        auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore),
+                AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 1},
-                                                {0, 1},
-                                                {9, 0},
-                                                {1, 9},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                1, 9
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 1},
-                                                {0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 0},
-                                                {1, 1},
-                                                {0, 1},
-                                                {0, 9},
-                                                {1, 9},
-                                                {9, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 9
+            },
+            {
+                1, 9
+            },
+            {
+                9, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {2, 0},
-                                                {0, 1},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {1, 1},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, false, false);
         multigrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {2, 0},
-                                                {0, 1},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = multigrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
 }
 
@@ -707,21 +1103,23 @@ TEST(MultiGrid2D, get_location_by_agent) {
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
-        EXPECT_FALSE(multigrid2d_foo.get_location_by_agent(agent_id_foo));
-        EXPECT_FALSE(multigrid2d_foo.get_location_by_agent(agent_id_bar));
+        EXPECT_THROW(auto loc1 = multigrid2d_foo.get_location_by_agent(agent_id_foo), AgentNotFound);
+        EXPECT_THROW(auto loc2 = multigrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
     {
         MultiGrid2D multigrid2d_foo(10, 10, true, true);
 
         static_cast<void>(multigrid2d_foo.add_agent(agent_id_foo, coord2));
         auto local = multigrid2d_foo.get_location_by_agent(agent_id_foo);
-        EXPECT_TRUE(local);
         EXPECT_EQ(local, coord2);
-        EXPECT_FALSE(multigrid2d_foo.get_location_by_agent(agent_id_bar));
+        EXPECT_THROW(auto loc = multigrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

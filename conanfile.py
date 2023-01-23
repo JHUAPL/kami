@@ -3,7 +3,7 @@ from conans import ConanFile, CMake
 
 class KamiConan(ConanFile):
     name = "kami"
-    version = "0.6.0"
+    version = "0.7.0"
     license = "MIT"
     author = "James P. Howard, II <james.howard@jhu.edu>"
     url = "https://github.com/jhuapl/kami"
@@ -49,3 +49,4 @@ class KamiConan(ConanFile):
         self.requires("cli11/2.2.0")
         self.requires("neargye-semver/0.3.0")
         self.requires("gtest/cci.20210126")
+        self.requires("nlohmann_json/3.11.1")

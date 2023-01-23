@@ -3,6 +3,7 @@
 [![Documentation status](https://readthedocs.org/projects/kami/badge/?version=main)](https://kami.readthedocs.io/en/main/)
 [![Release status](https://img.shields.io/github/release/JHUAPL/kami.svg)](https://github.com/JHUAPL/kami/releases)
 ![License](https://img.shields.io/github/license/JHUAPL/kami)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.6975259-success.svg)](https://doi.org/10.5281/zenodo.6975259)
 
 # Kami is Agent-Based Modeling in Modern C++
 

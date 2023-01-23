@@ -10,25 +10,15 @@ project(${LIBRARY_NAME}
         VERSION ${VERSION_STRING}
         LANGUAGES CXX)
 
+file(GLOB LIBRARY_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cc")
+
 create_library(
         NAME ${LIBRARY_NAME}
         NAMESPACE ${LIBRARY_NAME}
-        SOURCES
-        agent.cc
-        domain.cc
-        grid1d.cc
-        grid2d.cc
-        model.cc
-        multigrid1d.cc
-        multigrid2d.cc
-        population.cc
-        random.cc
-        sequential.cc
-        sologrid1d.cc
-        sologrid2d.cc
-        staged.cc
+        SOURCES ${LIBRARY_SOURCES}
         PUBLIC_INCLUDE_PATHS "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>" "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/generated_headers>"
         PRIVATE_LINKED_TARGETS ${COVERAGE_TARGET}
+        PUBLIC_LINKED_TARGETS fmt
         EXPORT_FILE_PATH "${CMAKE_CURRENT_BINARY_DIR}/generated_headers/kami/KAMI_EXPORT.h"
 )
 

@@ -23,35 +23,65 @@
  * SOFTWARE.
  */
 
-#include <kami/agent.h>
-
 #include <iostream>
 #include <string>
 
+#include <kami/agent.h>
+
 namespace kami {
 
-    bool operator==(const AgentID &lhs, const AgentID &rhs) {
+    AgentID::AgentID()
+            :_id(_id_next++) {
+    }
+
+    std::string AgentID::to_string() const {
+        return std::to_string(_id);
+    }
+
+    bool operator==(
+            const AgentID& lhs,
+            const AgentID& rhs
+    ) {
         return lhs._id == rhs._id;
     }
 
-    bool operator!=(const AgentID &lhs, const AgentID &rhs) {
+    bool operator!=(
+            const AgentID& lhs,
+            const AgentID& rhs
+    ) {
         return !(lhs == rhs);
     }
 
-    bool operator<(const AgentID &lhs, const AgentID &rhs) {
+    bool operator<(
+            const AgentID& lhs,
+            const AgentID& rhs
+    ) {
         return lhs._id < rhs._id;
     }
 
-    std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs) {
+    std::ostream& operator<<(
+            std::ostream& lhs,
+            const AgentID& rhs
+    ) {
         return lhs << rhs.to_string();
     }
 
-    AgentID Agent::get_agent_id() const { return this->_agent_id; }
+    AgentID Agent::get_agent_id() const {
+        return this->_agent_id;
+    }
 
-    bool operator==(const Agent &lhs, const Agent &rhs) {
+    bool operator==(
+            const Agent& lhs,
+            const Agent& rhs
+    ) {
         return lhs._agent_id == rhs._agent_id;
     }
 
-    bool operator!=(const Agent &lhs, const Agent &rhs) { return !(lhs == rhs); }
+    bool operator!=(
+            const Agent& lhs,
+            const Agent& rhs
+    ) {
+        return !(lhs == rhs);
+    }
 
 }  // namespace kami

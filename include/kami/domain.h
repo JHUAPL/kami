@@ -82,7 +82,10 @@ namespace kami {
          * @param rhs is the `Coord` to output
          * @return the output stream for reuse
          */
-        friend std::ostream &operator<<(std::ostream &lhs, const Coord &rhs);
+        friend std::ostream& operator<<(
+                std::ostream& lhs,
+                const Coord& rhs
+        );
     };
 
 }  // namespace kami

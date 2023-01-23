@@ -29,12 +29,14 @@
 #include <unordered_set>
 
 #include <kami/agent.h>
+#include <kami/error.h>
 #include <kami/sologrid2d.h>
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
+using namespace kami::error;
 using namespace std;
 
 TEST(SoloGrid2D, DefaultConstructor) {
@@ -53,17 +55,14 @@ TEST(SoloGrid2D, add_agent) {
 
     {
         auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
-        auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_bar, coord2);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_bar, coord2), LocationUnavailable);
     }
     {
         auto agent_id_baz = sologrid2d_foo.add_agent(agent_id_bar, coord3);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_bar);
+        EXPECT_EQ(agent_id_baz, agent_id_bar);
     }
 }
 
@@ -76,74 +75,64 @@ TEST(SoloGrid2D, delete_agent) {
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar), AgentNotFound);
     }
-
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord2);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord2), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_foo, coord3), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord3);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.delete_agent(agent_id_bar, coord3), AgentNotFound);
     }
 }
 
@@ -184,7 +173,6 @@ TEST(SoloGrid2D, is_location_empty) {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
         EXPECT_FALSE(sologrid2d_foo.is_location_empty(coord2));
         EXPECT_TRUE(sologrid2d_foo.is_location_empty(coord3));
     }
@@ -192,40 +180,34 @@ TEST(SoloGrid2D, is_location_empty) {
 
 TEST(SoloGrid2D, move_agent) {
     const AgentID agent_id_foo, agent_id_bar;
-    const GridCoord2D coord2(2, 5), coord3(3, 7), coord7(7, 2), coord10(10, 5);
+    const GridCoord2D coord2(2, 5), coord7(7, 2), coord10(10, 5);
 
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
         auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord7);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord10);
-        EXPECT_FALSE(agent_id_baz);
+        EXPECT_THROW(auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord10), LocationInvalid);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
-        auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord2);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
-        static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2));
+        EXPECT_THROW(static_cast<void>(sologrid2d_foo.add_agent(agent_id_bar, coord2)), LocationUnavailable);
         auto agent_id_baz = sologrid2d_foo.move_agent(agent_id_foo, coord7);
-        EXPECT_TRUE(agent_id_baz);
-        EXPECT_EQ(agent_id_baz.value(), agent_id_foo);
+        EXPECT_EQ(agent_id_baz, agent_id_foo);
     }
 }
 
@@ -236,206 +218,347 @@ TEST(SoloGrid2D, get_neighborhood_VonNeumann) {
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
-        auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann),
+                AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {9, 0},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 2},
-                                                {2, 1},
-                                                {1, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1},
-                                                {9, 0},
-                                                {0, 9}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                0, 9
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 2},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{0, 1},
-                                                {1, 2},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                0, 1
+            },
+            {
+                1, 2
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::VonNeumann);
 
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
 }
 
@@ -446,279 +569,532 @@ TEST(SoloGrid2D, get_neighborhood_Moore) {
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 1},
-                                                {0, 1},
-                                                {9, 0},
-                                                {1, 9},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                1, 9
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
+        auto rval = sologrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::Moore);
+
+        EXPECT_EQ(tval, *rval);
+    }
+    {
+        SoloGrid2D sologrid2d_foo(10, 10, true, true);
+
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
+        auto rval = sologrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::Moore);
+
+        EXPECT_EQ(tval, *rval);
+    }
+    {
+        SoloGrid2D sologrid2d_foo(10, 10, false, false);
+
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
-        SoloGrid2D sologrid2d_foo(10, 10, true, true);
+        SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
-    }
-    {
-        SoloGrid2D sologrid2d_foo(10, 10, false, false);
-
-        auto tval = unordered_set<GridCoord2D>({{1, 1},
-                                                {0, 1},
-                                                {1, 0},
-                                                {0, 0}});
-        auto rval = sologrid2d_foo.get_neighborhood(coord0, true, GridNeighborhoodType::Moore);
-
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
-    }
-    {
-        SoloGrid2D sologrid2d_foo(10, 10, false, false);
-
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
-        auto rval = sologrid2d_foo.get_neighborhood(coord1, true, GridNeighborhoodType::Moore);
-
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 0},
-                                                {1, 1},
-                                                {0, 1},
-                                                {0, 9},
-                                                {1, 9},
-                                                {9, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 9
+            },
+            {
+                1, 9
+            },
+            {
+                9, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 0},
-                                                {1, 1},
-                                                {0, 1},
-                                                {0, 9},
-                                                {1, 9},
-                                                {9, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 9
+            },
+            {
+                1, 9
+            },
+            {
+                9, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {1, 1},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {1, 1},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(coord0, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
-        auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
-
-        EXPECT_FALSE(rval);
+        EXPECT_THROW(auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore),
+                AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 1},
-                                                {0, 1},
-                                                {9, 0},
-                                                {1, 9},
-                                                {0, 9},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                9, 0
+            },
+            {
+                1, 9
+            },
+            {
+                0, 9
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 1},
-                                                {0, 1},
-                                                {1, 0},
-                                                {0, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                1, 0
+            },
+            {
+                0, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0},
-                                                {2, 0},
-                                                {0, 1},
-                                                {1, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                1, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, true, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{9, 9},
-                                                {9, 1},
-                                                {1, 0},
-                                                {1, 1},
-                                                {0, 1},
-                                                {0, 9},
-                                                {1, 9},
-                                                {9, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                9, 9
+            },
+            {
+                9, 1
+            },
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            },
+            {
+                0, 9
+            },
+            {
+                1, 9
+            },
+            {
+                9, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {2, 0},
-                                                {0, 1},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set<GridCoord2D>({{1, 0},
-                                                {1, 1},
-                                                {0, 1}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                1, 0
+            },
+            {
+                1, 1
+            },
+            {
+                0, 1
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, false, false);
         sologrid2d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set<GridCoord2D>({{2, 2},
-                                                {2, 0},
-                                                {0, 1},
-                                                {0, 2},
-                                                {1, 2},
-                                                {0, 0},
-                                                {2, 1},
-                                                {1, 0}});
+        auto tval = unordered_set < GridCoord2D > ({
+            {
+                2, 2
+            },
+            {
+                2, 0
+            },
+            {
+                0, 1
+            },
+            {
+                0, 2
+            },
+            {
+                1, 2
+            },
+            {
+                0, 0
+            },
+            {
+                2, 1
+            },
+            {
+                1, 0
+            }
+        });
         auto rval = sologrid2d_foo.get_neighborhood(agent_id_foo, false, GridNeighborhoodType::Moore);
 
         EXPECT_TRUE(rval);
-        EXPECT_EQ(tval, *rval.value());
+        EXPECT_EQ(tval, *rval);
     }
 }
 
 TEST(SoloGrid2D, get_location_by_agent) {
     const AgentID agent_id_foo, agent_id_bar;
-    const GridCoord2D coord2(2, 5), coord3(3, 7);
+    const GridCoord2D coord2(2, 5);
 
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
-        EXPECT_FALSE(sologrid2d_foo.get_location_by_agent(agent_id_foo));
-        EXPECT_FALSE(sologrid2d_foo.get_location_by_agent(agent_id_bar));
+        EXPECT_THROW(auto loc1 = sologrid2d_foo.get_location_by_agent(agent_id_foo), AgentNotFound);
+        EXPECT_THROW(auto loc2 = sologrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
     {
         SoloGrid2D sologrid2d_foo(10, 10, true, true);
 
         static_cast<void>(sologrid2d_foo.add_agent(agent_id_foo, coord2));
         auto local = sologrid2d_foo.get_location_by_agent(agent_id_foo);
-        EXPECT_TRUE(local);
         EXPECT_EQ(local, coord2);
-        EXPECT_FALSE(sologrid2d_foo.get_location_by_agent(agent_id_bar));
+        EXPECT_THROW(auto loc = sologrid2d_foo.get_location_by_agent(agent_id_bar), AgentNotFound);
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

@@ -37,40 +37,47 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent
+        : public Agent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 public:
-    optional<shared_ptr<vector<AgentID>>> step() {
-        return _sched->step(shared_from_this());
+    shared_ptr<vector<AgentID>> retval;
+
+    shared_ptr<Model> step() override {
+        retval = _sched->step(shared_from_this());
+        return shared_from_this();
     }
 
-    optional<shared_ptr<vector<AgentID>>> step(shared_ptr<vector<AgentID>> agent_list) {
-        return _sched->step(shared_from_this(), move(agent_list));
+    shared_ptr<Model> step(unique_ptr<vector<AgentID>> agent_list) {
+        retval = _sched->step(shared_from_this(), std::move(agent_list));
+        return shared_from_this();
     }
 };
 
-class SequentialSchedulerTest : public ::testing::Test {
+class SequentialSchedulerTest
+        : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
 
     void SetUp() override {
         mod = make_shared<TestModel>();
-        auto popul_foo = make_shared<Population>();
+        auto pop_foo = make_shared<Population>();
         auto sched_foo = make_shared<SequentialScheduler>();
 
         // Domain is not required for this test
-        static_cast<void>(mod->set_population(popul_foo));
+        static_cast<void>(mod->set_population(pop_foo));
         static_cast<void>(mod->set_scheduler(sched_foo));
 
         for (auto i = 0; i < 10; i++) {
             auto agent_foo = make_shared<TestAgent>();
-            static_cast<void>(popul_foo->add_agent(agent_foo));
+            static_cast<void>(pop_foo->add_agent(agent_foo));
         }
     }
 };
@@ -85,36 +92,48 @@ TEST(SequentialScheduler, DefaultConstructor) {
 }
 
 TEST_F(SequentialSchedulerTest, step_interface1) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step();
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
+    mod->step(std::move(aval));
+
+    auto rval = mod->retval;
 
     EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
-    EXPECT_EQ(*rval.value(), *tval);
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
 }
 
 TEST_F(SequentialSchedulerTest, step_interface2) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step(tval);
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
+    mod->step(std::move(aval));
+
+    auto rval = mod->retval;
 
     EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
-    EXPECT_EQ(*rval.value(), *tval);
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
 }
 
 TEST_F(SequentialSchedulerTest, step_10000) {
-    auto tval = mod->get_population().value()->get_agent_list();
-
     // Do it a lot...
     for (auto i = 0; i < 10000; i++) {
-        auto rval = mod->step();
+        auto tval = mod->get_population()->get_agent_list();
+        auto aval = mod->get_population()->get_agent_list();
+        mod->step(std::move(aval));
+
+        auto rval = mod->retval;
+
         EXPECT_TRUE(rval);
-        EXPECT_EQ(rval.value()->size(), 10);
-        EXPECT_EQ(*rval.value(), *tval);
+        EXPECT_EQ(rval->size(), 10);
+        EXPECT_EQ(*rval, *tval);
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

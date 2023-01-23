@@ -23,14 +23,17 @@
  * SOFTWARE.
  */
 
-#include <kami/domain.h>
-
 #include <iostream>
 #include <string>
 
+#include <kami/domain.h>
+
 namespace kami {
 
-    std::ostream &operator<<(std::ostream &lhs, const Coord &rhs) {
+    std::ostream& operator<<(
+            std::ostream& lhs,
+            const Coord& rhs
+    ) {
         return lhs << rhs.to_string();
     }
 

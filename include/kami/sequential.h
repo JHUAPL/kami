@@ -30,7 +30,6 @@
 //! @endcond
 
 #include <memory>
-#include <optional>
 #include <vector>
 
 #include <kami/agent.h>
@@ -48,7 +47,8 @@ namespace kami {
      * That order is preserved between calls to `step()` but may be modified by
      * `addAgent()` or `deleteAgent()`.
      */
-    class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
+    class LIBKAMI_EXPORT SequentialScheduler
+            : public Scheduler {
     public:
         /**
          * @brief Execute a single time step.
@@ -62,7 +62,21 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model) override;
+        std::unique_ptr<std::vector<AgentID>> step(std::shared_ptr<Model> model) override;
+
+        /**
+         * @brief Execute a single time step for a `ReporterModel`
+         *
+         * @details This method will step through the list of Agents in the
+         * scheduler's internal queue and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the `ReporterModel`
+         *
+         * @returns returns vector of agents successfully stepped
+         */
+        std::unique_ptr<std::vector<AgentID>> step(std::shared_ptr<ReporterModel> model) override;
 
         /**
          * @brief Execute a single time step.
@@ -77,7 +91,30 @@ namespace kami {
          *
          * @returns returns vector of agents successfully stepped
          */
-        std::optional<std::shared_ptr<std::vector<AgentID>>> step(std::shared_ptr<Model> model, std::shared_ptr<std::vector<AgentID>> agent_list) override;
+        std::unique_ptr<std::vector<AgentID>>
+        step(
+                std::shared_ptr<Model> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) override;
+
+        /**
+         * @brief Execute a single time step for a `ReporterModel`
+         *
+         * @details This method will step through the list of Agents in the
+         * scheduler's internal queue and then execute the `Agent::step()`
+         * method for every Agent assigned to this scheduler in the order
+         * assigned.
+         *
+         * @param model a reference copy of the `ReporterModel`
+         * @param agent_list list of agents to execute the step
+         *
+         * @returns returns vector of agents successfully stepped
+         */
+        std::unique_ptr<std::vector<AgentID>>
+        step(
+                std::shared_ptr<ReporterModel> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) override;
     };
 
 }  // namespace kami

@@ -28,63 +28,72 @@
 #include <kami/agent.h>
 #include <kami/model.h>
 
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
 using namespace kami;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent
+        : public Agent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
+};
+
+class AgentTest
+        : public ::testing::Test {
+protected:
+    TestAgent agent_foo;
+    TestAgent agent_bar;
+    shared_ptr<TestModel> model_world = nullptr;
+
+    void SetUp() override {
+        model_world = make_shared<TestModel>();
+    }
 };
 
 TEST(Agent, DefaultConstructor) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
+    EXPECT_NO_THROW(
+            const TestAgent agent_baz;
+            const TestAgent agent_qux;
+    );
+}
 
+TEST_F(AgentTest, equivalance) {
     EXPECT_EQ(agent_foo, agent_foo);
     EXPECT_NE(agent_foo, agent_bar);
 }
 
-TEST(Agent, get_agent_id) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
-
+TEST_F(AgentTest, get_agent_id) {
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.get_agent_id());
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.get_agent_id());
 }
 
-TEST(Agent, step) {
-    TestAgent agent_foo;
-    TestAgent agent_bar;
-    auto model_world = make_shared<TestModel>();
-
+TEST_F(AgentTest, step) {
     EXPECT_EQ(agent_foo.get_agent_id(), agent_foo.step(model_world));
     EXPECT_NE(agent_bar.get_agent_id(), agent_foo.step(model_world));
 }
 
-TEST(Agent, Equality) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
-
+TEST_F(AgentTest, equality) {
     EXPECT_TRUE(agent_foo == agent_foo);
     EXPECT_TRUE(agent_bar == agent_bar);
 }
 
-TEST(Agent, Inequality) {
-    const TestAgent agent_foo;
-    const TestAgent agent_bar;
-
+TEST_F(AgentTest, inequality) {
     EXPECT_TRUE(agent_foo != agent_bar);
     EXPECT_FALSE(agent_bar != agent_bar);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

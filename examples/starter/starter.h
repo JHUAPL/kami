@@ -39,7 +39,8 @@
 /**
  * A starter agent for a starter model
  */
-class StarterAgent : public kami::Agent {
+class StarterAgent
+        : public kami::Agent {
 private:
     int _step_counter = 0;
 
@@ -65,7 +66,8 @@ public:
 /**
  * The one-dimensional Boltzmann wealth model
  */
-class StarterModel : public kami::Model {
+class StarterModel
+        : public kami::Model {
 private:
     unsigned int _step_count;
 
@@ -77,7 +79,10 @@ public:
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
      */
-    explicit StarterModel(unsigned int number_agents = 10, unsigned int new_seed = 42);
+    explicit StarterModel(
+            unsigned int number_agents = 10,
+            unsigned int new_seed = 42
+    );
 
     /**
      * Execute a single time-step for the model.

@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+#include <algorithm>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -37,7 +38,8 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public StagedAgent {
+class TestAgent
+        : public StagedAgent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
@@ -48,18 +50,24 @@ public:
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 public:
-    optional<shared_ptr<vector<AgentID>>> step() {
-        return _sched->step(shared_from_this());
+    shared_ptr<vector<AgentID>> retval;
+
+    shared_ptr<Model> step() override {
+        retval = _sched->step(shared_from_this());
+        return shared_from_this();
     }
 
-    optional<shared_ptr<vector<AgentID>>> step(shared_ptr<vector<AgentID>> agent_list) {
-        return _sched->step(shared_from_this(), move(agent_list));
+    shared_ptr<Model> step(unique_ptr<vector<AgentID>> agent_list) {
+        retval = _sched->step(shared_from_this(), std::move(agent_list));
+        return shared_from_this();
     }
 };
 
-class StagedSchedulerTest : public ::testing::Test {
+class StagedSchedulerTest
+        : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
 
@@ -89,36 +97,45 @@ TEST(StagedScheduler, DefaultConstructor) {
 }
 
 TEST_F(StagedSchedulerTest, step_interface1) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step();
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
+    mod->step(std::move(aval));
 
-    EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
-    EXPECT_EQ(*rval.value(), *tval);
+    auto rval = mod->retval;
+
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
 }
 
 TEST_F(StagedSchedulerTest, step_interface2) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step(tval);
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
+    mod->step(std::move(aval));
 
-    EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
-    EXPECT_EQ(*rval.value(), *tval);
+    auto rval = mod->retval;
+
+    EXPECT_EQ(rval->size(), 10);
+    EXPECT_EQ(*rval, *tval);
 }
 
 TEST_F(StagedSchedulerTest, step_10000) {
-    auto tval = mod->get_population().value()->get_agent_list();
-
     // Do it a lot...
     for (auto i = 0; i < 10000; i++) {
-        auto rval = mod->step();
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(rval.value()->size(), 10);
-        EXPECT_EQ(*rval.value(), *tval);
+        auto tval = mod->get_population()->get_agent_list();
+        auto aval = mod->get_population()->get_agent_list();
+        mod->step(std::move(aval));
+
+        auto rval = mod->retval;
+
+        EXPECT_EQ(rval->size(), 10);
+        EXPECT_EQ(*rval, *tval);
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

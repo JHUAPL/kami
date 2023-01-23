@@ -83,7 +83,17 @@ namespace kami {
          * "taxicab distance," "rectilinear distance," or many other [formal
          * names](https://en.wikipedia.org/wiki/Taxicab_geometry).
          */
-        Manhattan
+        Manhattan,
+
+        /**
+         * @brief Chebyshev distance.
+         *
+         * @details The Chebyshev distance, also called the "chessboard" distance
+         * is the number of single point jumps necessary to move from one point to
+         * the next.  This can be likened to a king on a chessboard and the number
+         * of moves necessary to move from a given point to any other given point.
+         */
+        Chebyshev
     };
 
     /**
@@ -93,14 +103,38 @@ namespace kami {
      * rectilinear grid where the cells are equal size and laid out in an ordered
      * fashion.
      */
-    class LIBKAMI_EXPORT GridDomain : public Domain {};
+    class LIBKAMI_EXPORT GridDomain
+            : public Domain {
+    };
 
     /**
      * @brief An abstract for gridded coordinates.
      *
      * @details All gridded coordinates are expected to subclass `GridCoord`.
      */
-    class LIBKAMI_EXPORT GridCoord : public Coord {};
+    class LIBKAMI_EXPORT GridCoord
+            : public Coord {
+
+    public:
+
+        /**
+         * @brief Find the distance between two points
+         *
+         * @details Find the distance between two points using the
+         * specified metric.
+         *
+         * However, the coordinate class is not aware of the
+         * properties of the `GridDomain` it is operating on.  Accordingly,
+         * if the direct path is measured, without accounting for
+         * and toroidal wrapping of the underlying `GridDomain`.
+         *
+         * @param p the point to measure the distance to
+         *
+         * @returns the distance as a `double`
+         */
+        virtual double distance(std::shared_ptr<Coord>& p) const = 0;
+
+    };
 
 }  // namespace kami
 

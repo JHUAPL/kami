@@ -30,7 +30,6 @@
 //! @endcond
 
 #include <memory>
-#include <optional>
 
 #include <kami/domain.h>
 #include <kami/kami.h>
@@ -41,8 +40,11 @@ namespace kami {
 
     /**
      * @brief An abstract for generic models
+     *
+     * @see `ReporterModel`
      */
-    class LIBKAMI_EXPORT Model : public std::enable_shared_from_this<Model> {
+    class LIBKAMI_EXPORT Model
+            : public std::enable_shared_from_this<Model> {
 
     public:
         /**
@@ -50,7 +52,7 @@ namespace kami {
          *
          * @returns a shared pointer to the `Domain`
          */
-        std::optional<std::shared_ptr<Domain>> get_domain();
+        std::shared_ptr<Domain> get_domain();
 
         /**
          * @brief Add a `Domain` to this scheduler
@@ -67,7 +69,7 @@ namespace kami {
          *
          * @returns a shared pointer to the `Population`
          */
-        std::optional<std::shared_ptr<Population>> get_population();
+        std::shared_ptr<Population> get_population();
 
         /**
          * @brief Add a `Model` to this scheduler
@@ -84,7 +86,7 @@ namespace kami {
          *
          * @returns a shared pointer to the `Scheduler`
          */
-        std::optional<std::shared_ptr<Scheduler>> get_scheduler();
+        std::shared_ptr<Scheduler> get_scheduler();
 
         /**
          * @brief Add a `Model` to this scheduler
@@ -95,6 +97,16 @@ namespace kami {
          * @returns a shared pointer to the `Scheduler`
          */
         std::shared_ptr<Scheduler> set_scheduler(std::shared_ptr<Scheduler> scheduler);
+
+        /**
+         * @brief Execute a single time step of the model
+         *
+         * @details This method will collect all the `Agent`s in the `Population` associated
+         * with model and pass them to the associated `Scheduler` for stepping.
+         *
+         * @returns a shared pointer to the model instance
+         */
+        virtual std::shared_ptr<Model> step();
 
     protected:
         /**

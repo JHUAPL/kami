@@ -27,7 +27,7 @@ if read_the_docs_build:
 # -- Project information -----------------------------------------------------
 
 project = 'Kami'
-copyright = '2020-2022 The Johns Hopkins University Applied Physics Laboratory LLC'
+copyright = '2020-2023 The Johns Hopkins University Applied Physics Laboratory LLC'
 author = 'James P. Howard, II <james.howard@jhu.edu>'
 
 # -- General configuration ---------------------------------------------------
@@ -94,11 +94,11 @@ highlight_language = 'cpp'
 # The short X.Y version.
 github_ref = os.getenv("GITHUB_REF", "")
 if github_ref == "":
-    git_ref = "master"
+    git_ref = "main"
 else:
     match = re.match(r"refs/(heads|tags|pull)/(?P<ref>.+)", github_ref)
     if not match:
-        git_ref = "master"
+        git_ref = "main"
     else:
         git_ref = match.group("ref")
 

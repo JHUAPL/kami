@@ -30,48 +30,43 @@
 
 using namespace kami;
 
-TEST(AgentID, DefaultConstructor) {
-    const AgentID agent_id_foo;
-    const AgentID agent_id_bar;
+class AgentIDTest
+        : public ::testing::Test {
+protected:
+    AgentID agent_id_foo;
+    AgentID agent_id_bar;
+};
 
+TEST_F(AgentIDTest, DefaultConstructor) {
     EXPECT_EQ(agent_id_foo, agent_id_foo);
     EXPECT_NE(agent_id_foo, agent_id_bar);
 }
 
-TEST(AgentID, to_string) {
-    const AgentID agent_id_foo;
-    const AgentID agent_id_bar;
-
+TEST_F(AgentIDTest, to_string) {
     EXPECT_THAT(agent_id_foo.to_string(), testing::MatchesRegex("[0-9]+"));
     EXPECT_THAT(agent_id_bar.to_string(), testing::MatchesRegex("[0-9]+"));
 }
 
-TEST(AgentID, Equality) {
-    const AgentID agent_id_foo;
-    const AgentID agent_id_bar;
-
+TEST_F(AgentIDTest, equality) {
     EXPECT_TRUE(agent_id_foo == agent_id_foo);
     EXPECT_TRUE(agent_id_bar == agent_id_bar);
     EXPECT_FALSE(agent_id_foo == agent_id_bar);
 }
 
-TEST(AgentID, Inequality) {
-    const AgentID agent_id_foo;
-    const AgentID agent_id_bar;
-
+TEST_F(AgentIDTest, inequality) {
     EXPECT_TRUE(agent_id_foo != agent_id_bar);
     EXPECT_FALSE(agent_id_bar != agent_id_bar);
 }
 
-TEST(AgentID, Ordering) {
-    const AgentID agent_id_foo;
-    const AgentID agent_id_bar;
-
+TEST_F(AgentIDTest, ordering) {
     EXPECT_TRUE(agent_id_foo < agent_id_bar);
     EXPECT_FALSE(agent_id_bar < agent_id_foo);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

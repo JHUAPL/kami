@@ -39,32 +39,39 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent
+        : public Agent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 public:
-    optional<shared_ptr<vector<AgentID>>> step() {
-        return _sched->step(shared_from_this());
+    shared_ptr<vector<AgentID>> retval;
+
+    shared_ptr<Model> step() override {
+        retval = _sched->step(shared_from_this());
+        return shared_from_this();
     }
 
-    optional<shared_ptr<vector<AgentID>>> step(shared_ptr<vector<AgentID>> agent_list) {
-        return _sched->step(shared_from_this(), move(agent_list));
+    shared_ptr<Model> step(unique_ptr<vector<AgentID>> agent_list) {
+        retval = _sched->step(shared_from_this(), std::move(agent_list));
+        return shared_from_this();
     }
 };
 
-class RandomSchedulerTest : public ::testing::Test {
+class RandomSchedulerTest
+        : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
-    shared_ptr<ranlux24> rng = nullptr;
+    shared_ptr<mt19937> rng = nullptr;
 
     void SetUp() override {
         mod = make_shared<TestModel>();
-        rng = make_shared<ranlux24>();
+        rng = make_shared<mt19937>();
         auto popul_foo = make_shared<Population>();
         auto sched_foo = make_shared<RandomScheduler>(rng);
 
@@ -89,64 +96,75 @@ TEST(RandomScheduler, DefaultConstructor) {
 }
 
 TEST_F(RandomSchedulerTest, step_interface1) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step();
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
+    mod->step(std::move(aval));
 
-    EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
+    auto rval = mod->retval;
+
+    EXPECT_EQ(rval->size(), 10);
 
     // Sort both return values and just make sure all of them all the same...
     // We cannot test permutation since, well, you know...
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-    set<AgentID> rval_set = set(rval.value()->begin(), rval.value()->end());
+    set < AgentID > tval_set = set(tval->begin(), tval->end());
+    set < AgentID > rval_set = set(rval->begin(), rval->end());
     EXPECT_EQ(tval_set, rval_set);
 }
 
 TEST_F(RandomSchedulerTest, step_interface2) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    auto rval = mod->step(tval);
+    auto tval = mod->get_population()->get_agent_list();
+    auto aval = mod->get_population()->get_agent_list();
+    mod->step(std::move(aval));
+
+    auto rval = mod->retval;
 
     EXPECT_TRUE(rval);
-    EXPECT_EQ(rval.value()->size(), 10);
+    EXPECT_EQ(rval->size(), 10);
 
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-    set<AgentID> rval_set = set(rval.value()->begin(), rval.value()->end());
+    set < AgentID > tval_set = set(tval->begin(), tval->end());
+    set < AgentID > rval_set = set(rval->begin(), rval->end());
     EXPECT_EQ(tval_set, rval_set);
 }
 
 TEST_F(RandomSchedulerTest, step_10000) {
-    auto tval = mod->get_population().value()->get_agent_list();
-    set<AgentID> tval_set = set(tval->begin(), tval->end());
-
     // Do it a lot...
     for (auto i = 0; i < 10000; i++) {
-        auto rval = mod->step();
-        EXPECT_TRUE(rval);
-        EXPECT_EQ(rval.value()->size(), 10);
+        auto tval = mod->get_population()->get_agent_list();
+        auto aval = mod->get_population()->get_agent_list();
+        mod->step(std::move(aval));
 
-        set<AgentID> rval_set = set(rval.value()->begin(), rval.value()->end());
+        auto rval = mod->retval;
+
+        EXPECT_TRUE(rval);
+        EXPECT_EQ(rval->size(), 10);
+
+        set < AgentID > tval_set = set(tval->begin(), tval->end());
+        set < AgentID > rval_set = set(rval->begin(), rval->end());
         EXPECT_EQ(tval_set, rval_set);
     }
 }
 
 TEST_F(RandomSchedulerTest, get_rng) {
-    auto rval = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+    auto rval = static_pointer_cast<RandomScheduler>(mod->get_scheduler())->get_rng();
 
     EXPECT_EQ(rng, rval);
 }
 
 TEST_F(RandomSchedulerTest, set_rng) {
-    auto new_rng = make_shared<ranlux24>();
-    auto rval1 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+    auto new_rng = make_shared<mt19937>();
+    auto rval1 = static_pointer_cast<RandomScheduler>(mod->get_scheduler())->get_rng();
 
-    static_cast<void>(static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->set_rng(new_rng));
-    auto rval2 = static_pointer_cast<RandomScheduler>(mod->get_scheduler().value())->get_rng();
+    static_cast<void>(static_pointer_cast<RandomScheduler>(mod->get_scheduler())->set_rng(new_rng));
+    auto rval2 = static_pointer_cast<RandomScheduler>(mod->get_scheduler())->get_rng();
 
     EXPECT_EQ(new_rng, rval2);
     EXPECT_NE(new_rng, rval1);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

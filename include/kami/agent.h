@@ -33,7 +33,6 @@
 #include <memory>
 #include <string>
 
-#include <kami/kami.h>
 #include <kami/model.h>
 
 namespace kami {
@@ -65,14 +64,14 @@ namespace kami {
         /**
          * @brief Constructs a new unique identifier.
          */
-        AgentID() : _id(_id_next++) {};
+        AgentID();
 
         /**
          * @brief Convert the identifier to a human-readable string.
          *
          * @return a human-readable form of the `AgentID` as `std::string`.
          */
-        [[nodiscard]] std::string to_string() const { return std::to_string(_id); }
+        [[nodiscard]] std::string to_string() const;
 
         /**
          * @brief Test if two `AgentID` instances are equal.
@@ -81,7 +80,10 @@ namespace kami {
          * @param rhs is the right-hand side of the equality test.
          * @return true is they are equal and false if not.
          */
-        friend bool operator==(const AgentID &lhs, const AgentID &rhs);
+        friend bool operator==(
+                const AgentID& lhs,
+                const AgentID& rhs
+        );
 
         /**
          * @brief Test if two `AgentID` instances are not equal.
@@ -90,7 +92,10 @@ namespace kami {
          * @param rhs is the right-hand side of the equality test.
          * @return true is they are not equal and false if they are.
          */
-        friend bool operator!=(const AgentID &lhs, const AgentID &rhs);
+        friend bool operator!=(
+                const AgentID& lhs,
+                const AgentID& rhs
+        );
 
         /**
          * @brief Test if one AgentID is less than another.
@@ -104,7 +109,10 @@ namespace kami {
          * @return true if `lhs` is "less than" `rhs` as determined by the
          * underlying implementation of the `AgentID`.
          */
-        friend bool operator<(const AgentID &lhs, const AgentID &rhs);
+        friend bool operator<(
+                const AgentID& lhs,
+                const AgentID& rhs
+        );
 
         /**
          * @brief Output an AgentID to the specified output stream
@@ -116,7 +124,10 @@ namespace kami {
          * @param rhs is the `AgentID` to output
          * @return the output stream for reuse
          */
-        friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
+        friend std::ostream& operator<<(
+                std::ostream& lhs,
+                const AgentID& rhs
+        );
     };
 
     /**
@@ -126,7 +137,7 @@ namespace kami {
      * implement the `step()` function, to execute a single time step for each
      * agent.
      *
-     * @see `StagedAgent`
+     * @see `ReporterAgent`, `StagedAgent`
      */
     class LIBKAMI_EXPORT Agent {
     private:
@@ -147,6 +158,8 @@ namespace kami {
          * agent should perform as part of its time step should be in this function.
          *
          * @param model a reference copy of the model
+         *
+         * @returns a copy of the AgentID
          */
         virtual AgentID step(std::shared_ptr<Model> model) = 0;
 
@@ -164,7 +177,10 @@ namespace kami {
          * Subclasses of Agent may chose to extend this operator to tighten
          * the restrictions on the comparison.
          */
-        friend bool operator==(const Agent &lhs, const Agent &rhs);
+        friend bool operator==(
+                const Agent& lhs,
+                const Agent& rhs
+        );
 
         /**
          * @brief Compare if two `Agent`s are not the same `Agent`.
@@ -180,7 +196,10 @@ namespace kami {
          * Subclasses of `Agent` may chose to extend this operator to tighten
          * the restrictions on the comparison.
          */
-        friend bool operator!=(const Agent &lhs, const Agent &rhs);
+        friend bool operator!=(
+                const Agent& lhs,
+                const Agent& rhs
+        );
     };
 
     /**
@@ -195,7 +214,8 @@ namespace kami {
      *
      * `StagedAgents` must implement both the `step()` and `advance()` functions.
      */
-    class LIBKAMI_EXPORT StagedAgent : public Agent {
+    class LIBKAMI_EXPORT StagedAgent
+            : public Agent {
     public:
         /**
          * @brief Post-step advance the agent
