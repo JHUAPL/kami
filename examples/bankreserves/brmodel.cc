@@ -37,8 +37,13 @@
 #include <kami/random.h>
 #include <kami/reporter.h>
 
-BankReservesModel::BankReservesModel(unsigned int agent_count, unsigned int x_size, unsigned int y_size,
-                                     unsigned int initial_seed, unsigned int max_initial_wealth) {
+BankReservesModel::BankReservesModel(
+        unsigned int agent_count,
+        unsigned int x_size,
+        unsigned int y_size,
+        unsigned int initial_seed,
+        unsigned int max_initial_wealth
+) {
     rng = std::make_shared<std::mt19937>();
     rng->seed(initial_seed);
 

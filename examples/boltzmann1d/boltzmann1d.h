@@ -44,13 +44,16 @@
 /**
  * A sample agent for a one-dimensional Boltzmann wealth model
  */
-class MoneyAgent1D : public kami::Agent {
+class MoneyAgent1D
+        : public kami::Agent {
 
 public:
     /**
      * Create the agent
      */
-    MoneyAgent1D() : _step_counter(0), _agent_wealth(1) {}
+    MoneyAgent1D()
+            :_step_counter(0), _agent_wealth(1) {
+    }
 
     /**
      * Deconstruct the agent
@@ -81,7 +84,8 @@ private:
 /**
  * The one-dimensional Boltzmann wealth model
  */
-class BoltzmannWealthModel1D : public kami::Model {
+class BoltzmannWealthModel1D
+        : public kami::Model {
 
 public:
     /**
@@ -91,7 +95,11 @@ public:
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
      */
-    explicit BoltzmannWealthModel1D(unsigned int number_agents = 10, unsigned int length_x = 10, unsigned int new_seed = 42);
+    explicit BoltzmannWealthModel1D(
+            unsigned int number_agents = 10,
+            unsigned int length_x = 10,
+            unsigned int new_seed = 42
+    );
 
     /**
      * Execute a single time-step for the model.

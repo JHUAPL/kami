@@ -53,7 +53,10 @@ std::shared_ptr<std::mt19937> rng = nullptr;
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EmptyDeclOrStmt"
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     std::string ident = "bankreserves";
     std::string log_level_option = "info";
     std::string output_file_name = ident + ".json";
@@ -68,7 +71,7 @@ int main(int argc, char **argv) {
 
     // This exercise is really stupid.
     auto levels_list = std::make_unique<std::list<std::string>>();
-    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+    for (auto& level_name : SPDLOG_LEVEL_NAMES)
         levels_list->push_back(std::string(level_name.data(), level_name.size()));
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);

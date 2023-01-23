@@ -46,16 +46,24 @@
 std::shared_ptr<spdlog::logger> console = nullptr;
 std::shared_ptr<std::mt19937> rng = nullptr;
 
-template <>
-struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
-    static auto format(kami::AgentID agent_id, format_context &ctx) {
+template<>
+struct fmt::formatter<kami::AgentID>
+        : fmt::formatter<std::string> {
+    static auto format(
+            kami::AgentID agent_id,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template<>
-struct fmt::formatter<kami::GridCoord2D> : fmt::formatter<std::string> {
-    static auto format(const kami::GridCoord2D &coord, format_context &ctx) {
+struct fmt::formatter<kami::GridCoord2D>
+        : fmt::formatter<std::string> {
+    static auto format(
+            const kami::GridCoord2D& coord,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
@@ -75,7 +83,7 @@ kami::AgentID MoneyAgent2D::step(std::shared_ptr<kami::Model> model) {
     return this->get_agent_id();
 }
 
-std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(const std::shared_ptr<kami::Model> &model) {
+std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(const std::shared_ptr<kami::Model>& model) {
     console->trace("Entering move_agent");
     auto agent_id = get_agent_id();
 
@@ -98,7 +106,7 @@ std::optional<kami::GridCoord2D> MoneyAgent2D::move_agent(const std::shared_ptr<
     return new_location;
 }
 
-std::optional<kami::AgentID> MoneyAgent2D::give_money(const std::shared_ptr<kami::Model> &model) {
+std::optional<kami::AgentID> MoneyAgent2D::give_money(const std::shared_ptr<kami::Model>& model) {
     console->trace("Entering give_money");
     auto agent_id = get_agent_id();
 
@@ -134,7 +142,12 @@ std::optional<kami::AgentID> MoneyAgent2D::give_money(const std::shared_ptr<kami
     return other_agent_id;
 }
 
-BoltzmannWealthModel2D::BoltzmannWealthModel2D(unsigned int number_agents, unsigned int length_x, unsigned int length_y, unsigned int new_seed) {
+BoltzmannWealthModel2D::BoltzmannWealthModel2D(
+        unsigned int number_agents,
+        unsigned int length_x,
+        unsigned int length_y,
+        unsigned int new_seed
+) {
     rng = std::make_shared<std::mt19937>();
     rng->seed(new_seed);
 
@@ -171,7 +184,10 @@ std::shared_ptr<kami::Model> BoltzmannWealthModel2D::step() {
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EmptyDeclOrStmt"
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     std::string ident = "boltzmann2d";
     std::string log_level_option = "info";
     CLI::App app{ident};
@@ -179,7 +195,7 @@ int main(int argc, char **argv) {
 
     // This exercise is really stupid.
     auto levels_list = std::make_unique<std::list<std::string>>();
-    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+    for (auto& level_name : SPDLOG_LEVEL_NAMES)
         levels_list->push_back(std::string(level_name.data(), level_name.size()));
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
@@ -194,8 +210,9 @@ int main(int argc, char **argv) {
     console = spdlog::stdout_color_st(ident);
     console->set_level(spdlog::level::from_str(log_level_option));
     console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), log_level_option);
-    console->info("Starting Boltzmann Wealth Model with {} agents on a {}x{}-unit grid for {} steps", agent_count,
-                  x_size, y_size, max_steps);
+    console->info(
+            "Starting Boltzmann Wealth Model with {} agents on a {}x{}-unit grid for {} steps", agent_count,
+            x_size, y_size, max_steps);
 
     spdlog::stopwatch sw;
 

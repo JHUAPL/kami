@@ -47,7 +47,7 @@ kami::AgentID PersonAgent::step(std::shared_ptr<kami::ReporterModel> model) {
     return get_agent_id();
 }
 
-std::optional<kami::GridCoord2D> PersonAgent::move_agent(std::shared_ptr<kami::ReporterModel> &model) {
+std::optional<kami::GridCoord2D> PersonAgent::move_agent(std::shared_ptr<kami::ReporterModel>& model) {
     console->trace("move_agent() called for agent {}", get_agent_id());
     auto agent_id = get_agent_id();
 
@@ -64,7 +64,7 @@ std::optional<kami::GridCoord2D> PersonAgent::move_agent(std::shared_ptr<kami::R
     return new_location;
 }
 
-std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::ReporterModel> &model) {
+std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::ReporterModel>& model) {
     console->trace("do_business() called for agent {}", get_agent_id());
     auto agent_id = get_agent_id();
 
@@ -110,9 +110,10 @@ std::optional<kami::AgentID> PersonAgent::do_business(std::shared_ptr<kami::Repo
     return customer_id;
 }
 
-std::optional<int> PersonAgent::balance_books(std::shared_ptr<kami::ReporterModel> &model) {
-    console->debug("balance_books() called for agent {} with wallet {}, savings {}, loans {}", get_agent_id(), _wallet,
-                   _savings, _loans);
+std::optional<int> PersonAgent::balance_books(std::shared_ptr<kami::ReporterModel>& model) {
+    console->debug(
+            "balance_books() called for agent {} with wallet {}, savings {}, loans {}", get_agent_id(), _wallet,
+            _savings, _loans);
 
     if (_wallet < 0) {
         if (_savings >= -_wallet) {

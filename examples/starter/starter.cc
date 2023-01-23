@@ -45,9 +45,13 @@
 std::shared_ptr<spdlog::logger> console = nullptr;
 std::shared_ptr<std::mt19937> rng = nullptr;
 
-template <>
-struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
-    static auto format(kami::AgentID agent_id, format_context &ctx) {
+template<>
+struct fmt::formatter<kami::AgentID>
+        : fmt::formatter<std::string> {
+    static auto format(
+            kami::AgentID agent_id,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
@@ -65,7 +69,10 @@ kami::AgentID StarterAgent::step(std::shared_ptr<kami::Model> model) {
     return this->get_agent_id();
 }
 
-StarterModel::StarterModel(unsigned int number_agents, unsigned int new_seed) {
+StarterModel::StarterModel(
+        unsigned int number_agents,
+        unsigned int new_seed
+) {
     rng = std::make_shared<std::mt19937>();
     rng->seed(new_seed);
 
@@ -93,7 +100,10 @@ std::shared_ptr<kami::Model> StarterModel::step() {
     return shared_from_this();
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     std::string ident = "starter";
     std::string log_level_option = "info";
     CLI::App app{ident};
@@ -101,7 +111,7 @@ int main(int argc, char **argv) {
 
     // This exercise is really stupid.
     auto levels_list = std::make_unique<std::list<std::string>>();
-    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+    for (auto& level_name : SPDLOG_LEVEL_NAMES)
         levels_list->push_back(std::string(level_name.data(), level_name.size()));
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);

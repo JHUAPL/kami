@@ -46,16 +46,24 @@
 std::shared_ptr<spdlog::logger> console = nullptr;
 std::shared_ptr<std::mt19937> rng = nullptr;
 
-template <>
-struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
-    static auto format(kami::AgentID agent_id, format_context &ctx) {
+template<>
+struct fmt::formatter<kami::AgentID>
+        : fmt::formatter<std::string> {
+    static auto format(
+            kami::AgentID agent_id,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template<>
-struct fmt::formatter<kami::GridCoord1D> : fmt::formatter<std::string> {
-    static auto format(const kami::GridCoord1D &coord, format_context &ctx) {
+struct fmt::formatter<kami::GridCoord1D>
+        : fmt::formatter<std::string> {
+    static auto format(
+            const kami::GridCoord1D& coord,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
@@ -134,7 +142,11 @@ std::optional<kami::AgentID> MoneyAgent1D::give_money(std::shared_ptr<kami::Mode
     return other_agent_id;
 }
 
-BoltzmannWealthModel1D::BoltzmannWealthModel1D(unsigned int number_agents, unsigned int length_x, unsigned int new_seed) {
+BoltzmannWealthModel1D::BoltzmannWealthModel1D(
+        unsigned int number_agents,
+        unsigned int length_x,
+        unsigned int new_seed
+) {
     rng = std::make_shared<std::mt19937>();
     rng->seed(new_seed);
 
@@ -170,7 +182,10 @@ std::shared_ptr<kami::Model> BoltzmannWealthModel1D::step() {
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EmptyDeclOrStmt"
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     std::string ident = "boltzmann1d";
     std::string log_level_option = "info";
     CLI::App app{ident};
@@ -178,7 +193,7 @@ int main(int argc, char **argv) {
 
     // This exercise is really stupid.
     auto levels_list = std::make_unique<std::list<std::string>>();
-    for (auto &level_name: SPDLOG_LEVEL_NAMES)
+    for (auto& level_name : SPDLOG_LEVEL_NAMES)
         levels_list->push_back(std::string(level_name.data(), level_name.size()));
 
     app.add_option("-c", agent_count, "Set the number of agents")->check(CLI::PositiveNumber);
@@ -192,8 +207,9 @@ int main(int argc, char **argv) {
     console = spdlog::stdout_color_st(ident);
     console->set_level(spdlog::level::from_str(log_level_option));
     console->info("Compiled with Kami/{}, log level {}", kami::version.to_string(), log_level_option);
-    console->info("Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agent_count, x_size,
-                  max_steps);
+    console->info(
+            "Starting Boltzmann Wealth Model with {} agents on a {}-unit grid for {} steps", agent_count, x_size,
+            max_steps);
 
     spdlog::stopwatch sw;
 

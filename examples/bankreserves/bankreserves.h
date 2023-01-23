@@ -48,15 +48,23 @@ extern std::shared_ptr<spdlog::logger> console;
 extern std::shared_ptr<std::mt19937> rng;
 
 template<>
-struct fmt::formatter<kami::AgentID> : fmt::formatter<std::string> {
-    static auto format(kami::AgentID agent_id, format_context &ctx) {
+struct fmt::formatter<kami::AgentID>
+        : fmt::formatter<std::string> {
+    static auto format(
+            kami::AgentID agent_id,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", agent_id.to_string());
     }
 };
 
 template<>
-struct fmt::formatter<kami::GridCoord2D> : fmt::formatter<std::string> {
-    static auto format(const kami::GridCoord2D &coord, format_context &ctx) {
+struct fmt::formatter<kami::GridCoord2D>
+        : fmt::formatter<std::string> {
+    static auto format(
+            const kami::GridCoord2D& coord,
+            format_context& ctx
+    ) {
         return format_to(ctx.out(), "{}", coord.to_string());
     }
 };
@@ -64,12 +72,15 @@ struct fmt::formatter<kami::GridCoord2D> : fmt::formatter<std::string> {
 /**
  * A starter agent for a starter model
  */
-class BankAgent : public kami::ReporterAgent {
+class BankAgent
+        : public kami::ReporterAgent {
 public:
     /**
      * Constructor
      */
-    explicit BankAgent(int reserve_percent) : _reserve_percent(reserve_percent) {};
+    explicit BankAgent(int reserve_percent)
+            :_reserve_percent(reserve_percent) {
+    };
 
     inline std::unique_ptr<nlohmann::json> collect() override {
         auto ret = std::make_unique<nlohmann::json>();
@@ -99,13 +110,19 @@ private:
     friend class PersonAgent;
 };
 
-class PersonAgent : public kami::ReporterAgent {
+class PersonAgent
+        : public kami::ReporterAgent {
 public:
     /**
      * Constructor
      */
-    explicit PersonAgent(int wallet, std::shared_ptr<BankAgent> &bank) :
-            _wallet(wallet), _bank(bank) {};
+    explicit PersonAgent(
+            int wallet,
+            std::shared_ptr<BankAgent>& bank
+    )
+            :
+            _wallet(wallet), _bank(bank) {
+    };
 
     inline std::unique_ptr<nlohmann::json> collect() override {
         auto ret = std::make_unique<nlohmann::json>();
@@ -134,11 +151,11 @@ private:
     /**
      * Move the agent to a random location on the world
      */
-    std::optional<kami::GridCoord2D> move_agent(std::shared_ptr<kami::ReporterModel> &model);
+    std::optional<kami::GridCoord2D> move_agent(std::shared_ptr<kami::ReporterModel>& model);
 
-    std::optional<kami::AgentID> do_business(std::shared_ptr<kami::ReporterModel> &model);
+    std::optional<kami::AgentID> do_business(std::shared_ptr<kami::ReporterModel>& model);
 
-    std::optional<int> balance_books(std::shared_ptr<kami::ReporterModel> &model);
+    std::optional<int> balance_books(std::shared_ptr<kami::ReporterModel>& model);
 
     kami::AgentID deposit_to_savings(double amount);
 
@@ -152,7 +169,8 @@ private:
 /**
  * The one-dimensional Boltzmann wealth model
  */
-class BankReservesModel : public kami::ReporterModel {
+class BankReservesModel
+        : public kami::ReporterModel {
 public:
     /**
      * Create an instance of the one-dimensional Boltzmann wealth model.
@@ -161,8 +179,13 @@ public:
      * @param[in] length_x the length of the one-dimensional world the agents
      * occupy.
      */
-    explicit BankReservesModel(unsigned int agent_count, unsigned int x_size, unsigned int y_size,
-                               unsigned int initial_seed, unsigned int max_initial_wealth);
+    explicit BankReservesModel(
+            unsigned int agent_count,
+            unsigned int x_size,
+            unsigned int y_size,
+            unsigned int initial_seed,
+            unsigned int max_initial_wealth
+    );
 
     inline std::unique_ptr<nlohmann::json> collect() override {
         return nullptr;
