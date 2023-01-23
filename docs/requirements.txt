@@ -1,8 +1,8 @@
-breathe
-sphinx
-exhale
-documenteer
-myst-parser
-sphinx_bootstrap_theme
-sphinx_rtd_theme
-releases
+breathe==4.34.0
+Sphinx==4.5.0
+exhale==0.3.6
+documenteer==0.7.0
+myst-parser==0.18.1
+sphinx-bootstrap-theme==0.8.1
+sphinx-rtd-theme==1.1.1
+releases==1.6.3
