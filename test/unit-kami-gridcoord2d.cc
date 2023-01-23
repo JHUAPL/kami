@@ -30,7 +30,8 @@
 
 using namespace kami;
 
-class GridCoord2DTest : public ::testing::Test {
+class GridCoord2DTest
+        : public ::testing::Test {
 protected:
     GridCoord2D gridcoord2d_foo = GridCoord2D(0, 0);
     GridCoord2D gridcoord2d_bar = GridCoord2D(1, 1);
@@ -145,7 +146,10 @@ TEST_F(GridCoord2DTest, y) {
     EXPECT_FALSE(gridcoord2d_bar.y() == gridcoord2d_qu2.y());
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

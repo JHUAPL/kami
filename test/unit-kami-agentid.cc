@@ -30,7 +30,8 @@
 
 using namespace kami;
 
-class AgentIDTest : public ::testing::Test {
+class AgentIDTest
+        : public ::testing::Test {
 protected:
     AgentID agent_id_foo;
     AgentID agent_id_bar;
@@ -62,7 +63,10 @@ TEST_F(AgentIDTest, ordering) {
     EXPECT_FALSE(agent_id_bar < agent_id_foo);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

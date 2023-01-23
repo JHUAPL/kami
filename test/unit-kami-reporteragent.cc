@@ -35,7 +35,8 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public ReporterAgent {
+class TestAgent
+        : public ReporterAgent {
 public:
     AgentID step(shared_ptr<ReporterModel> model) override {
         return get_agent_id();
@@ -51,14 +52,16 @@ public:
     }
 };
 
-class TestModel : public ReporterModel {
+class TestModel
+        : public ReporterModel {
 public:
     std::unique_ptr<nlohmann::json> collect() override {
         return std::make_unique<nlohmann::json>();
     }
 };
 
-class ReporterAgentTest : public ::testing::Test {
+class ReporterAgentTest
+        : public ::testing::Test {
 protected:
     TestAgent agent_foo;
     TestAgent agent_bar;
@@ -106,7 +109,10 @@ TEST_F(ReporterAgentTest, inequality) {
     EXPECT_FALSE(agent_bar != agent_bar);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

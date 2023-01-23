@@ -34,7 +34,8 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public StagedAgent {
+class TestAgent
+        : public StagedAgent {
 public:
     AgentID advance(shared_ptr<Model> model) override {
         return get_agent_id();
@@ -45,10 +46,12 @@ public:
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 };
 
-class StagedAgentTest : public ::testing::Test {
+class StagedAgentTest
+        : public ::testing::Test {
 protected:
     TestAgent agent_foo;
     TestAgent agent_bar;
@@ -96,7 +99,10 @@ TEST_F(StagedAgentTest, inequality) {
     EXPECT_FALSE(agent_bar != agent_bar);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

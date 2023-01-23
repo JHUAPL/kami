@@ -38,7 +38,8 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public StagedAgent {
+class TestAgent
+        : public StagedAgent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
@@ -49,7 +50,8 @@ public:
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 public:
     shared_ptr<vector<AgentID>> retval;
 
@@ -64,7 +66,8 @@ public:
     }
 };
 
-class StagedSchedulerTest : public ::testing::Test {
+class StagedSchedulerTest
+        : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
 
@@ -129,7 +132,10 @@ TEST_F(StagedSchedulerTest, step_10000) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

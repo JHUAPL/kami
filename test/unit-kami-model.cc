@@ -38,14 +38,16 @@ using namespace kami;
 using namespace kami::error;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent
+        : public Agent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 public:
     shared_ptr<Model> step() final {
         return shared_from_this();
@@ -127,7 +129,10 @@ TEST(Model, get_domain) {
     EXPECT_EQ(grid2_bar, grid2_baz);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

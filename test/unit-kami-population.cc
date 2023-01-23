@@ -34,12 +34,15 @@ using namespace kami;
 using namespace kami::error;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent
+        : public Agent {
 private:
     int _x;
 
 public:
-    explicit TestAgent(int x) : _x(x) {};
+    explicit TestAgent(int x)
+            :_x(x) {
+    };
 
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
@@ -191,7 +194,10 @@ TEST(Population, get_agent_list) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

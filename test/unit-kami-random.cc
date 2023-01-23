@@ -39,14 +39,16 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public Agent {
+class TestAgent
+        : public Agent {
 public:
     AgentID step(shared_ptr<Model> model) override {
         return get_agent_id();
     }
 };
 
-class TestModel : public Model {
+class TestModel
+        : public Model {
 public:
     shared_ptr<vector<AgentID>> retval;
 
@@ -61,7 +63,8 @@ public:
     }
 };
 
-class RandomSchedulerTest : public ::testing::Test {
+class RandomSchedulerTest
+        : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
     shared_ptr<mt19937> rng = nullptr;
@@ -158,7 +161,10 @@ TEST_F(RandomSchedulerTest, set_rng) {
     EXPECT_NE(new_rng, rval1);
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

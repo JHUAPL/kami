@@ -39,7 +39,8 @@
 using namespace kami;
 using namespace std;
 
-class TestAgent : public ReporterAgent {
+class TestAgent
+        : public ReporterAgent {
 public:
     AgentID step(shared_ptr<ReporterModel> model) override {
         return get_agent_id();
@@ -55,7 +56,8 @@ public:
     }
 };
 
-class TestModel : public ReporterModel {
+class TestModel
+        : public ReporterModel {
 public:
     shared_ptr<vector<AgentID>> retval;
 
@@ -69,7 +71,8 @@ public:
     }
 };
 
-class ReporterModelTest : public ::testing::Test {
+class ReporterModelTest
+        : public ::testing::Test {
 protected:
     shared_ptr<TestModel> mod = nullptr;
 
@@ -117,10 +120,13 @@ TEST_F(ReporterModelTest, report) {
 
     auto rval = mod->report();
     EXPECT_EQ(rval->dump(),
-              "[{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":1},{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":2}]");
+            "[{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":1},{\"agent_data\":[{\"agent_id\":\"13\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"14\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}},{\"agent_id\":\"15\",\"data\":{\"fname\":\"Jesse\",\"lname\":\"Pinkman\"}}],\"model_data\":{\"fname\":\"Walter\",\"lname\":\"White\"},\"step_id\":2}]");
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

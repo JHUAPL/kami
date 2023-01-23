@@ -222,7 +222,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord9
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord0, true);
 
         EXPECT_EQ(tval, *rval);
@@ -230,7 +232,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord1, true);
 
         EXPECT_EQ(tval, *rval);
@@ -238,7 +242,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, false);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord0, true);
 
         EXPECT_EQ(tval, *rval);
@@ -246,7 +252,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, false);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord1, true);
 
         EXPECT_EQ(tval, *rval);
@@ -254,7 +262,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord1, coord9 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord1, coord9
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord0, false);
 
         EXPECT_EQ(tval, *rval);
@@ -262,7 +272,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, true);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord1, false);
 
         EXPECT_EQ(tval, *rval);
@@ -270,7 +282,9 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, false);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord1 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord1
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord0, false);
 
         EXPECT_EQ(tval, *rval);
@@ -278,20 +292,26 @@ TEST(SoloGrid1D, get_neighborhood) {
     {
         SoloGrid1D sologrid1d_foo(10, false);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(coord1, false);
 
         EXPECT_EQ(tval, *rval);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord9
+        });
         EXPECT_THROW(auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true), AgentNotFound);
     }
     {
         SoloGrid1D sologrid1d_foo(10, true);
         sologrid1d_foo.add_agent(agent_id_foo, coord0);
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord9 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord9
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_EQ(tval, *rval);
@@ -300,7 +320,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, true);
         sologrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_EQ(tval, *rval);
@@ -309,7 +331,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, false);
         sologrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_EQ(tval, *rval);
@@ -318,7 +342,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, false);
         sologrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord1, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord1, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, true);
 
         EXPECT_EQ(tval, *rval);
@@ -327,7 +353,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, true);
         sologrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord1, coord9 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord1, coord9
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_EQ(tval, *rval);
@@ -336,7 +364,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, true);
         sologrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_EQ(tval, *rval);
@@ -345,7 +375,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, false);
         sologrid1d_foo.add_agent(agent_id_foo, coord0);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord1 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord1
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_EQ(tval, *rval);
@@ -354,7 +386,9 @@ TEST(SoloGrid1D, get_neighborhood) {
         SoloGrid1D sologrid1d_foo(10, false);
         sologrid1d_foo.add_agent(agent_id_foo, coord1);
 
-        auto tval = unordered_set < GridCoord1D > ({ coord0, coord2 });
+        auto tval = unordered_set < GridCoord1D > ({
+            coord0, coord2
+        });
         auto rval = sologrid1d_foo.get_neighborhood(agent_id_foo, false);
 
         EXPECT_EQ(tval, *rval);
@@ -403,7 +437,9 @@ TEST(SoloGrid1D, get_location_contents) {
         EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord1)), LocationUnavailable);
         EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_baz, coord1)), LocationUnavailable);
 
-        auto tval = set < AgentID > ({ agent_id_foo });
+        auto tval = set < AgentID > ({
+            agent_id_foo
+        });
         auto rval = sologrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(rval);
@@ -415,7 +451,9 @@ TEST(SoloGrid1D, get_location_contents) {
         EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_bar, coord1)), LocationUnavailable);
         EXPECT_THROW(static_cast<void>(sologrid1d_foo.add_agent(agent_id_baz, coord1)), LocationUnavailable);
 
-        auto tval = set < AgentID > ({ agent_id_foo });
+        auto tval = set < AgentID > ({
+            agent_id_foo
+        });
         auto rval = sologrid1d_foo.get_location_contents(coord1);
 
         EXPECT_TRUE(rval);
@@ -423,7 +461,10 @@ TEST(SoloGrid1D, get_location_contents) {
     }
 }
 
-int main(int argc, char **argv) {
+int main(
+        int argc,
+        char** argv
+) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
