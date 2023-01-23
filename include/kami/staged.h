@@ -46,7 +46,8 @@ namespace kami {
      * preserved between calls to `step()` but may be modified by `add_agent()` or
      * `delete_agent()`.
      */
-    class LIBKAMI_EXPORT StagedScheduler : public SequentialScheduler {
+    class LIBKAMI_EXPORT StagedScheduler
+            : public SequentialScheduler {
     public:
         /**
          * @brief Execute a single time step
@@ -62,10 +63,16 @@ namespace kami {
          * @returns returns vector of agents successfully stepped
          */
         std::unique_ptr<std::vector<AgentID>>
-        step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+        step(
+                std::shared_ptr<Model> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) override;
 
         std::unique_ptr<std::vector<AgentID>>
-        step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) override;
+        step(
+                std::shared_ptr<ReporterModel> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        ) override;
 
     private:
         /**
@@ -98,7 +105,10 @@ namespace kami {
          * @returns returns vector of agents successfully advanced
          */
         std::unique_ptr<std::vector<AgentID>>
-        advance(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list);
+        advance(
+                std::shared_ptr<Model> model,
+                std::unique_ptr<std::vector<AgentID>> agent_list
+        );
     };
 
 }  // namespace kami

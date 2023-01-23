@@ -103,14 +103,17 @@ namespace kami {
      * rectilinear grid where the cells are equal size and laid out in an ordered
      * fashion.
      */
-    class LIBKAMI_EXPORT GridDomain : public Domain {};
+    class LIBKAMI_EXPORT GridDomain
+            : public Domain {
+    };
 
     /**
      * @brief An abstract for gridded coordinates.
      *
      * @details All gridded coordinates are expected to subclass `GridCoord`.
      */
-    class LIBKAMI_EXPORT GridCoord : public Coord {
+    class LIBKAMI_EXPORT GridCoord
+            : public Coord {
 
     public:
 
@@ -129,7 +132,7 @@ namespace kami {
          *
          * @returns the distance as a `double`
          */
-        virtual double distance(std::shared_ptr<Coord> &p) const = 0;
+        virtual double distance(std::shared_ptr<Coord>& p) const = 0;
 
     };
 

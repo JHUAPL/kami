@@ -45,7 +45,8 @@ namespace kami {
      * @see `Grid2D`
      * @see `SoloGrid2D`
      */
-    class LIBKAMI_EXPORT MultiGrid2D : public Grid2D {
+    class LIBKAMI_EXPORT MultiGrid2D
+            : public Grid2D {
     public:
         /**
          * @brief Constructor
@@ -57,7 +58,12 @@ namespace kami {
          * @param[in] wrap_y should the grid wrap around on itself in the second
          * dimension
          */
-        MultiGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x, bool wrap_y);
+        MultiGrid2D(
+                unsigned int maximum_x,
+                unsigned int maximum_y,
+                bool wrap_x,
+                bool wrap_y
+        );
 
         /**
          * @brief Place agent on the grid at the specified location.
@@ -67,7 +73,10 @@ namespace kami {
          *
          * @returns the `AgentID` of the agent added
          */
-        AgentID add_agent(AgentID agent_id, const GridCoord2D &coord) override;
+        AgentID add_agent(
+                AgentID agent_id,
+                const GridCoord2D& coord
+        ) override;
     };
 
 }  // namespace kami

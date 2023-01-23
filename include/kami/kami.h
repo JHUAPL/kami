@@ -58,7 +58,9 @@ namespace kami {
      *
      * @return a `semver::version` object containing version information
      */
-    inline semver::version get_version() { return version; }
+    inline semver::version get_version() {
+        return version;
+    }
 
     /**
      * @brief A catalog of handy constants, mostly useful for seeding

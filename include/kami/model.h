@@ -43,7 +43,8 @@ namespace kami {
      *
      * @see `ReporterModel`
      */
-    class LIBKAMI_EXPORT Model : public std::enable_shared_from_this<Model> {
+    class LIBKAMI_EXPORT Model
+            : public std::enable_shared_from_this<Model> {
 
     public:
         /**

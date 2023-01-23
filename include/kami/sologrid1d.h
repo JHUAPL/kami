@@ -44,7 +44,8 @@ namespace kami {
      * @see `Grid1D`
      * @see `MultiGrid1D`
      */
-    class LIBKAMI_EXPORT SoloGrid1D : public Grid1D {
+    class LIBKAMI_EXPORT SoloGrid1D
+            : public Grid1D {
     public:
         /**
          * @brief Constructor
@@ -52,7 +53,10 @@ namespace kami {
          * @param[in] maximum_x the length of the grid.
          * @param[in] wrap_x should the grid wrap around on itself.
          */
-        SoloGrid1D(unsigned int maximum_x, bool wrap_x);
+        SoloGrid1D(
+                unsigned int maximum_x,
+                bool wrap_x
+        );
 
         /**
          * @brief Place agent on the grid at the specified location.
@@ -63,7 +67,10 @@ namespace kami {
          * @returns false if the agent is not placed at the specified
          * location, otherwise, true
          */
-        AgentID add_agent(AgentID agent_id, const GridCoord1D &coord) override;
+        AgentID add_agent(
+                AgentID agent_id,
+                const GridCoord1D& coord
+        ) override;
     };
 
 }  // namespace kami

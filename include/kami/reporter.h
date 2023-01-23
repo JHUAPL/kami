@@ -199,7 +199,7 @@ namespace kami {
          *
          * @returns a copy of the current report
          */
-        std::unique_ptr<nlohmann::json> collect(const std::shared_ptr<ReporterModel> &model);
+        std::unique_ptr<nlohmann::json> collect(const std::shared_ptr<ReporterModel>& model);
 
         /**
          * @brief Collect the current state of the model
@@ -213,7 +213,10 @@ namespace kami {
          * @returns a copy of the current report
          */
         std::unique_ptr<nlohmann::json>
-        collect(const std::shared_ptr<ReporterModel> &model, const std::shared_ptr<Population> &pop);
+        collect(
+                const std::shared_ptr<ReporterModel>& model,
+                const std::shared_ptr<Population>& pop
+        );
 
         /**
          * @brief Collect the current state of the model
@@ -227,7 +230,10 @@ namespace kami {
          * @returns a copy of the current report
          */
         std::unique_ptr<nlohmann::json>
-        collect(const std::shared_ptr<ReporterModel> &model, const std::unique_ptr<std::vector<AgentID>> &agent_list);
+        collect(
+                const std::shared_ptr<ReporterModel>& model,
+                const std::unique_ptr<std::vector<AgentID>>& agent_list
+        );
 
         /**
          * @brief Collect the report
@@ -239,7 +245,7 @@ namespace kami {
          *
          * @returns a copy of the current report
          */
-        std::unique_ptr<nlohmann::json> report(const std::shared_ptr<ReporterModel> &model);
+        std::unique_ptr<nlohmann::json> report(const std::shared_ptr<ReporterModel>& model);
 
     protected:
         /**

@@ -58,7 +58,7 @@ namespace kami {
          *
          * @returns the ID of the agent added
          */
-        AgentID add_agent(const std::shared_ptr<Agent> &agent) noexcept;
+        AgentID add_agent(const std::shared_ptr<Agent>& agent) noexcept;
 
         /**
          * @brief Remove an Agent from the Population.

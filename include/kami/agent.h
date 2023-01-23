@@ -80,7 +80,10 @@ namespace kami {
          * @param rhs is the right-hand side of the equality test.
          * @return true is they are equal and false if not.
          */
-        friend bool operator==(const AgentID &lhs, const AgentID &rhs);
+        friend bool operator==(
+                const AgentID& lhs,
+                const AgentID& rhs
+        );
 
         /**
          * @brief Test if two `AgentID` instances are not equal.
@@ -89,7 +92,10 @@ namespace kami {
          * @param rhs is the right-hand side of the equality test.
          * @return true is they are not equal and false if they are.
          */
-        friend bool operator!=(const AgentID &lhs, const AgentID &rhs);
+        friend bool operator!=(
+                const AgentID& lhs,
+                const AgentID& rhs
+        );
 
         /**
          * @brief Test if one AgentID is less than another.
@@ -103,7 +109,10 @@ namespace kami {
          * @return true if `lhs` is "less than" `rhs` as determined by the
          * underlying implementation of the `AgentID`.
          */
-        friend bool operator<(const AgentID &lhs, const AgentID &rhs);
+        friend bool operator<(
+                const AgentID& lhs,
+                const AgentID& rhs
+        );
 
         /**
          * @brief Output an AgentID to the specified output stream
@@ -115,7 +124,10 @@ namespace kami {
          * @param rhs is the `AgentID` to output
          * @return the output stream for reuse
          */
-        friend std::ostream &operator<<(std::ostream &lhs, const AgentID &rhs);
+        friend std::ostream& operator<<(
+                std::ostream& lhs,
+                const AgentID& rhs
+        );
     };
 
     /**
@@ -165,7 +177,10 @@ namespace kami {
          * Subclasses of Agent may chose to extend this operator to tighten
          * the restrictions on the comparison.
          */
-        friend bool operator==(const Agent &lhs, const Agent &rhs);
+        friend bool operator==(
+                const Agent& lhs,
+                const Agent& rhs
+        );
 
         /**
          * @brief Compare if two `Agent`s are not the same `Agent`.
@@ -181,7 +196,10 @@ namespace kami {
          * Subclasses of `Agent` may chose to extend this operator to tighten
          * the restrictions on the comparison.
          */
-        friend bool operator!=(const Agent &lhs, const Agent &rhs);
+        friend bool operator!=(
+                const Agent& lhs,
+                const Agent& rhs
+        );
     };
 
     /**
@@ -196,7 +214,8 @@ namespace kami {
      *
      * `StagedAgents` must implement both the `step()` and `advance()` functions.
      */
-    class LIBKAMI_EXPORT StagedAgent : public Agent {
+    class LIBKAMI_EXPORT StagedAgent
+            : public Agent {
     public:
         /**
          * @brief Post-step advance the agent

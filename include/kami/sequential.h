@@ -47,7 +47,8 @@ namespace kami {
      * That order is preserved between calls to `step()` but may be modified by
      * `addAgent()` or `deleteAgent()`.
      */
-    class LIBKAMI_EXPORT SequentialScheduler : public Scheduler {
+    class LIBKAMI_EXPORT SequentialScheduler
+            : public Scheduler {
     public:
         /**
          * @brief Execute a single time step.

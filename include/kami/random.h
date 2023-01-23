@@ -46,7 +46,9 @@ namespace kami {
      * That order should be different for each subsequent call to `step()`,
      * but is not guaranteed not to repeat.
      */
-    class LIBKAMI_EXPORT RandomScheduler : public SequentialScheduler, std::enable_shared_from_this<RandomScheduler> {
+    class LIBKAMI_EXPORT RandomScheduler
+            : public SequentialScheduler,
+              std::enable_shared_from_this<RandomScheduler> {
     public:
         /**
          * @brief Constructor.
