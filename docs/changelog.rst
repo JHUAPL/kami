@@ -3,6 +3,8 @@ Changelog
 
 Below is the consolidated changelog for Kami.
 
+- :feature:`0` Added baseline for continuous domains
+
 - :release:`0.7.1 <2023.01.22>`
 - :bug:`0` Corrected bug in documentation build
 
