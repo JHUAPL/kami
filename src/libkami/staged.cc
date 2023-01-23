@@ -35,13 +35,19 @@
 namespace kami {
 
     std::unique_ptr<std::vector<AgentID>>
-    StagedScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    StagedScheduler::step(
+            std::shared_ptr<Model> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         auto stepped_agent_list = this->SequentialScheduler::step(model, std::move(agent_list));
         return std::move(this->advance(model, std::move(stepped_agent_list)));
     }
 
     std::unique_ptr<std::vector<AgentID>>
-    StagedScheduler::step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    StagedScheduler::step(
+            std::shared_ptr<ReporterModel> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         auto stepped_agent_list = this->SequentialScheduler::step(model, std::move(agent_list));
         return std::move(this->advance(model, std::move(stepped_agent_list)));
     }
@@ -57,11 +63,14 @@ namespace kami {
     }
 
     std::unique_ptr<std::vector<AgentID>>
-    StagedScheduler::advance(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    StagedScheduler::advance(
+            std::shared_ptr<Model> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         auto return_agent_list = std::make_unique<std::vector<AgentID>>();
         auto population = model->get_population();
 
-        for (auto &agent_id: *agent_list) {
+        for (auto& agent_id : *agent_list) {
             auto agent = std::static_pointer_cast<StagedAgent>(population->get_agent_by_id(agent_id));
 
             agent->advance(model);

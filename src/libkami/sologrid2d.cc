@@ -33,10 +33,19 @@
 
 namespace kami {
 
-    SoloGrid2D::SoloGrid2D(unsigned int maximum_x, unsigned int maximum_y, bool wrap_x, bool wrap_y)
-            : Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {}
+    SoloGrid2D::SoloGrid2D(
+            unsigned int maximum_x,
+            unsigned int maximum_y,
+            bool wrap_x,
+            bool wrap_y
+    )
+            :Grid2D(maximum_x, maximum_y, wrap_x, wrap_y) {
+    }
 
-    AgentID SoloGrid2D::add_agent(const AgentID agent_id, const GridCoord2D &coord) {
+    AgentID SoloGrid2D::add_agent(
+            const AgentID agent_id,
+            const GridCoord2D& coord
+    ) {
         if (!is_location_valid(coord))
             throw error::LocationInvalid(fmt::format("Coordinates {} are invalid", coord.to_string()));
         if (!is_location_empty(coord))

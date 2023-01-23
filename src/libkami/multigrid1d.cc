@@ -33,10 +33,17 @@
 
 namespace kami {
 
-    MultiGrid1D::MultiGrid1D(unsigned int maximum_x, bool wrap_x)
-            : Grid1D(maximum_x, wrap_x) {}
+    MultiGrid1D::MultiGrid1D(
+            unsigned int maximum_x,
+            bool wrap_x
+    )
+            :Grid1D(maximum_x, wrap_x) {
+    }
 
-    AgentID MultiGrid1D::add_agent(const AgentID agent_id, const GridCoord1D &coord) {
+    AgentID MultiGrid1D::add_agent(
+            const AgentID agent_id,
+            const GridCoord1D& coord
+    ) {
         if (!is_location_valid(coord))
             throw error::LocationInvalid(fmt::format("Coordinates {} are invalid", coord.to_string()));
 

@@ -43,12 +43,15 @@ namespace kami {
     }
 
     std::unique_ptr<std::vector<AgentID>>
-    SequentialScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    SequentialScheduler::step(
+            std::shared_ptr<Model> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         auto return_agent_list = std::make_unique<std::vector<AgentID>>();
         auto population = model->get_population();
 
         Scheduler::_step_counter++;
-        for (auto &agent_id: *agent_list) {
+        for (auto& agent_id : *agent_list) {
             auto agent = population->get_agent_by_id(agent_id);
 
             agent->step(model);
@@ -59,12 +62,15 @@ namespace kami {
     }
 
     std::unique_ptr<std::vector<AgentID>>
-    SequentialScheduler::step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    SequentialScheduler::step(
+            std::shared_ptr<ReporterModel> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         auto return_agent_list = std::make_unique<std::vector<AgentID>>();
         auto population = model->get_population();
 
         Scheduler::_step_counter++;
-        for (auto &agent_id: *agent_list) {
+        for (auto& agent_id : *agent_list) {
             auto agent = population->get_agent_by_id(agent_id);
 
             agent->step(model);

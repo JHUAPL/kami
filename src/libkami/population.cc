@@ -33,7 +33,7 @@
 
 namespace kami {
 
-    AgentID Population::add_agent(const std::shared_ptr<Agent> &agent) noexcept {
+    AgentID Population::add_agent(const std::shared_ptr<Agent>& agent) noexcept {
         auto agent_id = agent->get_agent_id();
         _agent_map.insert(std::pair<AgentID, std::shared_ptr<Agent>>(agent_id, agent));
         return agent->get_agent_id();
@@ -60,7 +60,10 @@ namespace kami {
     }
 
     std::unique_ptr<std::vector<AgentID>> Population::get_agent_list() const {
-        auto key_selector = [](auto pair) { return pair.first; };
+        auto key_selector = [](auto pair)
+        {
+          return pair.first;
+        };
         auto agent_ids = std::make_unique<std::vector<AgentID>>(_agent_map.size());
 
         transform(_agent_map.begin(), _agent_map.end(), agent_ids->begin(), key_selector);

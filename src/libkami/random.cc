@@ -41,7 +41,10 @@ namespace kami {
     }
 
     std::unique_ptr<std::vector<AgentID>>
-    RandomScheduler::step(std::shared_ptr<Model> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    RandomScheduler::step(
+            std::shared_ptr<Model> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         if (_rng == nullptr)
             throw error::ResourceNotAvailable("No random number generator available");
 
@@ -50,7 +53,10 @@ namespace kami {
     }
 
     std::unique_ptr<std::vector<AgentID>>
-    RandomScheduler::step(std::shared_ptr<ReporterModel> model, std::unique_ptr<std::vector<AgentID>> agent_list) {
+    RandomScheduler::step(
+            std::shared_ptr<ReporterModel> model,
+            std::unique_ptr<std::vector<AgentID>> agent_list
+    ) {
         if (_rng == nullptr)
             throw error::ResourceNotAvailable("No random number generator available");
 
@@ -63,6 +69,8 @@ namespace kami {
         return _rng;
     }
 
-    std::shared_ptr<std::mt19937> RandomScheduler::get_rng() { return (this->_rng); }
+    std::shared_ptr<std::mt19937> RandomScheduler::get_rng() {
+        return (this->_rng);
+    }
 
 }  // namespace kami

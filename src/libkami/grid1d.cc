@@ -39,7 +39,9 @@
 
 namespace kami {
 
-    GridCoord1D::GridCoord1D(int x_coord) : _x_coord(x_coord) {}
+    GridCoord1D::GridCoord1D(int x_coord)
+            :_x_coord(x_coord) {
+    }
 
     int GridCoord1D::x() const {
         return _x_coord;
@@ -49,41 +51,65 @@ namespace kami {
         return std::string("(" + std::to_string(_x_coord) + ")");
     }
 
-    double GridCoord1D::distance(std::shared_ptr<Coord> &p) const {
+    double GridCoord1D::distance(std::shared_ptr<Coord>& p) const {
         auto p1d = std::static_pointer_cast<GridCoord1D>(p);
         return static_cast<double>(abs(_x_coord - p1d->_x_coord));
     }
 
-    bool operator==(const GridCoord1D &lhs, const GridCoord1D &rhs) {
+    bool operator==(
+            const GridCoord1D& lhs,
+            const GridCoord1D& rhs
+    ) {
         return (lhs._x_coord == rhs._x_coord);
     }
 
-    bool operator!=(const GridCoord1D &lhs, const GridCoord1D &rhs) {
+    bool operator!=(
+            const GridCoord1D& lhs,
+            const GridCoord1D& rhs
+    ) {
         return !(lhs == rhs);
     }
 
-    std::ostream &operator<<(std::ostream &lhs, const GridCoord1D &rhs) {
+    std::ostream& operator<<(
+            std::ostream& lhs,
+            const GridCoord1D& rhs
+    ) {
         return lhs << rhs.to_string();
     }
 
-    GridCoord1D operator+(const GridCoord1D &lhs, const GridCoord1D &rhs) {
+    GridCoord1D operator+(
+            const GridCoord1D& lhs,
+            const GridCoord1D& rhs
+    ) {
         return GridCoord1D(lhs._x_coord + rhs._x_coord);
     }
 
-    GridCoord1D operator-(const GridCoord1D &lhs, const GridCoord1D &rhs) {
+    GridCoord1D operator-(
+            const GridCoord1D& lhs,
+            const GridCoord1D& rhs
+    ) {
         return GridCoord1D(lhs._x_coord - rhs._x_coord);
     }
 
-    GridCoord1D operator*(const GridCoord1D &lhs, const double rhs) {
+    GridCoord1D operator*(
+            const GridCoord1D& lhs,
+            const double rhs
+    ) {
         return GridCoord1D(static_cast<int>(lhs._x_coord * rhs));
     }
 
-    GridCoord1D operator*(const double lhs, const GridCoord1D &rhs) {
+    GridCoord1D operator*(
+            const double lhs,
+            const GridCoord1D& rhs
+    ) {
         return GridCoord1D(static_cast<int>(rhs._x_coord * lhs));
     }
 
 
-    Grid1D::Grid1D(unsigned int maximum_x, bool wrap_x) {
+    Grid1D::Grid1D(
+            unsigned int maximum_x,
+            bool wrap_x
+    ) {
         _maximum_x = maximum_x;
         _wrap_x = wrap_x;
 
@@ -95,7 +121,10 @@ namespace kami {
         return delete_agent(agent_id, get_location_by_agent(agent_id));
     }
 
-    AgentID Grid1D::delete_agent(AgentID agent_id, const GridCoord1D &coord) {
+    AgentID Grid1D::delete_agent(
+            AgentID agent_id,
+            const GridCoord1D& coord
+    ) {
         for (auto test_agent_id = _agent_grid->find(coord); test_agent_id != _agent_grid->end(); test_agent_id++)
             if (test_agent_id->second == agent_id) {
                 _agent_grid->erase(test_agent_id);
@@ -107,35 +136,44 @@ namespace kami {
                 fmt::format("Agent {} not found at location {}", agent_id.to_string(), coord.to_string()));
     }
 
-    bool Grid1D::is_location_valid(const GridCoord1D &coord) const {
+    bool Grid1D::is_location_valid(const GridCoord1D& coord) const {
         auto x = coord.x();
 
         return (x >= 0 && x < static_cast<int>(_maximum_x));
     }
 
-    bool Grid1D::is_location_empty(const GridCoord1D &coord) const {
+    bool Grid1D::is_location_empty(const GridCoord1D& coord) const {
         auto grid_location = _agent_grid->equal_range(coord);
         return grid_location.first == grid_location.second;
     }
 
-    AgentID Grid1D::move_agent(const AgentID agent_id, const GridCoord1D &coord) {
+    AgentID Grid1D::move_agent(
+            const AgentID agent_id,
+            const GridCoord1D& coord
+    ) {
         return add_agent(delete_agent(agent_id, get_location_by_agent(agent_id)), coord);
     }
 
     std::shared_ptr<std::unordered_set<GridCoord1D>>
-    Grid1D::get_neighborhood(const AgentID agent_id, const bool include_center) const {
+    Grid1D::get_neighborhood(
+            const AgentID agent_id,
+            const bool include_center
+    ) const {
         return std::move(get_neighborhood(get_location_by_agent(agent_id), include_center));
     }
 
     std::shared_ptr<std::unordered_set<GridCoord1D>>
-    Grid1D::get_neighborhood(const GridCoord1D &coord, const bool include_center) const {
+    Grid1D::get_neighborhood(
+            const GridCoord1D& coord,
+            const bool include_center
+    ) const {
         auto neighborhood = std::make_shared<std::unordered_set<GridCoord1D>>();
 
         // We assume our starting position is valid
         if (include_center)
             neighborhood->insert(coord);
 
-        for (auto &direction: directions) {
+        for (auto& direction : directions) {
             auto new_location = coord_wrap(coord + direction);
 
             if (is_location_valid(new_location))
@@ -145,7 +183,7 @@ namespace kami {
         return std::move(neighborhood);
     }
 
-    std::shared_ptr<std::set<AgentID>> Grid1D::get_location_contents(const GridCoord1D &coord) const {
+    std::shared_ptr<std::set<AgentID>> Grid1D::get_location_contents(const GridCoord1D& coord) const {
         auto agent_ids = std::make_shared<std::set<AgentID>>();
 
         if (!is_location_valid(coord))
@@ -162,18 +200,22 @@ namespace kami {
         return agent_ids;
     }
 
-    bool Grid1D::get_wrap_x() const { return _wrap_x; }
+    bool Grid1D::get_wrap_x() const {
+        return _wrap_x;
+    }
 
-    unsigned int Grid1D::get_maximum_x() const { return _maximum_x; }
+    unsigned int Grid1D::get_maximum_x() const {
+        return _maximum_x;
+    }
 
-    GridCoord1D Grid1D::get_location_by_agent(const AgentID &agent_id) const {
+    GridCoord1D Grid1D::get_location_by_agent(const AgentID& agent_id) const {
         auto coord = _agent_index->find(agent_id);
         if (coord == _agent_index->end())
             throw error::AgentNotFound(fmt::format("Agent {} not found on grid", agent_id.to_string()));
         return coord->second;
     }
 
-    GridCoord1D Grid1D::coord_wrap(const GridCoord1D &coord) const {
+    GridCoord1D Grid1D::coord_wrap(const GridCoord1D& coord) const {
         auto x = coord.x();
 
         if (_wrap_x)
