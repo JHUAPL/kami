@@ -33,7 +33,7 @@
 #include <kami/population.h>
 #include <kami/sequential.h>
 
-class MinimumAgent
+class MinimalAgent
         : public kami::Agent {
 public:
     kami::AgentID step(std::shared_ptr<kami::Model> model) override {
@@ -41,22 +41,25 @@ public:
     }
 };
 
-class MinimumModel
+class MinimalModel
         : public kami::Model {
 public:
-    MinimumModel() {
-        _sched = std::make_shared<kami::SequentialScheduler>();
-        _pop = std::make_shared<kami::Population>();
+    MinimalModel() {
+        auto sched = std::make_shared<kami::SequentialScheduler>();
+        set_scheduler(sched);
+
+        auto pop = std::make_shared<kami::Population>();
+        set_population(pop);
 
         for (auto i = 0; i < 10; i++) {
-            auto new_agent = std::make_shared<MinimumAgent>();
-            _pop->add_agent(new_agent);
+            auto new_agent = std::make_shared<MinimalAgent>();
+            pop->add_agent(new_agent);
         }
     }
 };
 
 int main() {
-    auto model = std::make_shared<MinimumModel>();
+    auto model = std::make_shared<MinimalModel>();
 
     for (int i = 0; i < 10; i++)
         model->step();
