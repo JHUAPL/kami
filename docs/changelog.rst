@@ -1,6 +1,7 @@
 Changelog
 =========
 
+- :support:`0` Added a minimal example and tutorial
 - :support:`0` Added documentation for each example
 - :feature:`0` Readded step() to the Model interface
 - :feature:`0` Moved to exception-based error handling

@@ -9,7 +9,6 @@ a 1.0 release.  This list is *not* static.
 - Network domain
 - Hexgrid domain
 - Continuous grid domain
-- Tutorial write up
 
 Wishlist
 --------
