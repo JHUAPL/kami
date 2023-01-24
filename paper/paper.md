@@ -7,7 +7,7 @@ tags:
   - social science
   - simulation
   - complex systems theory
-- artificial life
+  - artificial life
 authors:
   - name: James P. Howard, II
     orcid: 0000-0003-4530-1547
