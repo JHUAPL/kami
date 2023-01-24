@@ -45,8 +45,7 @@ that allow for the rapid development of complex models. However,
 running interpreted, these models are slower than that offered by
 compiled systems. There are several application-specific ABMs
 available for specific problems, including public health, ecology,
-economics, and other fields  [e.g., @5970118, @rutherford2012agent,
-@standish2004ecolab, @zhou2010agent]. Kami aims to fill a niche
+economics, and other fields. Kami aims to fill a niche
 for implementing a field-neutral, extensible ABM platform in modern
 C++, using C++17 as a baseline for requirements.
 
