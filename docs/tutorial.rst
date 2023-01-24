@@ -6,7 +6,7 @@ by being written in C++, Kami runs substantially faster.  This
 allows for faster runs and more runs within a fixed amount of time.
 The advantage here is that an agent-based model (ABM) built on the
 Kami platform is better suited for statistical and Monte Carlo
-approaches to modelling.
+approaches to modeling.
 
 Model Form
 ----------
@@ -36,12 +36,12 @@ create a class called ``MinimalAgent``:
 .. code-block:: c++
   :linenos:
 
-    class MinimalAgent : public kami::Agent {
-    public:
-        kami::AgentID step(std::shared_ptr<kami::Model> model) override {
-            return this->get_agent_id();
-        }
-    };
+  class MinimalAgent : public kami::Agent {
+  public:
+    kami::AgentID step(std::shared_ptr<kami::Model> model) override {
+      return this->get_agent_id();
+    }
+  };
 
 An ``Agent``, and its subclasses, will automatically inherit an ``AgentID``,
 which is the unique identifier for the session.  The only explicit
@@ -56,18 +56,18 @@ The second component is ``MinimalModel:``
 
   class MinimalModel: public kami::Model {
   public:
-      MinimalModel() {
-          auto sched = std::make_shared<kami::SequentialScheduler>();
-          set_scheduler(sched);
+    MinimalModel() {
+      auto sched = std::make_shared<kami::SequentialScheduler>();
+      set_scheduler(sched);
 
-          auto pop = std::make_shared<kami::Population>();
-          set_population(pop);
+      auto pop = std::make_shared<kami::Population>();
+      set_population(pop);
 
-          for (auto i = 0; i < 10; i++) {
-              auto new_agent = std::make_shared<MinimalAgent>();
-              pop->add_agent(new_agent);
-          }
+      for (auto i = 0; i < 10; i++) {
+        auto new_agent = std::make_shared<MinimalAgent>();
+        pop->add_agent(new_agent);
       }
+    }
   };
 
 The ``MinimalModel`` performs some important tasks that important to do
@@ -85,12 +85,12 @@ them to the population.
   :linenos:
 
   int main() {
-      auto model = std::make_shared<MinimalModel>();
+    auto model = std::make_shared<MinimalModel>();
 
-      for (int i = 0; i < 10; i++)
-          model->step();
+    for (int i = 0; i < 10; i++)
+      model->step();
 
-      return 0;
+    return 0;
   }
 
 The last part is our `main()` function.  It creates the `MinimalModel`
