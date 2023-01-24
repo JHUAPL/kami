@@ -1,24 +1,23 @@
 ---
 title: 'Kami is Agent-Based Modeling in Modern C++'
 tags:
-
-- C++
-- agent-based model
-- individual-based model
-- social science
-- simulation
-- complex systems theory
+  - C++
+  - agent-based model
+  - individual-based model
+  - social science
+  - simulation
+  - complex systems theory
 - artificial life
-  authors:
-- name: James P. Howard, II
-  orcid: 0000-0003-4530-1547
-  equal-contrib: true
-  affiliation: 1
-  affiliations:
-- name: Johns Hopkins Applied Physics Laboratory, USA
-  index: 1
-  date: 13 August 2017
-  bibliography: paper.bib
+authors:
+  - name: James P. Howard, II
+    orcid: 0000-0003-4530-1547
+    equal-contrib: true
+    affiliation: 1
+affiliations:
+  - name: Johns Hopkins Applied Physics Laboratory, USA
+    index: 1
+date: 23 January 2023
+bibliography: paper.bib
 ---
 
 # Summary
