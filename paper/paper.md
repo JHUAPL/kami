@@ -9,7 +9,7 @@ tags:
   - complex systems theory
   - artificial life
 authors:
-  - name: "James P. Howard, II"
+  - name: "James P. Howard II"
     orcid: 0000-0003-4530-1547
     affiliation: 1
 affiliations:
