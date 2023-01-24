@@ -3,6 +3,7 @@ Changelog
 
 Below is the consolidated changelog for Kami.
 
+- :support:`0` Started using Conventional Commits
 - :feature:`0` Added baseline for continuous domains
 
 - :release:`0.7.2 <2023.01.22>`
