@@ -1,3 +1,5 @@
+name: Build Paper PDF
+
 on: [ push ]
 
 jobs:
