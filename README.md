@@ -65,7 +65,6 @@ Neither is used directly by the Kami library.
 * Use [GitFlow](http://nvie.com/posts/a-successful-git-branching-model/)
 * Use [Google Test](https://github.com/google/googletest)
 * Use [Conventional Commits](https://www.conventionalcommits.org/)
-*
 
 ## For more information
 
